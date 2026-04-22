@@ -1,0 +1,28 @@
+---
+description: Use peepshow to extract frames from videos and animated images so you can view them as stills.
+alwaysApply: false
+---
+
+# peepshow — video → frames
+
+When the user shares a video (`.mp4` `.mov` `.mkv` `.webm` `.avi` `.flv` `.wmv` `.ts` `.mts` `.m2ts` `.3gp` `.ogv`) or animated image (`.gif` `.apng` animated `.webp`) — **including when they just drop the file into the chat** — extract frames and read them as images.
+
+## How
+
+```bash
+peepshow "<path-or-url>" --emit json
+```
+
+Parse `frames[].path` from the stdout JSON, read each as an image (in order), use `video.tags` for context (title/director/producer/show/etc), and `video.durationSeconds` to estimate per-frame timestamps. Do **not** run on static images — Cursor handles those natively.
+
+## Install
+
+`npm i -g peepshow` — https://www.npmjs.com/package/peepshow. ffmpeg bundled via `ffmpeg-static`, native install optional (faster).
+
+## Flags
+
+`--emit paths|json|markdown|caveman` · `--stats off|short|full` · `--max N` · `--threshold 0..1` · `--fps N` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va`
+
+## Attach frames back to the workspace
+
+`peepshow video.mp4 --sink ide` auto-detects Cursor and drops frames into `.cursor/attachments/peepshow/<timestamp>/`.

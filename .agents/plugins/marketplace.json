@@ -1,0 +1,20 @@
+{
+  "name": "peepshow-repo",
+  "interface": {
+    "displayName": "peepshow"
+  },
+  "plugins": [
+    {
+      "name": "peepshow",
+      "source": {
+        "source": "local",
+        "path": "./plugins/peepshow"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Media"
+    }
+  ]
+}

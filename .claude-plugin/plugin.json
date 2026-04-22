@@ -1,0 +1,33 @@
+{
+  "name": "peepshow",
+  "description": "Turn videos into a sequence of relevant still frames so Claude can view them as images. Pass a local path, an http(s) URL, or pipe video bytes on stdin.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Tom Taylor"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/peepshow-session-start.cjs\"",
+            "timeout": 5,
+            "statusMessage": "Checking peepshow statusline..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/peepshow-user-prompt.cjs\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

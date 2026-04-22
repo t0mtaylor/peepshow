@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" role="img" aria-label="peepshow">
+  <title>peepshow</title>
+  <defs>
+    <linearGradient id="ps-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0abfc"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="ps-glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0abfc" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- film strip body -->
+  <rect x="10" y="30" width="210" height="80" rx="10" fill="#0f0f1a" stroke="url(#ps-accent)" stroke-width="2"/>
+
+  <!-- sprocket holes top -->
+  <g fill="url(#ps-accent)" opacity="0.75">
+    <rect x="22" y="38" width="8" height="10" rx="2"/>
+    <rect x="52" y="38" width="8" height="10" rx="2"/>
+    <rect x="82" y="38" width="8" height="10" rx="2"/>
+    <rect x="112" y="38" width="8" height="10" rx="2"/>
+    <rect x="142" y="38" width="8" height="10" rx="2"/>
+    <rect x="172" y="38" width="8" height="10" rx="2"/>
+    <rect x="202" y="38" width="8" height="10" rx="2"/>
+  </g>
+  <!-- sprocket holes bottom -->
+  <g fill="url(#ps-accent)" opacity="0.75">
+    <rect x="22" y="92" width="8" height="10" rx="2"/>
+    <rect x="52" y="92" width="8" height="10" rx="2"/>
+    <rect x="82" y="92" width="8" height="10" rx="2"/>
+    <rect x="112" y="92" width="8" height="10" rx="2"/>
+    <rect x="142" y="92" width="8" height="10" rx="2"/>
+    <rect x="172" y="92" width="8" height="10" rx="2"/>
+    <rect x="202" y="92" width="8" height="10" rx="2"/>
+  </g>
+
+  <!-- three frames inside the strip -->
+  <rect x="40" y="54" width="50" height="32" rx="3" fill="#1e1e2e" stroke="#a78bfa" stroke-width="1" opacity="0.7"/>
+  <rect x="100" y="54" width="50" height="32" rx="3" fill="#2a1a3a" stroke="url(#ps-accent)" stroke-width="1.5"/>
+  <rect x="160" y="54" width="50" height="32" rx="3" fill="#1e1e2e" stroke="#a78bfa" stroke-width="1" opacity="0.7"/>
+
+  <!-- left frame: simple scene (mountains) -->
+  <path d="M44 82 L54 68 L62 76 L72 62 L86 82 Z" fill="#a78bfa" opacity="0.4"/>
+
+  <!-- center frame: the eye (the peep) -->
+  <ellipse cx="125" cy="70" rx="16" ry="10" fill="#0f0f1a" stroke="url(#ps-accent)" stroke-width="1.5"/>
+  <circle cx="125" cy="70" r="5" fill="url(#ps-accent)"/>
+  <circle cx="127" cy="68" r="1.6" fill="#fff"/>
+
+  <!-- right frame: motion lines -->
+  <line x1="166" y1="63" x2="204" y2="63" stroke="#a78bfa" stroke-width="1" opacity="0.5"/>
+  <line x1="168" y1="70" x2="206" y2="70" stroke="#a78bfa" stroke-width="1" opacity="0.7"/>
+  <line x1="170" y1="77" x2="208" y2="77" stroke="#a78bfa" stroke-width="1" opacity="0.5"/>
+
+  <!-- glow under strip -->
+  <rect x="10" y="105" width="210" height="15" fill="url(#ps-glow)"/>
+
+  <!-- wordmark -->
+  <g font-family="ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, Consolas, monospace" font-weight="600">
+    <text x="240" y="78" font-size="40" fill="url(#ps-accent)" letter-spacing="-1">peepshow</text>
+    <text x="240" y="100" font-size="13" fill="#a78bfa" opacity="0.85">video → frames → LLM</text>
+  </g>
+</svg>

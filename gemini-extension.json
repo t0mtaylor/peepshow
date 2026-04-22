@@ -1,0 +1,6 @@
+{
+  "name": "peepshow",
+  "description": "Extract relevant frames from videos + animated images (GIF/APNG/WebP) so Gemini can view them as a timeline of stills.",
+  "version": "0.1.2",
+  "contextFileName": "GEMINI.md"
+}

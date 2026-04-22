@@ -1,0 +1,96 @@
+{
+  "name": "peepshow",
+  "version": "0.3.0",
+  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames so LLMs can 'watch' them. CLI + Claude Code plugin with 18 pluggable sinks (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB).",
+  "type": "module",
+  "license": "MIT",
+  "author": "Tom Taylor",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "llm",
+    "ai",
+    "ffmpeg",
+    "video",
+    "gif",
+    "apng",
+    "animated-webp",
+    "frames",
+    "scene-detection",
+    "slides",
+    "sinks",
+    "obsidian",
+    "notion",
+    "sqlite",
+    "postgres",
+    "s3",
+    "webhook"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0mtaylor/peepshow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/t0mtaylor/peepshow/issues"
+  },
+  "homepage": "https://github.com/t0mtaylor/peepshow#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bin": {
+    "peepshow": "./bin/peepshow",
+    "peepshow-sink-sqlite": "./bin/peepshow-sink-sqlite",
+    "peepshow-sink-webhook": "./bin/peepshow-sink-webhook",
+    "peepshow-sink-slack": "./bin/peepshow-sink-slack",
+    "peepshow-sink-discord": "./bin/peepshow-sink-discord",
+    "peepshow-sink-obsidian": "./bin/peepshow-sink-obsidian",
+    "peepshow-sink-graphql": "./bin/peepshow-sink-graphql",
+    "peepshow-sink-ide": "./bin/peepshow-sink-ide",
+    "peepshow-sink-postgres": "./bin/peepshow-sink-postgres",
+    "peepshow-sink-s3": "./bin/peepshow-sink-s3",
+    "peepshow-sink-notion": "./bin/peepshow-sink-notion",
+    "peepshow-sink-linear": "./bin/peepshow-sink-linear",
+    "peepshow-sink-github-issues": "./bin/peepshow-sink-github-issues",
+    "peepshow-sink-sentry": "./bin/peepshow-sink-sentry",
+    "peepshow-sink-chroma": "./bin/peepshow-sink-chroma",
+    "peepshow-sink-qdrant": "./bin/peepshow-sink-qdrant",
+    "peepshow-sink-pinecone": "./bin/peepshow-sink-pinecone",
+    "peepshow-sink-pgvector": "./bin/peepshow-sink-pgvector",
+    "peepshow-sink-mongodb": "./bin/peepshow-sink-mongodb"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0"
+  },
+  "optionalDependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "better-sqlite3": "^11.0.0",
+    "mongodb": "^6.10.0",
+    "pg": "^8.12.0"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "hooks",
+    ".claude-plugin",
+    ".cursor",
+    ".windsurf",
+    ".clinerules",
+    ".codex",
+    ".agents",
+    "skills",
+    "docs/sinks",
+    "docs/INTEGRATIONS.md",
+    "docs/PLUGINS.md",
+    "docs/SINKS-MISSING.md",
+    "docs/logo.svg",
+    "AGENTS.md",
+    "GEMINI.md",
+    "gemini-extension.json",
+    "README.md",
+    "LICENSE"
+  ]
+}
