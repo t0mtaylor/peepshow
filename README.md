@@ -104,49 +104,38 @@ Combine with `--gpu` to pick a hardware-accel backend (`videotoolbox`, `cuda`, `
 
 ## Install
 
-### 1. Install the CLI from npm
+Two steps. Both required — **install the runtime from npm, register the Claude plugin from GitHub.**
+
+### 1. Install the runtime from npm
 
 Published on npm as [`peepshow`](https://www.npmjs.com/package/peepshow):
 
 ```bash
 npm i -g peepshow        # global — adds peepshow + all peepshow-sink-* bins to PATH
 # or
-npm i peepshow           # local — adds to the current project's node_modules
-# or
 npx peepshow ./video.mp4 # one-shot, no install
 ```
 
-All sink bins (`peepshow-sink-sqlite`, `peepshow-sink-postgres`, `peepshow-sink-s3`, `peepshow-sink-webhook`, `peepshow-sink-slack`, `peepshow-sink-discord`, `peepshow-sink-graphql`, `peepshow-sink-notion`, `peepshow-sink-obsidian`, `peepshow-sink-ide`) install alongside. Heavy driver libraries (`better-sqlite3`, `pg`, `@aws-sdk/client-s3`) are **optional deps** — if one fails to build, the rest of peepshow still works; the missing sink prints a one-line install hint when invoked.
+Every sink bin (`peepshow-sink-sqlite`, `peepshow-sink-postgres`, `peepshow-sink-s3`, `peepshow-sink-webhook`, `peepshow-sink-slack`, `peepshow-sink-discord`, `peepshow-sink-graphql`, `peepshow-sink-notion`, `peepshow-sink-obsidian`, `peepshow-sink-ide`, `peepshow-sink-linear`, `peepshow-sink-github-issues`, `peepshow-sink-sentry`, `peepshow-sink-chroma`, `peepshow-sink-qdrant`, `peepshow-sink-pinecone`, `peepshow-sink-pgvector`, `peepshow-sink-mongodb`) installs alongside. Heavy driver libraries (`better-sqlite3`, `pg`, `@aws-sdk/client-s3`, `mongodb`) are **optional deps** — if one fails to build, the rest of peepshow still works; the missing sink prints a one-line install hint when invoked.
 
-### 2. Load into Claude Code
+Verify:
 
-**Published marketplace (simplest)** — pull straight from GitHub in one line:
+```bash
+peepshow --help
+```
+
+### 2. Register the Claude Code plugin
+
+Two commands pull the skill, hooks, and agent manifests from the public GitHub repo:
 
 ```bash
 claude plugin marketplace add t0mtaylor/peepshow
 claude plugin install peepshow@peepshow-marketplace
 ```
 
-After that, `claude` launches normally with peepshow enabled.
+After that, `claude` launches normally with peepshow enabled. The skill is available as `/peepshow:slides` — and the drag-and-drop hook fires automatically on every prompt.
 
-**Active development** — clone the repo and read from the live directory (every launch picks up edits immediately, no cache refresh):
-
-```bash
-git clone https://github.com/t0mtaylor/peepshow.git
-cd peepshow
-npm install
-claude --plugin-dir "$(pwd)"
-```
-
-**Local marketplace from a clone** — register the repo dir as a marketplace:
-
-```bash
-claude plugin marketplace add /absolute/path/to/peepshow
-claude plugin install peepshow@peepshow-marketplace
-claude plugin marketplace update peepshow-marketplace   # after edits
-```
-
-Once loaded (any method), the skill is available as `/peepshow:slides` — and the drag-and-drop hook fires automatically on every prompt.
+> **Why two steps?** This GitHub repo ships only manifests, hooks, and docs — no compiled code. The runtime lives on npm so everyone gets minified, versioned binaries. Step 1 supplies the `peepshow` command; step 2 lets Claude Code know about it.
 
 ## Drag-and-drop auto-invoke
 
