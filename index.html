@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>peepshow — video → frames → LLM. Any LLM CLI. Any storage backend.</title>
+  <meta name="description" content="peepshow turns videos and animated images (GIF, APNG, WebP) into a timeline of still frames so LLMs can watch them. Ships as a Claude Code plugin, Cursor/Windsurf/Cline/Codex/Gemini agent manifests, and a standalone CLI with 18 pluggable sinks.">
+  <meta name="keywords" content="claude code, claude plugin, llm, ai, ffmpeg, video frames, gif, apng, webp, scene detection, sinks, obsidian, notion, sqlite, postgres, pgvector, s3, webhook, cursor, windsurf, codex, gemini">
+  <meta name="author" content="Tom Taylor">
+  <meta name="theme-color" content="#a78bfa">
+  <link rel="canonical" href="https://t0mtaylor.github.io/peepshow/">
+  <link rel="icon" type="image/svg+xml" href="./assets/logo.svg">
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="peepshow — video → frames → LLM">
+  <meta property="og:description" content="Turn videos + animated images into a timeline of still frames so LLMs can watch them. CLI + Claude Code plugin with 18 pluggable sinks.">
+  <meta property="og:url" content="https://t0mtaylor.github.io/peepshow/">
+  <meta property="og:image" content="https://t0mtaylor.github.io/peepshow/assets/og.png">
+  <meta property="og:image:alt" content="peepshow logo — a film strip with an eye in the middle frame">
+  <meta property="og:site_name" content="peepshow">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="peepshow — video → frames → LLM">
+  <meta name="twitter:description" content="Turn videos + animated images into a timeline of still frames so LLMs can watch them. 18 pluggable sinks ship built in.">
+  <meta name="twitter:image" content="https://t0mtaylor.github.io/peepshow/assets/og.png">
+  <meta name="twitter:image:alt" content="peepshow logo">
+
+  <!-- JSON-LD SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "peepshow",
+    "description": "Turn videos + animated images into a timeline of still frames so LLMs can watch them. CLI + Claude Code plugin with 18 pluggable sinks.",
+    "url": "https://t0mtaylor.github.io/peepshow/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows",
+    "softwareVersion": "0.3.0",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "license": "https://opensource.org/licenses/MIT",
+    "author": { "@type": "Person", "name": "Tom Taylor" },
+    "sameAs": [
+      "https://www.npmjs.com/package/peepshow",
+      "https://github.com/t0mtaylor/peepshow"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href="#top" aria-label="peepshow home">
+      <img src="./assets/logo.svg" alt="" width="220" height="50">
+    </a>
+    <nav aria-label="Primary">
+      <a href="#install">Install</a>
+      <a href="#sinks">Sinks</a>
+      <a href="#agents">Agents</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/t0mtaylor/peepshow" rel="noopener external">GitHub</a>
+      <a href="https://www.npmjs.com/package/peepshow" rel="noopener external">npm</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" id="top">
+  <div class="container">
+    <h1>video → frames → LLM.</h1>
+    <p class="lede">Turn a video — or an animated GIF, APNG, or WebP — into a timeline of still frames so any LLM can <em>watch</em> it.</p>
+    <p class="sub">
+      Ships as a <strong>Claude Code plugin</strong> with drag-and-drop auto-invoke, native manifests for
+      <strong>Cursor · Windsurf · Cline · Codex CLI · Gemini CLI</strong>, and a standalone CLI with
+      <strong>18 pluggable sinks</strong> (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB).
+    </p>
+    <div class="cta-row">
+      <pre class="cta-install" aria-label="install command"><code>npm&nbsp;i&nbsp;-g&nbsp;peepshow</code></pre>
+      <a class="btn btn-primary" href="#install">Install guide</a>
+      <a class="btn btn-ghost" href="https://github.com/t0mtaylor/peepshow" rel="noopener external">View on GitHub →</a>
+    </div>
+    <p class="badges">
+      <a href="https://www.npmjs.com/package/peepshow" rel="noopener external"><img src="https://img.shields.io/npm/v/peepshow.svg?color=a78bfa&label=npm" alt="npm version"></a>
+      <img src="https://img.shields.io/badge/node-%E2%89%A522-43853d" alt="Node 22 or later">
+      <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license">
+    </p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="why-heading">
+  <div class="container">
+    <h2 id="why-heading">Why peepshow?</h2>
+    <div class="feature-grid">
+      <article class="feature">
+        <h3>Drag & drop — same UX as images</h3>
+        <p>Drop an <code>.mp4</code>, <code>.mov</code>, or <code>.gif</code> into the Claude prompt. A <code>UserPromptSubmit</code> hook detects the path and auto-invokes <code>/peepshow:slides</code>. No slash command required.</p>
+      </article>
+      <article class="feature">
+        <h3>Scene-change detection</h3>
+        <p>Defaults to ffmpeg's <code>select='gt(scene,0.3)'</code> filter — catches visually distinct moments, not fixed-fps noise. Falls back to interval sampling for short clips.</p>
+      </article>
+      <article class="feature">
+        <h3>18 built-in sinks</h3>
+        <p>Every run can fan out to databases, object stores, vector DBs, issue trackers, chat, and wiki systems. All tested, all shipped on npm. <a href="#sinks">Full list →</a></p>
+      </article>
+      <article class="feature">
+        <h3>Conditional routing</h3>
+        <p>Sinks fire only when the input matches — <code>--when director=Kubrick</code>, <code>--when path=/Volumes/Work/</code>, <code>--when extension=mp4,mov</code>. Turns peepshow into a smart router.</p>
+      </article>
+      <article class="feature">
+        <h3>Hardware-accelerated</h3>
+        <p>VideoToolbox on macOS, VAAPI on Linux, D3D11VA on Windows — auto-detected. Prefers native ffmpeg over the bundled static build for extra speed.</p>
+      </article>
+      <article class="feature">
+        <h3>Live statusline badge</h3>
+        <p><code>[PEEPSHOW:decoding:42%]</code> mid-run, <code>[PEEPSHOW:5frm:scene:system]</code> after, <code>[PEEPSHOW|3s]</code> with three auto-sinks armed.</p>
+      </article>
+      <article class="feature">
+        <h3>Works with any LLM CLI</h3>
+        <p>Ships native agent manifests for <strong>Claude · Cursor · Windsurf · Cline · Codex · Gemini</strong>. Integration snippets for <strong>aider · llm · Copilot · Continue · Cody · Zed</strong> in the docs.</p>
+      </article>
+      <article class="feature">
+        <h3>Container metadata</h3>
+        <p>Title, director, producer, show, genre, creation time — every tag inside the video's container flows into the JSON the LLM sees. Ground answers in what the video <em>says it is</em>, not just what's on screen.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="install" aria-labelledby="install-heading">
+  <div class="container">
+    <h2 id="install-heading">Install</h2>
+    <p class="lede">Two steps. Runtime from npm, plugin from GitHub.</p>
+
+    <h3>1. Runtime from npm</h3>
+    <pre><code>npm i -g peepshow            <span class="c"># adds peepshow + all peepshow-sink-* bins to PATH</span>
+npx peepshow ./video.mp4     <span class="c"># one-shot, no install</span></code></pre>
+    <p>Optional native ffmpeg for faster hardware decoding:</p>
+    <pre><code>brew install ffmpeg          <span class="c"># macOS</span>
+choco install ffmpeg-full    <span class="c"># Windows</span>
+sudo apt install ffmpeg      <span class="c"># Debian / Ubuntu</span></code></pre>
+    <p>Skip entirely — peepshow bundles <a href="https://www.npmjs.com/package/ffmpeg-static" rel="noopener external">ffmpeg-static</a> as a fallback.</p>
+
+    <h3>2. Plugin for Claude Code</h3>
+    <pre><code>claude plugin marketplace add t0mtaylor/peepshow
+claude plugin install peepshow@peepshow-marketplace</code></pre>
+    <p>Restart <code>claude</code> — the <code>/peepshow:slides</code> skill is live, and the drag-and-drop hook fires on every prompt.</p>
+
+    <h3>Use anywhere</h3>
+    <pre><code>peepshow ./bug.mov                              <span class="c"># paths + human-readable stats</span>
+peepshow ./demo.mp4 --emit json | jq            <span class="c"># structured</span>
+peepshow ./loop.gif --emit caveman              <span class="c"># token-compressed</span>
+peepshow ./keynote.mp4 --sink folder:/shared    <span class="c"># fan out</span></code></pre>
+  </div>
+</section>
+
+<section class="section" id="sinks" aria-labelledby="sinks-heading">
+  <div class="container">
+    <h2 id="sinks-heading">18 built-in sinks</h2>
+    <p class="lede">Every extract can fan out to any number of destinations. A sink reads the JSON payload on stdin, does anything. Conditional matchers (<code>--when</code>) mean each sink only fires when the input fits.</p>
+    <div class="sink-grid">
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/sqlite.md" rel="noopener external"><strong>sqlite</strong><span>Local archive, queryable with any SQLite tool.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/postgres.md" rel="noopener external"><strong>postgres</strong><span>Full-blown SQL archive with schema auto-creation.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/s3.md" rel="noopener external"><strong>s3-compatible</strong><span>AWS · MinIO · R2 · DO Spaces · B2 · Wasabi · GCS.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/webhook.md" rel="noopener external"><strong>webhook</strong><span>Generic POST of the payload to any URL.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/slack.md" rel="noopener external"><strong>slack</strong><span>Incoming webhook with Block Kit formatting.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/discord.md" rel="noopener external"><strong>discord</strong><span>Channel webhook with embeds per frame.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/graphql.md" rel="noopener external"><strong>graphql</strong><span>POST a mutation to any GraphQL endpoint.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/notion.md" rel="noopener external"><strong>notion</strong><span>Create a page per run in a Notion database.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/obsidian.md" rel="noopener external"><strong>obsidian</strong><span>Markdown note + embedded frames into a vault.</span></a>
+      <a class="sink-card" href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/ide.md" rel="noopener external"><strong>ide</strong><span>Drop frames into Cursor / Windsurf / Zed / VS Code.</span></a>
+      <span class="sink-card"><strong>linear</strong><span>Open an issue with video evidence attached.</span></span>
+      <span class="sink-card"><strong>github-issues</strong><span>File an issue via the GitHub REST API.</span></span>
+      <span class="sink-card"><strong>sentry</strong><span>Send the run as an event with full context.</span></span>
+      <span class="sink-card"><strong>chroma</strong><span>Index frames into a Chroma vector DB collection.</span></span>
+      <span class="sink-card"><strong>qdrant</strong><span>Upsert frame points into a Qdrant collection.</span></span>
+      <span class="sink-card"><strong>pinecone</strong><span>Upsert into a Pinecone serverless index.</span></span>
+      <span class="sink-card"><strong>pgvector</strong><span>Vector index on top of the postgres sink.</span></span>
+      <span class="sink-card"><strong>mongodb</strong><span>Runs + frames into MongoDB collections.</span></span>
+    </div>
+
+    <h3>Auto-sinks — configure once, fire forever</h3>
+    <pre><code>peepshow sinks add folder:/Volumes/Shared/peepshow
+peepshow sinks add postgres
+peepshow sinks add-cmd 'node ~/scripts/obsidian-sync.js'
+peepshow sinks list                                <span class="c"># see what's active</span>
+
+peepshow ./any-video.mp4                           <span class="c"># all three fire</span>
+peepshow ./one-off.mp4 --no-auto-sinks             <span class="c"># skip for this run</span></code></pre>
+
+    <h3>Conditional routing — <code>--when</code></h3>
+    <pre><code>peepshow sinks add folder:/Volumes/Family --when extension=mp4,mov
+peepshow sinks add postgres --when path=/Volumes/Work/
+peepshow sinks add folder:/Cinema/Kubrick --when director=Kubrick --when genre=Thriller
+peepshow sinks add-cmd 'node x.js' --when filename='*vacation*'</code></pre>
+  </div>
+</section>
+
+<section class="section section-alt" id="agents" aria-labelledby="agents-heading">
+  <div class="container">
+    <h2 id="agents-heading">Agent support</h2>
+    <p class="lede">Native manifests for every major LLM CLI. Install peepshow once; every agent picks it up.</p>
+    <table class="agent-table">
+      <thead>
+        <tr><th>Agent</th><th>Manifest</th><th>Install</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claude Code</td><td><code>.claude-plugin/</code> + <code>skills/</code> + <code>hooks/</code></td><td><code>claude plugin marketplace add t0mtaylor/peepshow</code></td></tr>
+        <tr><td>Cursor</td><td><code>.cursor/rules/peepshow.mdc</code></td><td>picked up when peepshow is installed into the project</td></tr>
+        <tr><td>Windsurf</td><td><code>.windsurf/rules/peepshow.md</code></td><td>same</td></tr>
+        <tr><td>Cline</td><td><code>.clinerules/peepshow.md</code></td><td>same</td></tr>
+        <tr><td>Codex CLI</td><td><code>.codex/hooks.json</code> + <code>.codex/config.toml</code></td><td>SessionStart hook announces peepshow; invoke via Bash</td></tr>
+        <tr><td>Gemini CLI</td><td><code>gemini-extension.json</code> + <code>GEMINI.md</code></td><td>point Gemini at the repo as a custom command</td></tr>
+        <tr><td>Codex agents / Zed AI</td><td><code>AGENTS.md</code></td><td>convention-based pickup</td></tr>
+        <tr><td>Generic agents registry</td><td><code>.agents/plugins/marketplace.json</code></td><td><code>npx skills add t0mtaylor/peepshow</code> (once supported)</td></tr>
+      </tbody>
+    </table>
+    <p>Plus documented integration snippets for <strong>Copilot CLI · aider · llm · Continue · Cody · Zed AI · Perplexity · Ollama</strong> in <a href="https://github.com/t0mtaylor/peepshow/blob/main/docs/INTEGRATIONS.md" rel="noopener external">docs/INTEGRATIONS.md</a>.</p>
+  </div>
+</section>
+
+<section class="section" id="faq" aria-labelledby="faq-heading">
+  <div class="container">
+    <h2 id="faq-heading">FAQ</h2>
+    <dl class="faq">
+      <dt>Does it work without ffmpeg installed?</dt>
+      <dd>Yes — <code>npm i peepshow</code> pulls in <a href="https://www.npmjs.com/package/ffmpeg-static" rel="noopener external">ffmpeg-static</a> as a fallback. Native ffmpeg (via brew / choco / apt) is preferred for hardware decoding but optional.</dd>
+
+      <dt>What happens when I drop a video into Claude Code?</dt>
+      <dd>A <code>UserPromptSubmit</code> hook spots the video path, injects a reminder into Claude's context, and Claude auto-invokes <code>/peepshow:slides &lt;path&gt;</code>. Frames are extracted, read as images, and Claude answers — without you typing the slash command.</dd>
+
+      <dt>Are static images handled too?</dt>
+      <dd>No — static JPG / PNG / WebP are already readable by every LLM. peepshow only runs for things with <em>multiple frames across time</em>: video and animated images.</dd>
+
+      <dt>Where does the runtime code come from?</dt>
+      <dd>npm. The <a href="https://github.com/t0mtaylor/peepshow" rel="noopener external">public GitHub repo</a> ships only manifests, hooks, and docs — no compiled code. That keeps the source trusted (versioned on npm with integrity hashes) and the GitHub surface clean.</dd>
+
+      <dt>Can I write my own sink?</dt>
+      <dd>Any executable that reads the <code>--emit json</code> payload on stdin is a valid sink — bash, Node, Python, Go, Rust, whatever. Register persistent ones via <code>peepshow sinks add-cmd 'your command'</code>. See <a href="https://github.com/t0mtaylor/peepshow/blob/main/docs/PLUGINS.md" rel="noopener external">the sink spec</a>.</dd>
+
+      <dt>How does it pair with caveman mode?</dt>
+      <dd><code>peepshow ... --emit caveman</code> prints an ultra-terse one-line summary + paths, designed for token-compressed LLM setups like <a href="https://github.com/JuliusBrussee/caveman" rel="noopener external">JuliusBrussee/caveman</a>. Saves ~70% of peepshow's preamble tokens.</dd>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      <a href="https://github.com/t0mtaylor/peepshow" rel="noopener external">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/peepshow" rel="noopener external">npm</a> ·
+      <a href="https://github.com/t0mtaylor/peepshow/blob/main/docs/sinks/README.md" rel="noopener external">Sinks</a> ·
+      <a href="https://github.com/t0mtaylor/peepshow/blob/main/docs/INTEGRATIONS.md" rel="noopener external">Integrations</a> ·
+      <a href="https://github.com/t0mtaylor/peepshow/blob/main/docs/PLUGINS.md" rel="noopener external">Plugin spec</a>
+    </p>
+    <p>© <span id="year">2026</span> Tom Taylor · MIT licensed · <code>peepshow</code> on <a href="https://www.npmjs.com/package/peepshow" rel="noopener external">npm</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
