@@ -1,6 +1,7 @@
 # peepshow marketing site
 
-Static single-page marketing site — served at <https://t0mtaylor.github.io/peepshow/>.
+Static single-page marketing site — served at <https://www.peepshow.dev/> (CNAME on the
+`t0mtaylor/peepshow` gh-pages branch).
 
 ## Structure
 

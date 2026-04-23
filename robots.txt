@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://t0mtaylor.github.io/peepshow/sitemap.xml
+Sitemap: https://www.peepshow.dev/sitemap.xml
