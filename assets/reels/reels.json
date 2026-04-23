@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-22",
+  "updated": "2026-04-23",
   "reels": [
     {
       "slug": "big-buck-bunny",
@@ -77,6 +77,123 @@
         "close on Sintel's eyes, ice-rimmed",
         "breath condensing, lips parted",
         "looking up — storm closing in above"
+      ]
+    },
+    {
+      "slug": "earth-at-night",
+      "title": "Earth at Night · MP4",
+      "credit": "NASA Black Marble · public domain",
+      "creditUrl": "https://earthobservatory.nasa.gov/features/NightLights",
+      "poster": "assets/reels/earth-at-night/poster.webp",
+      "video": "assets/reels/earth-at-night/clip.mp4",
+      "frames": [
+        "assets/reels/earth-at-night/f1.webp",
+        "assets/reels/earth-at-night/f2.webp",
+        "assets/reels/earth-at-night/f3.webp",
+        "assets/reels/earth-at-night/f4.webp",
+        "assets/reels/earth-at-night/f5.webp",
+        "assets/reels/earth-at-night/f6.webp"
+      ],
+      "metadata": {
+        "director": "NASA Earth Observatory",
+        "producer": "NASA Goddard Space Flight Center",
+        "studio": "NASA",
+        "year": "2015",
+        "genre": "satellite imagery · earth science",
+        "duration": 30.526667,
+        "bitrate": 816171,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "fps": 30,
+        "size_bytes": 3114374
+      },
+      "captions": [
+        "rotating Earth — Asia lit up, city lights across India and China",
+        "continents drift — Europe and Africa centered, Mediterranean arc glowing",
+        "North Atlantic swings into view, eastern seaboard visible",
+        "Americas face us — US interstate grid and coastal cities bright",
+        "Pacific hemisphere, dark expanse of open ocean",
+        "Australia and Southeast Asia returning — one full rotation"
+      ]
+    },
+    {
+      "slug": "earth-at-night-webm",
+      "title": "Earth at Night · WebM",
+      "credit": "NASA Black Marble · public domain",
+      "creditUrl": "https://earthobservatory.nasa.gov/features/NightLights",
+      "poster": "assets/reels/earth-at-night-webm/poster.webp",
+      "video": "assets/reels/earth-at-night-webm/clip.mp4",
+      "frames": [
+        "assets/reels/earth-at-night-webm/f1.webp",
+        "assets/reels/earth-at-night-webm/f2.webp",
+        "assets/reels/earth-at-night-webm/f3.webp",
+        "assets/reels/earth-at-night-webm/f4.webp",
+        "assets/reels/earth-at-night-webm/f5.webp",
+        "assets/reels/earth-at-night-webm/f6.webp"
+      ],
+      "metadata": {
+        "director": "NASA Earth Observatory",
+        "producer": "NASA Goddard Space Flight Center",
+        "studio": "NASA",
+        "year": "2015",
+        "genre": "satellite imagery · earth science",
+        "duration": 30.543,
+        "bitrate": 371366,
+        "container": "matroska,webm",
+        "codec": "vp8",
+        "width": 640,
+        "height": 360,
+        "fps": 30,
+        "size_bytes": 1417829
+      },
+      "captions": [
+        "VP9-encoded rotation — Asian night side, illuminated megacities",
+        "Europe's coastal belt glowing through the WebM stream",
+        "Atlantic gap, almost fully dark, clouds drift across",
+        "Americas sweep past — Mexico City and US East Coast bright",
+        "Pacific void, a single lit island cluster in the south",
+        "Back to Asia — container difference, same story"
+      ]
+    },
+    {
+      "slug": "earth-at-night-mov",
+      "title": "Earth at Night · MOV",
+      "credit": "NASA Black Marble · public domain",
+      "creditUrl": "https://earthobservatory.nasa.gov/features/NightLights",
+      "poster": "assets/reels/earth-at-night-mov/poster.webp",
+      "video": "assets/reels/earth-at-night-mov/clip.mp4",
+      "frames": [
+        "assets/reels/earth-at-night-mov/f1.webp",
+        "assets/reels/earth-at-night-mov/f2.webp",
+        "assets/reels/earth-at-night-mov/f3.webp",
+        "assets/reels/earth-at-night-mov/f4.webp",
+        "assets/reels/earth-at-night-mov/f5.webp",
+        "assets/reels/earth-at-night-mov/f6.webp"
+      ],
+      "metadata": {
+        "director": "NASA Earth Observatory",
+        "producer": "NASA Goddard Space Flight Center",
+        "studio": "NASA",
+        "year": "2015",
+        "genre": "satellite imagery · earth science",
+        "duration": 30.528,
+        "bitrate": 208759,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "fps": 30,
+        "size_bytes": 796625
+      },
+      "captions": [
+        "QuickTime wrapper — Asia faces the camera, night-lights web",
+        "Middle East transitions into Africa, Nile corridor traced in light",
+        "Atlantic Ocean dominates, thin crescents of Europe and Americas",
+        "North America centered — dense coastal clusters, dark interior",
+        "Pacific ocean, near-total blackness with scattered pinpricks",
+        "Australia climbs back into frame — container agnostic extraction"
       ]
     },
     {
