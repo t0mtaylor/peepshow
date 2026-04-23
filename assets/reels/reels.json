@@ -1,0 +1,122 @@
+{
+  "updated": "2026-04-22",
+  "reels": [
+    {
+      "slug": "big-buck-bunny",
+      "title": "Big Buck Bunny",
+      "credit": "Blender Foundation · CC-BY 3.0",
+      "creditUrl": "https://peach.blender.org/",
+      "poster": "assets/reels/big-buck-bunny/poster.webp",
+      "video": "assets/reels/big-buck-bunny/clip.mp4",
+      "frames": [
+        "assets/reels/big-buck-bunny/f1.webp",
+        "assets/reels/big-buck-bunny/f2.webp",
+        "assets/reels/big-buck-bunny/f3.webp",
+        "assets/reels/big-buck-bunny/f4.webp",
+        "assets/reels/big-buck-bunny/f5.webp",
+        "assets/reels/big-buck-bunny/f6.webp"
+      ],
+      "metadata": {
+        "director": "Sacha Goedegebure",
+        "producer": "Ton Roosendaal",
+        "studio": "Blender Institute",
+        "year": "2008",
+        "genre": "CG short · comedy",
+        "duration": 10,
+        "bitrate": 1656560,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "fps": 30,
+        "size_bytes": 2070701
+      },
+      "captions": [
+        "opening title — wind in tall grass, sunrise",
+        "bunny paw stretching up through undergrowth",
+        "Big Buck Bunny rolls out of his burrow, yawns",
+        "orchard wide shot — butterfly settling on flower",
+        "bunny mid-stride across the meadow",
+        "squirrel antagonist leering from a branch"
+      ]
+    },
+    {
+      "slug": "sintel",
+      "title": "Sintel",
+      "credit": "Blender Foundation · CC-BY 3.0",
+      "creditUrl": "https://durian.blender.org/",
+      "poster": "assets/reels/sintel/poster.webp",
+      "video": "assets/reels/sintel/clip.mp4",
+      "frames": [
+        "assets/reels/sintel/f1.webp",
+        "assets/reels/sintel/f2.webp",
+        "assets/reels/sintel/f3.webp",
+        "assets/reels/sintel/f4.webp",
+        "assets/reels/sintel/f5.webp",
+        "assets/reels/sintel/f6.webp"
+      ],
+      "metadata": {
+        "director": "Colin Levy",
+        "producer": "Ton Roosendaal",
+        "studio": "Blender Foundation",
+        "year": "2010",
+        "genre": "fantasy short · CG",
+        "duration": 10,
+        "bitrate": 1677353,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "fps": 24,
+        "size_bytes": 2096692
+      },
+      "captions": [
+        "cold open — windswept slate sky, no sound",
+        "snow drift over broken ridgeline",
+        "hooded figure against the weather",
+        "close on Sintel's eyes, ice-rimmed",
+        "breath condensing, lips parted",
+        "looking up — storm closing in above"
+      ]
+    },
+    {
+      "slug": "jellyfish",
+      "title": "Jellyfish",
+      "credit": "NHK · stock demo clip",
+      "creditUrl": "https://www.nhk.or.jp/",
+      "poster": "assets/reels/jellyfish/poster.webp",
+      "video": "assets/reels/jellyfish/clip.mp4",
+      "frames": [
+        "assets/reels/jellyfish/f1.webp",
+        "assets/reels/jellyfish/f2.webp",
+        "assets/reels/jellyfish/f3.webp",
+        "assets/reels/jellyfish/f4.webp",
+        "assets/reels/jellyfish/f5.webp",
+        "assets/reels/jellyfish/f6.webp"
+      ],
+      "metadata": {
+        "director": "NHK broadcast unit",
+        "producer": "NHK",
+        "studio": "NHK",
+        "year": "2014",
+        "genre": "nature · aquarium footage",
+        "duration": 10.01001,
+        "bitrate": 1674967,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "codec": "h264",
+        "width": 640,
+        "height": 360,
+        "fps": 29.97,
+        "size_bytes": 2095805
+      },
+      "captions": [
+        "deep blue — jellyfish centered",
+        "bell contracting, tendrils trailing",
+        "wider shot — second jelly enters frame",
+        "backlit translucence, shimmer",
+        "low angle, darkness around the bloom",
+        "bioluminescent ring of light"
+      ]
+    }
+  ]
+}
