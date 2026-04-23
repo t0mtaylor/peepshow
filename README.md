@@ -401,3 +401,7 @@ No central marketplace exists for Copilot CLI, ChatGPT Code, Cursor, Continue, C
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+<!-- GitHub README visit counter (Matomo, no cookies, self-hosted) -->
+<img src="https://st.rs.thetomtaylor.co.uk/matomo.php?idsite=31&amp;rec=1&amp;action_name=Github+peepshow" width="1" height="1" alt="" style="border:0" />
+
