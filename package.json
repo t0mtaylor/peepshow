@@ -1,6 +1,6 @@
 {
   "name": "peepshow",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames so LLMs can 'watch' them. CLI + Claude Code plugin with 19 pluggable sinks (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB, MemPalace).",
   "type": "module",
   "license": "MIT",
