@@ -1,10 +1,13 @@
 {
   "name": "peepshow",
   "version": "0.3.0",
-  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames so LLMs can 'watch' them. CLI + Claude Code plugin with 18 pluggable sinks (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB).",
+  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames so LLMs can 'watch' them. CLI + Claude Code plugin with 19 pluggable sinks (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB, MemPalace).",
   "type": "module",
   "license": "MIT",
-  "author": "Tom Taylor",
+  "author": {
+    "name": "Tom Taylor",
+    "url": "https://x.com/tom_taylor"
+  },
   "keywords": [
     "claude-code",
     "claude-code-plugin",
@@ -33,7 +36,7 @@
   "bugs": {
     "url": "https://github.com/t0mtaylor/peepshow/issues"
   },
-  "homepage": "https://github.com/t0mtaylor/peepshow#readme",
+  "homepage": "https://www.peepshow.dev/",
   "publishConfig": {
     "access": "public",
     "provenance": true
@@ -60,7 +63,8 @@
     "peepshow-sink-qdrant": "./bin/peepshow-sink-qdrant",
     "peepshow-sink-pinecone": "./bin/peepshow-sink-pinecone",
     "peepshow-sink-pgvector": "./bin/peepshow-sink-pgvector",
-    "peepshow-sink-mongodb": "./bin/peepshow-sink-mongodb"
+    "peepshow-sink-mongodb": "./bin/peepshow-sink-mongodb",
+    "peepshow-sink-mempalace": "./bin/peepshow-sink-mempalace"
   },
   "dependencies": {
     "ffmpeg-static": "^5.2.0"

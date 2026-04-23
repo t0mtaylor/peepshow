@@ -1,0 +1,96 @@
+# peepshow-sink-mempalace
+
+Writes a per-run markdown note into a directory that [MemPalace](https://github.com/MemPalace/mempalace) already mines. MemPalace is a local-first AI memory system that stores content verbatim and retrieves it via semantic search — no API keys, no cloud. The sink turns every peepshow run into a mineable markdown artefact so the video's container tags + extraction metadata + frame paths all become recallable through `mempalace search`.
+
+Supports mempalace's **wing** / **room** scoping by writing into the matching subdirectory, and can optionally spawn `mempalace mine` after each note is written so ingestion happens synchronously in your pipeline instead of waiting for the next manual mine.
+
+## Config
+
+| Env var | Required | Default | Purpose |
+| :------ | :------- | :------ | :------ |
+| `PEEPSHOW_MEMPALACE_DIR` | yes | — | absolute path to a directory mempalace mines (your project root, or a dedicated watch folder) |
+| `PEEPSHOW_MEMPALACE_WING` | no | — | wing name; becomes a normalised subdirectory under the mine dir |
+| `PEEPSHOW_MEMPALACE_ROOM` | no | — | room name; nested under the wing |
+| `PEEPSHOW_MEMPALACE_COPY` | no | `1` | `0` to leave frames in their original `outputDir` and reference absolute paths in the note |
+| `PEEPSHOW_MEMPALACE_AUTOMINE` | no | `0` | `1` to spawn `mempalace mine <dir> [--wing <wing>]` after writing the note |
+| `PEEPSHOW_MEMPALACE_BIN` | no | `mempalace` | override the `mempalace` executable path |
+
+## Use
+
+```bash
+pip install mempalace
+mempalace init ~/projects/myapp
+
+export PEEPSHOW_MEMPALACE_DIR=~/projects/myapp
+export PEEPSHOW_MEMPALACE_WING=myapp
+peepshow sinks add mempalace
+peepshow ./demo.mp4
+```
+
+Then, either wait for your next routine `mempalace mine ~/projects/myapp`, or set:
+
+```bash
+export PEEPSHOW_MEMPALACE_AUTOMINE=1
+```
+
+so each peepshow run ingests itself before returning.
+
+## Layout
+
+```
+<mine-dir>/
+  myapp/                                          # wing (optional)
+    costs/                                        # room (optional)
+      20260422-124857-the-heist.md                # note with frontmatter + metadata + frame refs
+      frames/
+        20260422-124857-the-heist/
+          frame_0001.jpg
+          frame_0002.jpg
+```
+
+## Note body
+
+```markdown
+---
+source: peepshow
+strategy: scene
+wing: myapp
+room: costs
+duration: 42
+resolution: "1920x1080"
+codec: h264
+container: mov
+frames: 12
+title: "The Heist"
+director: "Kubrick"
+---
+
+# The Heist
+
+- **strategy:** scene
+- **frames:** 12 emitted, 0 pruned
+- **duration:** 42.00s
+- **resolution:** 1920×1080
+- **codec:** h264
+- **ffmpeg:** system (/opt/homebrew/bin/ffmpeg)
+
+## Frames
+
+### Frame 1
+
+![frame 1](frames/20260422-124857-the-heist/frame_0001.jpg)
+
+### Frame 2
+
+![frame 1](frames/20260422-124857-the-heist/frame_0002.jpg)
+```
+
+MemPalace's default miner chunks character-wise and does not parse the markdown, so the YAML frontmatter and bullet-list metadata end up verbatim in retrieved drawers — which is what you want for semantic recall. The title and tags survive as-is in `search` hits.
+
+## Caveats
+
+- Wing and room names are slugified (`lowercase, [^\w\s-] stripped, whitespace → "-"`) before they become directory names. This keeps mempalace's own wing/room normalisation consistent with what it detects from folder structure in `mempalace init`.
+- `PEEPSHOW_MEMPALACE_AUTOMINE=1` waits for `mempalace mine` to exit before returning. On a large project this can take tens of seconds — prefer leaving it off and running mines on a cron/hook if that's a problem.
+- If `mempalace` is not on `PATH` when automine is enabled, the sink exits with code `3` (missingDep) and prints the `pip install mempalace` hint.
+- Frames copied into the mine dir are subject to whatever retention policy you've set; mempalace ignores binaries, so they stay on disk as references but don't inflate the index.
+- No dependency on `mempalace` itself unless `AUTOMINE=1` — the note-writing path is pure filesystem I/O, no Python required.

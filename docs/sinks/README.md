@@ -18,12 +18,13 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `notion` | Create a Notion page per run | [notion.md](./notion.md) |
 | `obsidian` | Write a markdown note + frame embeds into an Obsidian vault | [obsidian.md](./obsidian.md) |
 | `ide` | Drop frames into Cursor/Windsurf/Zed/VS Code attachment folders | [ide.md](./ide.md) |
+| `mempalace` | Write a mineable markdown note into a [MemPalace](https://github.com/MemPalace/mempalace) palace | [mempalace.md](./mempalace.md) |
 
 ## Skeletons (need community input)
 
 See [skeletons.md](./skeletons.md) for the state of each and what a PR should add.
 
-- `cognee` · `mempalace` · `perplexity` · `antigravity`
+- `cognee` · `perplexity` · `antigravity`
 
 ## Community examples
 

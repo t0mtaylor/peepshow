@@ -3,9 +3,18 @@
 </p>
 
 <p align="center">
+  <a href="https://www.peepshow.dev/"><img src="https://img.shields.io/badge/site-peepshow.dev-a78bfa" alt="peepshow.dev"></a>
   <a href="https://www.npmjs.com/package/peepshow"><img src="https://img.shields.io/npm/v/peepshow.svg" alt="npm"></a>
   <img src="https://img.shields.io/badge/node-%E2%89%A522-43853d" alt="Node ≥ 22">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT">
+  <a href="https://x.com/tom_taylor"><img src="https://img.shields.io/badge/x-%40tom__taylor-000000" alt="@tom_taylor on X"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.peepshow.dev/">peepshow.dev</a> ·
+  <a href="https://www.peepshow.dev/sinks/">Sinks</a> ·
+  <a href="https://www.peepshow.dev/agents/">Agents</a> ·
+  <a href="https://x.com/tom_taylor">@tom_taylor</a>
 </p>
 
 # peepshow
@@ -18,7 +27,7 @@ Static images (JPG, PNG, static WebP) are already handled natively by most LLMs 
 
 **Same drag-and-drop UX as images.** Drop a `.mp4` / `.mov` / `.gif` into the Claude Code prompt and a `UserPromptSubmit` hook auto-invokes `/peepshow:slides <path>` behind the scenes — Claude extracts frames, reads them, and answers. No slash command, no Bash call, no copy-paste. Works with natural-language prompts too ("what's in ~/Desktop/bug.mov?") and with every other CLI entry point (explicit `/peepshow:slides`, shell `peepshow ...`, pipes into `--sink`).
 
-**Pluggable sink backends — write your own, or use the built-ins.** Every run can fan out to downstream systems via `--sink <name>` or `--sink-cmd <shell>`. A sink is any executable that reads a JSON payload on stdin — write one in bash, Node, Python, Go, whatever. The full `video` + `tags` + `frames` + `extraction` payload (same as `--emit json`) flows to each sink, so they receive the full context, not just the frame paths. Ten sinks ship built-in (SQLite, Postgres, S3-compatible, Webhook, Slack, Discord, GraphQL, Notion, Obsidian, IDE attachments) — see [`docs/sinks/`](./docs/sinks/). Candidates wanted: cognee, MemPalace, Perplexity, Antigravity, pgvector, Chroma, Linear, Sentry. Full spec: [`docs/PLUGINS.md`](./docs/PLUGINS.md).
+**Pluggable sink backends — write your own, or use the built-ins.** Every run can fan out to downstream systems via `--sink <name>` or `--sink-cmd <shell>`. A sink is any executable that reads a JSON payload on stdin — write one in bash, Node, Python, Go, whatever. The full `video` + `tags` + `frames` + `extraction` payload (same as `--emit json`) flows to each sink, so they receive the full context, not just the frame paths. Nineteen sinks ship built-in (SQLite, Postgres, pgvector, S3-compatible, Webhook, Slack, Discord, GraphQL, Notion, Obsidian, MemPalace, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, MongoDB) — see [`docs/sinks/`](./docs/sinks/). Candidates wanted: cognee, Perplexity, Antigravity. Full spec: [`docs/PLUGINS.md`](./docs/PLUGINS.md).
 
 ## TL;DR
 
@@ -114,7 +123,7 @@ npm i -g peepshow        # global — adds peepshow + all peepshow-sink-* bins t
 npx peepshow ./video.mp4 # one-shot, no install
 ```
 
-Every sink bin (`peepshow-sink-sqlite`, `peepshow-sink-postgres`, `peepshow-sink-s3`, `peepshow-sink-webhook`, `peepshow-sink-slack`, `peepshow-sink-discord`, `peepshow-sink-graphql`, `peepshow-sink-notion`, `peepshow-sink-obsidian`, `peepshow-sink-ide`, `peepshow-sink-linear`, `peepshow-sink-github-issues`, `peepshow-sink-sentry`, `peepshow-sink-chroma`, `peepshow-sink-qdrant`, `peepshow-sink-pinecone`, `peepshow-sink-pgvector`, `peepshow-sink-mongodb`) installs alongside. Heavy driver libraries (`better-sqlite3`, `pg`, `@aws-sdk/client-s3`, `mongodb`) are **optional deps** — if one fails to build, the rest of peepshow still works; the missing sink prints a one-line install hint when invoked.
+Every sink bin (`peepshow-sink-sqlite`, `peepshow-sink-postgres`, `peepshow-sink-s3`, `peepshow-sink-webhook`, `peepshow-sink-slack`, `peepshow-sink-discord`, `peepshow-sink-graphql`, `peepshow-sink-notion`, `peepshow-sink-obsidian`, `peepshow-sink-ide`, `peepshow-sink-linear`, `peepshow-sink-github-issues`, `peepshow-sink-sentry`, `peepshow-sink-chroma`, `peepshow-sink-qdrant`, `peepshow-sink-pinecone`, `peepshow-sink-pgvector`, `peepshow-sink-mongodb`, `peepshow-sink-mempalace`) installs alongside. Heavy driver libraries (`better-sqlite3`, `pg`, `@aws-sdk/client-s3`, `mongodb`) are **optional deps** — if one fails to build, the rest of peepshow still works; the missing sink prints a one-line install hint when invoked.
 
 Verify:
 
@@ -262,6 +271,32 @@ Opt-out per-invocation: `PEEPSHOW_NO_HINTS=1 peepshow ...`
 
 Inside Claude Code, hints flow naturally — Claude reads the stderr alongside the stdout output, so if ffmpeg is missing or a setting is off, it can act on the tip without you re-typing anything.
 
+### Auto-compression
+
+If peepshow detects a known token compressor on your `$PATH`, it will automatically route its output through it — no flag required. Preference order:
+
+1. **`boom-llm`** (future-facing binary — not yet released)
+2. **`caveman`** — [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman)
+
+When auto-detection fires, peepshow prints a one-line note to stderr:
+
+```
+peepshow: auto-compressor detected → caveman
+```
+
+Under the hood, peepshow emits its standard JSON payload to the compressor's stdin and uses the compressor's stdout as the final output. Any compressor failure falls back silently to the default `paths` emit (the error is logged to stderr).
+
+**Explicit `--emit` always wins.** Pass `--emit json` (or `paths`/`markdown`/`caveman`) and auto-detection is skipped entirely.
+
+**Opt out globally** with an env var:
+
+```bash
+PEEPSHOW_AUTO_COMPRESS=0 peepshow ./video.mp4
+# also accepted: PEEPSHOW_AUTO_COMPRESS=false
+```
+
+The internal `--emit caveman` format (ultra-terse, no external binary required) remains available whether or not the `caveman` binary is installed.
+
 ### Exit codes
 
 | Code | Meaning |
@@ -290,10 +325,11 @@ A **sink** is just an executable that reads a JSON payload on stdin. It can be w
 | `graphql` | POST a mutation to any GraphQL endpoint (custom template + auth supported). |
 | `obsidian` | Write a per-run markdown note with frame embeds into an Obsidian vault. |
 | `ide` | Drop frames into Cursor / Windsurf / Zed / VS Code attachment folders (auto-detect). |
+| `mempalace` | Write a mineable markdown note into a [MemPalace](https://github.com/MemPalace/mempalace) palace (optionally auto-mine after each run). |
 
-**Skeleton sinks** (help wanted): cognee, mempalace, perplexity, antigravity. See [`docs/sinks/skeletons.md`](./docs/sinks/skeletons.md).
+**Skeleton sinks** (help wanted): cognee, perplexity, antigravity. See [`docs/sinks/skeletons.md`](./docs/sinks/skeletons.md).
 
-**Other systems worth a sink** (prioritised scouting list): pgvector, Linear, Chroma, Sentry, Zep/Mem0, plus ~40 more in [`docs/SINKS-MISSING.md`](./docs/SINKS-MISSING.md).
+**Other systems worth a sink** (prioritised scouting list): Zep/Mem0, cognee, Perplexity, Antigravity, plus ~40 more in [`docs/SINKS-MISSING.md`](./docs/SINKS-MISSING.md).
 
 Invoke one or more from any peepshow run:
 

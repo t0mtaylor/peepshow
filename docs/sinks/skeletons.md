@@ -1,6 +1,6 @@
 # Skeleton sinks — partial implementations awaiting community input
 
-Four sinks on the roadmap need input from their upstream projects before they can ship production-ready. This doc captures exactly what's in place, what's missing, and how to finish each one. PRs very welcome — most are ~100 lines of code.
+Three sinks on the roadmap need input from their upstream projects before they can ship production-ready. This doc captures exactly what's in place, what's missing, and how to finish each one. PRs very welcome — most are ~100 lines of code.
 
 Each skeleton already:
 
@@ -22,14 +22,6 @@ What they don't yet do: make the actual API calls. That's the piece we're asking
 **Env:** `COGNEE_DATA_ROOT`, `COGNEE_USER_ID`.
 
 **What a PR should add:** pick option 1 or 2 above, implement the upload call, and ingest frame paths + video tags as nodes in the cognee graph.
-
-## peepshow-sink-mempalace
-
-**Target:** MemPalace — spatial-memory AI framework (no single canonical repo; the term is used by several projects).
-
-**Gap:** no public API surface yet; integration path depends which project the user means. A PR should first pin which implementation (upstream URL in README).
-
-**What a PR should add:** a thin REST/CLI wrapper that attaches frames to a "spatial node" or equivalent.
 
 ## peepshow-sink-perplexity
 
