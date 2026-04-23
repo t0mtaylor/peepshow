@@ -38,8 +38,7 @@
   },
   "homepage": "https://www.peepshow.dev/",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -64,7 +63,17 @@
     "peepshow-sink-pinecone": "./bin/peepshow-sink-pinecone",
     "peepshow-sink-pgvector": "./bin/peepshow-sink-pgvector",
     "peepshow-sink-mongodb": "./bin/peepshow-sink-mongodb",
-    "peepshow-sink-mempalace": "./bin/peepshow-sink-mempalace"
+    "peepshow-sink-mempalace": "./bin/peepshow-sink-mempalace",
+    "peepshow-sink-zep": "./bin/peepshow-sink-zep",
+    "peepshow-sink-mem0": "./bin/peepshow-sink-mem0",
+    "peepshow-sink-weaviate": "./bin/peepshow-sink-weaviate",
+    "peepshow-sink-jira": "./bin/peepshow-sink-jira",
+    "peepshow-sink-posthog": "./bin/peepshow-sink-posthog",
+    "peepshow-sink-telegram": "./bin/peepshow-sink-telegram",
+    "peepshow-sink-msteams": "./bin/peepshow-sink-msteams",
+    "peepshow-sink-datadog": "./bin/peepshow-sink-datadog",
+    "peepshow-sink-outline": "./bin/peepshow-sink-outline",
+    "peepshow-sink-confluence": "./bin/peepshow-sink-confluence"
   },
   "dependencies": {
     "ffmpeg-static": "^5.2.0"
