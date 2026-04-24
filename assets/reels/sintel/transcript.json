@@ -1,0 +1,26 @@
+{
+  "model": "base.en",
+  "language": "en",
+  "segments": [
+    {
+      "start": 0,
+      "end": 14.96,
+      "text": "What brings you to the land of the gatekeepers?"
+    },
+    {
+      "start": 14.96,
+      "end": 34.96,
+      "text": "I'm searching for someone."
+    },
+    {
+      "start": 34.96,
+      "end": 41.96,
+      "text": "A dangerous quest for our lone hunter."
+    },
+    {
+      "start": 41.96,
+      "end": 48.96,
+      "text": "I've been alone for as long as I can remember."
+    }
+  ]
+}

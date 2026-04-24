@@ -1,0 +1,11 @@
+{
+  "model": "base.en",
+  "language": "en",
+  "segments": [
+    {
+      "start": 0,
+      "end": 2.58,
+      "text": "(upbeat music)"
+    }
+  ]
+}

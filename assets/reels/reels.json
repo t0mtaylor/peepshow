@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-23",
+  "updated": "2026-04-24",
   "reels": [
     {
       "slug": "big-buck-bunny",
@@ -22,23 +22,40 @@
         "studio": "Blender Institute",
         "year": "2008",
         "genre": "CG short · comedy",
-        "duration": 10,
-        "bitrate": 1656560,
+        "duration": 32.995,
+        "bitrate": 2681863,
         "container": "mov,mp4,m4a,3gp,3g2,mj2",
         "codec": "h264",
-        "width": 640,
-        "height": 360,
-        "fps": 30,
-        "size_bytes": 2070701
+        "width": 853,
+        "height": 480,
+        "fps": 25,
+        "size_bytes": 11061011,
+        "hasAudio": true,
+        "audioCodec": "aac"
       },
       "captions": [
-        "opening title — wind in tall grass, sunrise",
-        "bunny paw stretching up through undergrowth",
-        "Big Buck Bunny rolls out of his burrow, yawns",
-        "orchard wide shot — butterfly settling on flower",
-        "bunny mid-stride across the meadow",
-        "squirrel antagonist leering from a branch"
-      ]
+        "Blender Foundation intro card — logo on white",
+        "orchard establishing shot — dawn light through branches",
+        "Big Buck Bunny peering out, eyes wide",
+        "chase cut — squirrel antagonist darts past",
+        "bunny mid-air with a thrown fruit",
+        "trailer title card — Big Buck Bunny"
+      ],
+      "hasAudio": true,
+      "audioWaveform": "assets/reels/big-buck-bunny/audio-waveform.svg",
+      "transcript": {
+        "provider": "whisper-cpp",
+        "model": "base.en",
+        "language": "en",
+        "segments": [
+          {
+            "start": 0,
+            "end": 2.58,
+            "text": "(upbeat music)"
+          }
+        ],
+        "source": "assets/reels/big-buck-bunny/transcript.json"
+      }
     },
     {
       "slug": "sintel",
@@ -61,23 +78,55 @@
         "studio": "Blender Foundation",
         "year": "2010",
         "genre": "fantasy short · CG",
-        "duration": 10,
-        "bitrate": 1677353,
+        "duration": 52.208333,
+        "bitrate": 669988,
         "container": "mov,mp4,m4a,3gp,3g2,mj2",
         "codec": "h264",
-        "width": 640,
-        "height": 360,
+        "width": 854,
+        "height": 480,
         "fps": 24,
-        "size_bytes": 2096692
+        "size_bytes": 4372373,
+        "hasAudio": true,
+        "audioCodec": "aac"
       },
       "captions": [
-        "cold open — windswept slate sky, no sound",
-        "snow drift over broken ridgeline",
-        "hooded figure against the weather",
-        "close on Sintel's eyes, ice-rimmed",
-        "breath condensing, lips parted",
-        "looking up — storm closing in above"
-      ]
+        "Blender Foundation intro — score fades in",
+        "snow-swept ridgeline, Sintel walking alone",
+        "close on Sintel's face, hood pulled up",
+        "voiceover beat — 'I was looking for you'",
+        "dragon silhouette against grey sky",
+        "trailer title card — Sintel"
+      ],
+      "hasAudio": true,
+      "audioWaveform": "assets/reels/sintel/audio-waveform.svg",
+      "transcript": {
+        "provider": "whisper-cpp",
+        "model": "base.en",
+        "language": "en",
+        "segments": [
+          {
+            "start": 0,
+            "end": 14.96,
+            "text": "What brings you to the land of the gatekeepers?"
+          },
+          {
+            "start": 14.96,
+            "end": 34.96,
+            "text": "I'm searching for someone."
+          },
+          {
+            "start": 34.96,
+            "end": 41.96,
+            "text": "A dangerous quest for our lone hunter."
+          },
+          {
+            "start": 41.96,
+            "end": 48.96,
+            "text": "I've been alone for as long as I can remember."
+          }
+        ],
+        "source": "assets/reels/sintel/transcript.json"
+      }
     },
     {
       "slug": "earth-at-night",
@@ -107,7 +156,9 @@
         "width": 640,
         "height": 360,
         "fps": 30,
-        "size_bytes": 3114374
+        "size_bytes": 3114374,
+        "hasAudio": true,
+        "audioCodec": "aac"
       },
       "captions": [
         "rotating Earth — Asia lit up, city lights across India and China",
@@ -116,7 +167,10 @@
         "Americas face us — US interstate grid and coastal cities bright",
         "Pacific hemisphere, dark expanse of open ocean",
         "Australia and Southeast Asia returning — one full rotation"
-      ]
+      ],
+      "hasAudio": true,
+      "audioWaveform": "assets/reels/earth-at-night/audio-waveform.svg",
+      "transcript": null
     },
     {
       "slug": "earth-at-night-webm",
@@ -146,7 +200,9 @@
         "width": 640,
         "height": 360,
         "fps": 30,
-        "size_bytes": 1417829
+        "size_bytes": 1417829,
+        "hasAudio": true,
+        "audioCodec": "vorbis"
       },
       "captions": [
         "VP9-encoded rotation — Asian night side, illuminated megacities",
@@ -155,7 +211,10 @@
         "Americas sweep past — Mexico City and US East Coast bright",
         "Pacific void, a single lit island cluster in the south",
         "Back to Asia — container difference, same story"
-      ]
+      ],
+      "hasAudio": true,
+      "audioWaveform": "assets/reels/earth-at-night-webm/audio-waveform.svg",
+      "transcript": null
     },
     {
       "slug": "earth-at-night-mov",
@@ -185,7 +244,9 @@
         "width": 640,
         "height": 360,
         "fps": 30,
-        "size_bytes": 796625
+        "size_bytes": 796625,
+        "hasAudio": true,
+        "audioCodec": "aac"
       },
       "captions": [
         "QuickTime wrapper — Asia faces the camera, night-lights web",
@@ -194,7 +255,10 @@
         "North America centered — dense coastal clusters, dark interior",
         "Pacific ocean, near-total blackness with scattered pinpricks",
         "Australia climbs back into frame — container agnostic extraction"
-      ]
+      ],
+      "hasAudio": true,
+      "audioWaveform": "assets/reels/earth-at-night-mov/audio-waveform.svg",
+      "transcript": null
     },
     {
       "slug": "jellyfish",
@@ -224,7 +288,9 @@
         "width": 640,
         "height": 360,
         "fps": 29.97,
-        "size_bytes": 2095805
+        "size_bytes": 2095805,
+        "hasAudio": false,
+        "audioCodec": null
       },
       "captions": [
         "deep blue — jellyfish centered",
@@ -233,7 +299,10 @@
         "backlit translucence, shimmer",
         "low angle, darkness around the bloom",
         "bioluminescent ring of light"
-      ]
+      ],
+      "hasAudio": false,
+      "audioWaveform": null,
+      "transcript": null
     }
   ]
 }
