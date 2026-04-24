@@ -4,7 +4,7 @@ This is a scouting list of popular AI/LLM tools and developer-facing systems whe
 
 Every entry below is "drop-in fit" — the peepshow JSON payload on stdin cleanly maps onto the system's write surface. Community PRs welcome: see `docs/sinks/skeletons.md` for the pattern.
 
-Last audit: 2026-04-24. **58 sinks shipping**; items crossed out are live.
+Last audit: 2026-04-24. **68 sinks shipping**; items crossed out are live.
 
 ## Vector stores & AI memory
 
@@ -25,10 +25,10 @@ These ingest frames + tags + extracted metadata as embeddings or graph nodes so 
 
 - ~~**Continue**~~ — shipped (`peepshow-sink-continue`).
 - ~~**Aider**~~ — shipped (`peepshow-sink-aider`).
-- **Cody** (Sourcegraph) — attach via `.cody/` workspace files. Not shipped.
+- ~~**Cody** (Sourcegraph)~~ — shipped (`peepshow-sink-cody`).
+- ~~**OpenAI Files API**~~ — shipped (`peepshow-sink-openai-files`); pre-uploads frames for Custom GPTs / Projects / Assistants file-search.
 - **Roo Code / Kilo Code / RooVetGit** — VS Code forks; `peepshow-sink-ide` + `peepshow-sink-continue` cover the workspace-drop pattern for these.
 - **Claude.ai Projects** — no public upload API yet; watch for when they open it.
-- **ChatGPT Custom GPTs / Projects** — OpenAI Files API has `/files` endpoint; sink could pre-upload. Not shipped.
 
 ## Issue trackers / PM
 
@@ -72,8 +72,9 @@ Attach video of a bug as evidence.
 - ~~**Datadog**~~ — shipped (`peepshow-sink-datadog`).
 - ~~**PagerDuty**~~ — shipped (`peepshow-sink-pagerduty`).
 - ~~**Opsgenie**~~ — shipped (`peepshow-sink-opsgenie`).
-- **Grafana Oncall** — same shape as Opsgenie. Not shipped.
-- **Honeycomb**, **New Relic** — less natural fit; users can reach these via our generic `peepshow-sink-webhook`.
+- ~~**Grafana Oncall**~~ — shipped (`peepshow-sink-grafana-oncall`).
+- ~~**Honeycomb**~~ — shipped (`peepshow-sink-honeycomb`); wide-event ingest with dotted keys.
+- ~~**New Relic**~~ — shipped (`peepshow-sink-newrelic`); Events API with camelCase attributes.
 
 ## Event tracking / product analytics
 
@@ -93,7 +94,8 @@ Log "a peepshow run happened" as a product event.
 - **Roam Research** — API in flux; scrape-level workarounds exist.
 - **Tana** — API private beta.
 - **Craft** — no public API.
-- **Bear / Apple Notes / Things 3** — macOS-only, AppleScript/x-callback-url based.
+- ~~**Apple Notes**~~ — shipped (`peepshow-sink-apple-notes`) via AppleScript.
+- **Bear / Things 3** — macOS-only, AppleScript/x-callback-url based. Not shipped.
 
 ## Chat / messaging (beyond Slack/Discord already covered)
 
@@ -103,32 +105,31 @@ Log "a peepshow run happened" as a product event.
 - ~~**Mattermost**~~ — shipped (`peepshow-sink-mattermost`).
 - ~~**Rocket.Chat**~~ — shipped (`peepshow-sink-rocketchat`).
 - ~~**Zulip**~~ — shipped (`peepshow-sink-zulip`).
-- **WhatsApp Cloud API** — message templates; stricter rate limits.
+- ~~**WhatsApp Cloud API**~~ — shipped (`peepshow-sink-whatsapp`); uploads frames via `/media`, sends text + image messages via `/messages`.
 
 ## macOS-specific (AppleScript/Shortcuts)
 
-- **iMessage** — `osascript` with Messages.app; attach frames to a conversation.
-- **Apple Notes / Reminders** — `Notes.app` via AppleScript.
-- **Shortcuts app** — expose peepshow runs as input to user-built Shortcuts.
+- ~~**iMessage**~~ — shipped (`peepshow-sink-imessage`); AppleScript send via Messages.app.
+- ~~**Apple Notes**~~ — shipped (`peepshow-sink-apple-notes`); new note via AppleScript with HTML body + frame attachments.
+- ~~**Shortcuts app**~~ — shipped (`peepshow-sink-shortcuts`); invokes a named Shortcut with the payload (or per-frame).
+- **Apple Reminders** — `Reminders.app` via AppleScript. Not shipped.
 
 ## Low-code / automation platforms
 
 Less like sinks, more like "trigger points" — each has a webhook we can POST to and the user builds the downstream flow in their platform of choice.
 
-- **Zapier / Make (Integromat) / n8n / Activepieces / Node-RED** — covered by our generic `--sink-cmd` + `peepshow-sink-webhook` today. Dedicated sinks could add signing/retry tuned per platform. Not shipped.
+- ~~**Zapier**~~ — shipped (`peepshow-sink-zapier`); Catch Hook URL with flat body (tag_ prefix for each `video.tags[key]`), HMAC signing, 429/5xx retry.
 - ~~**Pipedream**~~ — shipped (`peepshow-sink-pipedream`).
+- **Make (Integromat) / n8n / Activepieces / Node-RED** — covered by our generic `--sink-cmd` + `peepshow-sink-webhook` today. Dedicated sinks could add signing/retry tuned per platform. Not shipped.
 
 ## Prioritisation for next wave
 
-All 7 of the previous next-wave items (Height · Opsgenie · Firebase Storage · Aider · Continue · Raycast · Pipedream) shipped in v0.5.0. Remaining gaps, ordered by leverage:
+0.6.0 cleared the bulk of the backlog (10 more sinks: Cody, Grafana Oncall, OpenAI Files, iMessage, Apple Notes, Shortcuts, WhatsApp, Honeycomb, New Relic, Zapier). What's left:
 
-1. **Cody** (Sourcegraph) — `.cody/` workspace context; same shape as `continue`/`ide`.
-2. **Grafana Oncall** — incident routing; REST API, similar to Opsgenie.
-3. **ChatGPT Files API** — pre-upload frames for Custom GPTs / Projects.
-4. **Whimsical** / **Excalidraw Plus** — whiteboards, pending API maturity.
-5. **iMessage / Apple Notes / Things 3** — macOS-only via AppleScript. Niche but possible.
-6. **WhatsApp Cloud API** — stricter rate limits; possible if there's demand.
+1. **Apple Reminders / Things 3 / Bear** — macOS AppleScript; same pattern as apple-notes/imessage.
+2. **Make (Integromat) / n8n / Activepieces / Node-RED** — branded wrappers over webhook; adds platform-specific signing + retry tuning.
+3. **Roam Research** — API in flux; re-evaluate after their next release.
 
-Everything else on this page is either blocked on upstream API availability (Roam, Tana, Craft, Claude.ai Projects) or covered by the generic webhook/command sinks.
+Everything else on this page is either blocked on upstream API availability (Tana, Craft, Claude.ai Projects) or covered by the generic webhook/command sinks.
 
 Volunteer for any — see `docs/sinks/skeletons.md` for the contribution pattern.

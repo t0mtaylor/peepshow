@@ -53,6 +53,8 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `box` | Upload frames + `manifest.json` to a Box folder via simple upload | [box.md](./box.md) |
 | `logseq` | Write a markdown page into a Logseq graph's `pages/` dir with frame embeds in `assets/` | [logseq.md](./logseq.md) |
 | `raycast` | Expose peepshow runs as Raycast script commands on macOS — manifest + frames + companion "Show last run" script | [raycast.md](./raycast.md) |
+| `apple-notes` | File a new note in Apple Notes.app on macOS with HTML body (metadata + inline frames + transcript) | [apple-notes.md](./apple-notes.md) |
+| `shortcuts` | Invoke a user-created macOS Shortcut via the `shortcuts` CLI — pass the peepshow JSON payload or each frame image | [shortcuts.md](./shortcuts.md) |
 
 ## Skeletons (need community input)
 
