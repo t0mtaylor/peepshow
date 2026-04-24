@@ -1,7 +1,7 @@
 {
   "name": "peepshow",
-  "version": "0.4.2",
-  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames + audio transcript so LLMs can 'watch' and 'listen'. Second ffmpeg pass extracts an audio track; whisper.cpp or openai/groq/deepgram/assemblyai transcribe it. CLI + Claude Code plugin with 51 pluggable sinks across SQL (SQLite, Postgres, MongoDB), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Azure Blob, Supabase, Dropbox, Google Drive, Box), chat (Slack, Discord, MS Teams, Telegram, Mattermost, Rocket.Chat, Zulip, Matrix), issue trackers (Linear, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki (Notion, Obsidian, Logseq, Outline, Confluence), analytics + observability (PostHog, Plausible, Sentry, Datadog, PagerDuty, Mixpanel/Amplitude/Segment) and generic webhook/GraphQL/IDE forwarders.",
+  "version": "0.5.0",
+  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames + audio transcript so LLMs can 'watch' and 'listen'. Second ffmpeg pass extracts an audio track; whisper.cpp or openai/groq/deepgram/assemblyai transcribe it. CLI + Claude Code plugin with 58 pluggable sinks across SQL (SQLite, Postgres, MongoDB), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Firebase Storage, Azure Blob, Supabase, Dropbox, Google Drive, Box), chat (Slack, Discord, MS Teams, Telegram, Mattermost, Rocket.Chat, Zulip, Matrix), issue trackers (Linear, Height, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki (Notion, Obsidian, Logseq, Outline, Confluence), analytics + observability (PostHog, Plausible, Sentry, Datadog, PagerDuty, Opsgenie, Mixpanel/Amplitude/Segment) and workflow glue (Webhook, GraphQL, IDE, Aider, Continue, Raycast, Pipedream).",
   "type": "module",
   "license": "MIT",
   "author": {
@@ -83,6 +83,7 @@
     "peepshow-sink-shortcut": "./bin/peepshow-sink-shortcut",
     "peepshow-sink-trello": "./bin/peepshow-sink-trello",
     "peepshow-sink-pagerduty": "./bin/peepshow-sink-pagerduty",
+    "peepshow-sink-opsgenie": "./bin/peepshow-sink-opsgenie",
     "peepshow-sink-event-track": "./bin/peepshow-sink-event-track",
     "peepshow-sink-plausible": "./bin/peepshow-sink-plausible",
     "peepshow-sink-milvus": "./bin/peepshow-sink-milvus",
@@ -90,12 +91,18 @@
     "peepshow-sink-miro": "./bin/peepshow-sink-miro",
     "peepshow-sink-figma": "./bin/peepshow-sink-figma",
     "peepshow-sink-gcs": "./bin/peepshow-sink-gcs",
+    "peepshow-sink-firebase-storage": "./bin/peepshow-sink-firebase-storage",
     "peepshow-sink-azure-blob": "./bin/peepshow-sink-azure-blob",
     "peepshow-sink-supabase": "./bin/peepshow-sink-supabase",
     "peepshow-sink-dropbox": "./bin/peepshow-sink-dropbox",
     "peepshow-sink-gdrive": "./bin/peepshow-sink-gdrive",
     "peepshow-sink-box": "./bin/peepshow-sink-box",
-    "peepshow-sink-logseq": "./bin/peepshow-sink-logseq"
+    "peepshow-sink-logseq": "./bin/peepshow-sink-logseq",
+    "peepshow-sink-height": "./bin/peepshow-sink-height",
+    "peepshow-sink-aider": "./bin/peepshow-sink-aider",
+    "peepshow-sink-continue": "./bin/peepshow-sink-continue",
+    "peepshow-sink-pipedream": "./bin/peepshow-sink-pipedream",
+    "peepshow-sink-raycast": "./bin/peepshow-sink-raycast"
   },
   "dependencies": {
     "ffmpeg-static": "^5.2.0"
@@ -125,7 +132,7 @@
     "docs/PLUGINS.md",
     "docs/SINKS-MISSING.md",
     "docs/logo.svg",
-    "docs/demo.gif",
+    "docs/demo.*.gif",
     "AGENTS.md",
     "CHANGELOG.md",
     "GEMINI.md",

@@ -38,6 +38,7 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `shortcut` | Create a Shortcut story (or attach to one) and link one file per frame | [shortcut.md](./shortcut.md) |
 | `trello` | Create a Trello card (or attach to one) with one attachment per frame | [trello.md](./trello.md) |
 | `pagerduty` | Fire a PagerDuty Events API v2 `trigger` event with run metadata | [pagerduty.md](./pagerduty.md) |
+| `opsgenie` | Create an Opsgenie v2 alert per run with priority, tags, and the full frame list | [opsgenie.md](./opsgenie.md) |
 | `event-track` | Unified sink for Mixpanel / Amplitude / Segment — one event per run | [event-track.md](./event-track.md) |
 | `plausible` | Custom event to a Plausible Analytics site via `/api/event` | [plausible.md](./plausible.md) |
 | `milvus` | Upsert one row per frame into a Milvus collection (zero-vector placeholder) | [milvus.md](./milvus.md) |
@@ -51,6 +52,7 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `gdrive` | Upload frames + `manifest.json` to a Google Drive folder via multipart | [gdrive.md](./gdrive.md) |
 | `box` | Upload frames + `manifest.json` to a Box folder via simple upload | [box.md](./box.md) |
 | `logseq` | Write a markdown page into a Logseq graph's `pages/` dir with frame embeds in `assets/` | [logseq.md](./logseq.md) |
+| `raycast` | Expose peepshow runs as Raycast script commands on macOS — manifest + frames + companion "Show last run" script | [raycast.md](./raycast.md) |
 
 ## Skeletons (need community input)
 
