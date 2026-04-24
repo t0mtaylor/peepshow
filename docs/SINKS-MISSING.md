@@ -12,11 +12,11 @@ These ingest frames + tags + extracted metadata as embeddings or graph nodes so 
 - **Qdrant** — REST + gRPC; easy Node client. Self-hosted friendly (docker).
 - **Weaviate** — REST + GraphQL. Batch insert of frame embeddings.
 - **Pinecone** — hosted only; needs API key. Upsert by run id.
-- **Milvus** — REST/gRPC; self-hosted or Zilliz cloud.
+- ~~**Milvus**~~ — shipped (`peepshow-sink-milvus`).
 - **pgvector** — extension on top of our existing Postgres sink. Trivial add: one extra column + an extension check.
 - **Mem0** — AI memory SDK with cloud + self-hosted options. Has a clean Node SDK.
 - **Zep** — long-term memory for agents. REST API, clean Node client.
-- **Letta** (formerly MemGPT) — REST + Python SDK. One POST per run.
+- ~~**Letta**~~ (formerly MemGPT) — shipped (`peepshow-sink-letta`).
 
 ## AI coding / workspace tools (beyond Cursor/Windsurf/Zed already covered)
 
@@ -35,13 +35,16 @@ Attach video evidence to a ticket so the LLM-assisted triage flow has frames, no
 - **GitHub Issues / PRs** — REST v3 or GraphQL v4; `gh` CLI fallback.
 - **Jira Cloud / Data Center** — REST with `/issue/{key}/attachments`.
 - **Height** — API + webhooks.
-- **Asana / ClickUp / Trello / Shortcut** — each has a REST API with a `createAttachment`-shaped call.
+- ~~**Asana**~~ — shipped (`peepshow-sink-asana`).
+- ~~**ClickUp**~~ — shipped (`peepshow-sink-clickup`).
+- ~~**Trello**~~ — shipped (`peepshow-sink-trello`).
+- ~~**Shortcut**~~ — shipped (`peepshow-sink-shortcut`).
 - **Raycast Script Commands** — wrap peepshow in a Raycast command; user gets a "extract and share" action menu.
 
 ## Boards & whiteboards
 
-- **Miro** — REST API, upload image block per frame.
-- **FigJam / Figma** — Figma API lets you add images to a file.
+- ~~**Miro**~~ — shipped (`peepshow-sink-miro`).
+- ~~**FigJam / Figma**~~ — shipped (`peepshow-sink-figma` — posts a file comment with run summary + frame list).
 - **Whimsical** — API in beta; watch for public release.
 - **Excalidraw Plus** — no public API yet; can export JSON with embedded image refs.
 
@@ -50,12 +53,12 @@ Attach video evidence to a ticket so the LLM-assisted triage flow has frames, no
 Our S3 sink covers: AWS S3, MinIO, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, Linode Object Storage, Wasabi, iDrive e2, Scaleway, Oracle OCI, IBM Cloud Object Storage. All configured via `S3_ENDPOINT`.
 
 Separate SDKs still worth dedicated sinks:
-- **Google Cloud Storage** — GCS has an S3 compat layer but a native `@google-cloud/storage` sink gets better auth story (workload identity).
-- **Azure Blob Storage** — different API family, no S3 compat.
-- **Dropbox** — API v2 uses a JSON-RPC style; needs its own upload logic.
-- **Google Drive** — REST + OAuth; multipart upload.
-- **Box** — REST with `files/upload_sessions`.
-- **Supabase Storage** — friendly REST (PostgREST-style).
+- ~~**Google Cloud Storage**~~ — shipped (`peepshow-sink-gcs`).
+- ~~**Azure Blob Storage**~~ — shipped (`peepshow-sink-azure-blob`).
+- ~~**Dropbox**~~ — shipped (`peepshow-sink-dropbox`).
+- ~~**Google Drive**~~ — shipped (`peepshow-sink-gdrive`).
+- ~~**Box**~~ — shipped (`peepshow-sink-box`).
+- ~~**Supabase Storage**~~ — shipped (`peepshow-sink-supabase`).
 - **Firebase Storage** — Google SDK; good for mobile flows.
 
 ## Observability / incident tooling
@@ -64,7 +67,7 @@ Attach video of a bug as evidence.
 
 - **Sentry** — `attach` to an issue event.
 - **Datadog** — add as a note/attachment on an incident.
-- **PagerDuty** — attach to an incident timeline.
+- ~~**PagerDuty**~~ — shipped (`peepshow-sink-pagerduty`).
 - **Opsgenie**, **Grafana Oncall** — same shape.
 - **Honeycomb**, **New Relic** — less natural fit; probably a webhook instead.
 
@@ -73,13 +76,13 @@ Attach video of a bug as evidence.
 Log "a peepshow run happened" as a product event.
 
 - **PostHog** — `capture` event with frames metadata.
-- **Plausible** — custom events API.
-- **Mixpanel / Amplitude / Segment** — identical shape; maybe a single "event-track" sink with a provider flag.
+- ~~**Plausible**~~ — shipped (`peepshow-sink-plausible`).
+- ~~**Mixpanel / Amplitude / Segment**~~ — shipped as unified `peepshow-sink-event-track` with `EVENT_TRACK_PROVIDER` flag.
 
 ## Note / wiki systems (beyond Obsidian)
 
 - **Notion** — already on our build list; keep moving it up.
-- **Logseq** — block graph; Markdown files under a known root — filesystem sink variant.
+- ~~**Logseq**~~ — shipped (`peepshow-sink-logseq`).
 - **Roam Research** — API in flux; scrape-level workarounds exist.
 - **Tana** — API private beta.
 - **Craft** — no public API.
@@ -89,11 +92,13 @@ Log "a peepshow run happened" as a product event.
 
 ## Chat / messaging (beyond Slack/Discord already covered)
 
-- **Microsoft Teams** — Incoming Webhook is similar to Slack; Adaptive Cards payload shape.
-- **Telegram Bot API** — `sendPhoto` loop, `sendMediaGroup` for albums.
+- ~~**Microsoft Teams**~~ — shipped (`peepshow-sink-msteams`).
+- ~~**Telegram Bot API**~~ — shipped (`peepshow-sink-telegram`).
+- ~~**Matrix**~~ — shipped (`peepshow-sink-matrix`).
+- ~~**Mattermost**~~ — shipped (`peepshow-sink-mattermost`).
+- ~~**Rocket.Chat**~~ — shipped (`peepshow-sink-rocketchat`).
+- ~~**Zulip**~~ — shipped (`peepshow-sink-zulip`).
 - **WhatsApp Cloud API** — message templates; stricter rate limits.
-- **Matrix** — any homeserver; nice for privacy-conscious users.
-- **Mattermost / Rocket.Chat / Zulip** — all have "incoming webhook" paths, same as Slack.
 
 ## macOS-specific (AppleScript/Shortcuts)
 

@@ -1,44 +1,68 @@
-# peepshow-sink-posthog
+# peepshow-sink-plausible
 
-Capture a peepshow run as a [PostHog](https://posthog.com) product-analytics
-event (plus optional per-frame events) so you can chart CLI usage,
-popular sinks, average run duration, etc.
+Fire a custom event against a [Plausible Analytics](https://plausible.io)
+site so peepshow runs show up on the dashboard alongside regular
+pageviews. Works with Plausible Cloud and self-hosted Plausible.
 
 ## Invocation
 
 ```bash
-peepshow ./bug.mov --sink posthog
-POSTHOG_PROJECT_API_KEY=phc_… \
-  peepshow ./clip.mp4 --sink posthog
+PLAUSIBLE_DOMAIN=peepshow.dev \
+  peepshow ./clip.mov --sink plausible
+
+# self-hosted
+PLAUSIBLE_DOMAIN=analytics.internal \
+PLAUSIBLE_HOST=https://analytics.example.com \
+  peepshow ./clip.mov --sink plausible
 ```
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `POSTHOG_PROJECT_API_KEY` | ✓ | — | Project API key (`phc_…`). |
-| `POSTHOG_HOST`            |   | `https://us.posthog.com` | Override for EU / self-hosted. |
-| `POSTHOG_DISTINCT_ID`     |   | `peepshow` | distinct_id used on every event. |
-| `POSTHOG_PER_FRAME`       |   | — | `1` fires one additional `peepshow_frame` event per extracted frame. |
+| `PLAUSIBLE_DOMAIN`     | ✓ | — | Site domain as registered in Plausible. |
+| `PLAUSIBLE_HOST`       |   | `https://plausible.io` | Base URL for Plausible Cloud / self-hosted. Trailing slashes stripped. |
+| `PLAUSIBLE_EVENT_NAME` |   | `peepshow_run` | Custom-event name recorded in Plausible. |
+| `PLAUSIBLE_URL`        |   | `https://<domain>/peepshow` | Absolute URL recorded against the event. |
+| `PLAUSIBLE_USER_AGENT` |   | `peepshow/0.3 (+https://www.peepshow.dev)` | UA header — Plausible rejects requests without one. |
 
-## Events
+## Event shape
 
-**peepshow_run** — one per run, properties: `strategy`, `frame_count`,
-`output_bytes_total`, `avg_frame_bytes`, `elapsed_ms`, `ffmpeg_source`,
-`codec`, `container`, `duration_seconds`, `width`, `height`, `fps`,
-`title`, `director`, `studio`.
+`POST <host>/api/event` with body:
 
-**peepshow_frame** (only when `POSTHOG_PER_FRAME=1`) — one per frame with
-`ordinal`, `path`, `bytes`, `approx_seconds`, `strategy`.
+```json
+{
+  "name": "peepshow_run",
+  "domain": "peepshow.dev",
+  "url": "https://peepshow.dev/peepshow",
+  "props": {
+    "strategy": "scene",
+    "frames": 12,
+    "codec": "h264",
+    "duration_s": 42.5,
+    "width": 1280,
+    "height": 720,
+    "director": "Sacha",
+    "studio": "Blender",
+    "output_dir": "/tmp/peepshow",
+    "tags": "{\"title\":\"Big Buck Bunny\"}"
+  }
+}
+```
 
-Events hit `POSTHOG_HOST/batch/` in a single request.
+Optional props (`duration_s`, `width`, `height`, `director`, `studio`)
+are omitted when the underlying metadata is missing. `tags` is the
+full `video.tags` object stringified as JSON, since Plausible props
+values must be scalar.
+
+Plausible responds `202 Accepted` on success.
 
 ## Exit codes
 
-| 0 | Events accepted. |
-| 2 | Missing `POSTHOG_PROJECT_API_KEY`. |
+| 0 | Event accepted. |
+| 2 | `PLAUSIBLE_DOMAIN` missing. |
 | 4 | stdin malformed. |
-| 5 | PostHog returned non-2xx. |
+| 5 | Plausible returned non-2xx. |
 
 ## Use with an LLM agent
 
@@ -54,7 +78,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export POSTHOG_PROJECT_API_KEY="…"
+export PLAUSIBLE_DOMAIN="your-value"
 ```
 
 ### 2. Register as an auto-sink
@@ -64,10 +88,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add posthog
+peepshow sinks add plausible
 # Optional: only fire for matching inputs
-peepshow sinks add posthog --when extension=mp4,mov
-peepshow sinks add posthog --when source=production
+peepshow sinks add plausible --when extension=mp4,mov
+peepshow sinks add plausible --when source=production
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -81,9 +105,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `PostHog` sink.
+> then forwards the run to the `Plausible` sink.
 >
-> **`PostHog`**: captures a single `peepshow_run` event per run with strategy, frame count, codec, duration, and container tags as properties.
+> **`Plausible`**: fires a custom Plausible event per run with strategy, frames, codec, duration, and container tags as props.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the

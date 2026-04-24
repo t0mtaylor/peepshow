@@ -1,25 +1,33 @@
-# peepshow-sink-msteams
+# peepshow-sink-trello
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+Create a Trello card (or attach to an existing one) with:
+- a markdown description listing strategy, frames, codec, duration, resolution, director, studio,
+- one multipart attachment per extracted frame.
+
+Uses Trello's REST API with [key + token](https://trello.com/power-ups/admin) authentication (passed as query-string params on every request).
+
+## Invocation
+
+```bash
+peepshow ./bug-repro.mov --sink trello
+```
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `TRELLO_KEY`     | ✓ | — | Trello API key. |
+| `TRELLO_TOKEN`   | ✓ | — | User token. |
+| `TRELLO_LIST_ID` | ◐ | — | List GID to create the new card under (required unless `TRELLO_CARD_ID` is set). |
+| `TRELLO_CARD_ID` | ◐ | — | Attach to this existing card; skip the create step. |
+| `TRELLO_API_URL` |   | `https://api.trello.com/1` | Override for self-hosted / test doubles. |
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| 0 | Card created / attachments uploaded. |
+| 2 | Missing env. |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | Trello returned non-2xx on create or attachment. |
 
 ## Use with an LLM agent
 
@@ -35,7 +43,8 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export TRELLO_KEY="…"
+export TRELLO_TOKEN="…"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +54,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add trello
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add trello --when extension=mp4,mov
+peepshow sinks add trello --when priority=high
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +71,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `Trello` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`Trello`**: creates a Trello card on a configured list with every frame attached as a card attachment.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the
@@ -84,4 +93,4 @@ the frame paths. That includes:
   language — populated when transcription is enabled (v0.4.0+).
 - `extraction` — strategy, thresholds, ffmpeg path used.
 
-> **Transcript handling**: the transcript snippet is posted alongside the frames as a secondary message in the thread.
+> **Transcript handling**: transcript lines appear in the issue body so triage has a copy-pasteable record of what was said on-screen.

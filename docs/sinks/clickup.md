@@ -1,25 +1,34 @@
-# peepshow-sink-msteams
+# peepshow-sink-clickup
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+Create a ClickUp task (or attach to an existing one) with:
+- a markdown description summarising the peepshow run (strategy, frames, codec, duration, resolution, director, studio),
+- one multipart attachment per extracted frame.
+
+Uses the ClickUp v2 REST API.
+
+## Invocation
+
+```bash
+peepshow ./bug-repro.mov --sink clickup
+```
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `CLICKUP_TOKEN`   | ✓ | — | Personal API token (ClickUp settings → Apps) or OAuth token. Sent verbatim — **no `Bearer` prefix**. |
+| `CLICKUP_LIST_ID` | ◐ | — | List id to create a new task under. Required unless `CLICKUP_TASK_ID` is set. |
+| `CLICKUP_TASK_ID` | ◐ | — | Attach to this existing task; skip the create step. |
+| `CLICKUP_API_URL` |   | `https://api.clickup.com/api/v2` | Override for self-hosted proxies. Trailing slashes are stripped. |
+
+One of `CLICKUP_LIST_ID` or `CLICKUP_TASK_ID` must be set.
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| 0 | Task created / attachments uploaded. |
+| 2 | Missing env (`CLICKUP_TOKEN`, or neither list nor task id). |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | ClickUp returned non-2xx on create or attachment. |
 
 ## Use with an LLM agent
 
@@ -35,7 +44,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export CLICKUP_TOKEN="…"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +54,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add clickup
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add clickup --when extension=mp4,mov
+peepshow sinks add clickup --when priority=high
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +71,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `ClickUp` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`ClickUp`**: opens a ClickUp task with a markdown description and every frame uploaded via the v2 REST API.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the
@@ -84,4 +93,4 @@ the frame paths. That includes:
   language — populated when transcription is enabled (v0.4.0+).
 - `extraction` — strategy, thresholds, ffmpeg path used.
 
-> **Transcript handling**: the transcript snippet is posted alongside the frames as a secondary message in the thread.
+> **Transcript handling**: transcript lines appear in the issue body so triage has a copy-pasteable record of what was said on-screen.

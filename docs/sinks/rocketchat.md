@@ -1,25 +1,34 @@
-# peepshow-sink-msteams
+# peepshow-sink-rocketchat
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+POST a peepshow run to a [Rocket.Chat incoming webhook][wh]. The body is
+Slack-compatible (`text` + `attachments[]`), so the run renders as a
+summary attachment (coloured bar + title + fields for Strategy / Frames
+/ Codec / Duration / Resolution / Director / Studio) plus — if
+`ROCKETCHAT_IMAGE_BASE` is set — one image attachment per frame (capped
+by `ROCKETCHAT_MAX_IMAGES`). Without `ROCKETCHAT_IMAGE_BASE`, the
+summary attachment lists the frame paths as a markdown bullet list
+(first 20, with a `+N more` note).
+
+[wh]: https://developer.rocket.chat/apidocs/create-integration
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `ROCKETCHAT_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL. |
+| `ROCKETCHAT_CHANNEL`     |   | — | Override target channel (`#room` or `@user`). Requires the integration to allow channel overrides. |
+| `ROCKETCHAT_ALIAS`       |   | — | Bot display name. |
+| `ROCKETCHAT_EMOJI`       |   | — | Bot avatar emoji, e.g. `:ghost:`. |
+| `ROCKETCHAT_AVATAR`      |   | — | Bot avatar URL. |
+| `ROCKETCHAT_IMAGE_BASE`  |   | — | URL prefix — Rocket.Chat fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
+| `ROCKETCHAT_MAX_IMAGES`  |   | `4` | Max image attachments posted. |
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| 0 | Webhook accepted the post. |
+| 2 | Missing `ROCKETCHAT_WEBHOOK_URL`. |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | Rocket.Chat returned non-2xx. |
 
 ## Use with an LLM agent
 
@@ -35,7 +44,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export ROCKETCHAT_WEBHOOK_URL="https://hooks.example.com/peepshow"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +54,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add rocketchat
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add rocketchat --when extension=mp4,mov
+peepshow sinks add rocketchat --when studio=Pixar
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +71,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `Rocket.Chat` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`Rocket.Chat`**: POSTs a coloured attachment with the run metadata fields to a Rocket.Chat incoming webhook.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the

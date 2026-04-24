@@ -29,9 +29,18 @@ If `$ARGUMENTS` contains the video reference, use it directly. Otherwise ask the
 
 2. **Parse the output**. In JSON mode, `frames[].path` is the ordered list of absolute paths. The `video` object gives you container, codec, resolution, fps, duration, and file size — useful context for the user's question without extra prompting. The `video.tags` object carries container-level metadata embedded in the file (title, artist, album_artist, director, producer, publisher, copyright, genre, description, creation_time, show, episode_id, season_number, etc.) — use it to ground your answer in what the video *says it is* before describing what you see. The `extraction` object tells you which strategy (`scene` vs `fps`) was used and how many frames were pruned.
 
-3. **Read each frame as an image** with the `Read` tool, **in order**. They are named `frame_0001.jpg`, `frame_0002.jpg`, etc. and represent the timeline from earliest to latest.
+3. **Read the audio transcript**, if present. When the input had an audio track, the JSON payload's `audio` object has:
+   - `audio.path` — the extracted `audio.m4a` on disk.
+   - `audio.durationSeconds`, `audio.codec`, `audio.peakDbfs`, `audio.silenceRatio` — audio metadata.
+   - `audio.transcript` — when transcription ran (whisper.cpp or a cloud provider), this contains `text` (full concatenated transcript) and `segments[]` (each with `start` / `end` / `text` in seconds). Use the transcript to understand **what was said** in addition to what was shown. For conversational or narration-heavy videos the transcript is often more informative than the frames alone. Cross-reference segment timestamps against frame indices so you can quote who said what when.
 
-4. **Answer the user's question** using what you saw across the frames, referencing timestamps when helpful (derive them from `video.durationSeconds` and frame ordering).
+   If `audio.path === null` the input had no audio track (GIF, APNG, animated WebP, silent video). Skip the audio step cleanly.
+
+   If `audio.transcript === null` or `audio.transcript.skippedReason` is set, transcription didn't run — just work with the frames.
+
+4. **Read each frame as an image** with the `Read` tool, **in order**. They are named `frame_0001.jpg`, `frame_0002.jpg`, etc. and represent the timeline from earliest to latest.
+
+5. **Answer the user's question** using both the frames and the transcript together. Reference timestamps when helpful (derive from `video.durationSeconds`, frame ordering, and transcript `segments[].start`). A useful pattern for longer clips: summarise the visual timeline in 2-3 beats, then weave in direct quotes from the transcript to ground what was said at those moments.
 
 ## Useful flags
 

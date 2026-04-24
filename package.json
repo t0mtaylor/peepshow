@@ -1,7 +1,7 @@
 {
   "name": "peepshow",
-  "version": "0.3.1",
-  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames so LLMs can 'watch' them. CLI + Claude Code plugin with 19 pluggable sinks (SQLite, Postgres, S3-compatible, Slack, Discord, Webhook, GraphQL, Notion, Obsidian, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, pgvector, MongoDB, MemPalace).",
+  "version": "0.4.0",
+  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames + audio transcript so LLMs can 'watch' and 'listen'. Second ffmpeg pass extracts an audio track; whisper.cpp or openai/groq/deepgram/assemblyai transcribe it. CLI + Claude Code plugin with 51 pluggable sinks across SQL (SQLite, Postgres, MongoDB), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Azure Blob, Supabase, Dropbox, Google Drive, Box), chat (Slack, Discord, MS Teams, Telegram, Mattermost, Rocket.Chat, Zulip, Matrix), issue trackers (Linear, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki (Notion, Obsidian, Logseq, Outline, Confluence), analytics + observability (PostHog, Plausible, Sentry, Datadog, PagerDuty, Mixpanel/Amplitude/Segment) and generic webhook/GraphQL/IDE forwarders.",
   "type": "module",
   "license": "MIT",
   "author": {
@@ -73,13 +73,38 @@
     "peepshow-sink-msteams": "./bin/peepshow-sink-msteams",
     "peepshow-sink-datadog": "./bin/peepshow-sink-datadog",
     "peepshow-sink-outline": "./bin/peepshow-sink-outline",
-    "peepshow-sink-confluence": "./bin/peepshow-sink-confluence"
+    "peepshow-sink-confluence": "./bin/peepshow-sink-confluence",
+    "peepshow-sink-mattermost": "./bin/peepshow-sink-mattermost",
+    "peepshow-sink-rocketchat": "./bin/peepshow-sink-rocketchat",
+    "peepshow-sink-zulip": "./bin/peepshow-sink-zulip",
+    "peepshow-sink-matrix": "./bin/peepshow-sink-matrix",
+    "peepshow-sink-asana": "./bin/peepshow-sink-asana",
+    "peepshow-sink-clickup": "./bin/peepshow-sink-clickup",
+    "peepshow-sink-shortcut": "./bin/peepshow-sink-shortcut",
+    "peepshow-sink-trello": "./bin/peepshow-sink-trello",
+    "peepshow-sink-pagerduty": "./bin/peepshow-sink-pagerduty",
+    "peepshow-sink-event-track": "./bin/peepshow-sink-event-track",
+    "peepshow-sink-plausible": "./bin/peepshow-sink-plausible",
+    "peepshow-sink-milvus": "./bin/peepshow-sink-milvus",
+    "peepshow-sink-letta": "./bin/peepshow-sink-letta",
+    "peepshow-sink-miro": "./bin/peepshow-sink-miro",
+    "peepshow-sink-figma": "./bin/peepshow-sink-figma",
+    "peepshow-sink-gcs": "./bin/peepshow-sink-gcs",
+    "peepshow-sink-azure-blob": "./bin/peepshow-sink-azure-blob",
+    "peepshow-sink-supabase": "./bin/peepshow-sink-supabase",
+    "peepshow-sink-dropbox": "./bin/peepshow-sink-dropbox",
+    "peepshow-sink-gdrive": "./bin/peepshow-sink-gdrive",
+    "peepshow-sink-box": "./bin/peepshow-sink-box",
+    "peepshow-sink-logseq": "./bin/peepshow-sink-logseq"
   },
   "dependencies": {
     "ffmpeg-static": "^5.2.0"
   },
   "optionalDependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
+    "@azure/storage-blob": "^12.0.0",
+    "@google-cloud/storage": "^7.0.0",
+    "@zilliz/milvus2-sdk-node": "^2.5.0",
     "better-sqlite3": "^11.0.0",
     "mongodb": "^6.10.0",
     "pg": "^8.12.0"
@@ -101,6 +126,7 @@
     "docs/SINKS-MISSING.md",
     "docs/logo.svg",
     "AGENTS.md",
+    "CHANGELOG.md",
     "GEMINI.md",
     "gemini-extension.json",
     "README.md",

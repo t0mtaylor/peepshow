@@ -1,25 +1,30 @@
-# peepshow-sink-msteams
+# peepshow-sink-mattermost
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+POST a peepshow run to a Mattermost Incoming Webhook. The body is
+Slack-compatible — a top-level `text` plus a primary `attachment`
+(peepshow purple) with fields for Strategy / Frames / Codec / Duration /
+Resolution, plus Director / Studio when the video carries those tags.
+If `MATTERMOST_IMAGE_BASE` is set, the first N frames (up to
+`MATTERMOST_MAX_IMAGES`) are appended as image attachments; otherwise the
+primary attachment's `text` lists the frame paths.
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `MATTERMOST_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL. |
+| `MATTERMOST_CHANNEL`     |   | — | Override target channel (`town-square`, `@alice`, `~announcements`). |
+| `MATTERMOST_USERNAME`    |   | — | Override bot display name. |
+| `MATTERMOST_ICON_URL`    |   | — | Override bot avatar URL. |
+| `MATTERMOST_IMAGE_BASE`  |   | — | URL prefix — Mattermost fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
+| `MATTERMOST_MAX_IMAGES`  |   | `4` | Max image attachments (Mattermost clients get sluggish past ~5). |
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| 0 | Message posted. |
+| 2 | Missing `MATTERMOST_WEBHOOK_URL`. |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | Mattermost returned non-2xx. |
 
 ## Use with an LLM agent
 
@@ -35,7 +40,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export MATTERMOST_WEBHOOK_URL="https://hooks.example.com/peepshow"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +50,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add mattermost
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add mattermost --when extension=mp4,mov
+peepshow sinks add mattermost --when studio=Pixar
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +67,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `Mattermost` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`Mattermost`**: POSTs a Slack-compatible attachment to a Mattermost incoming webhook with the run metadata fields.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the

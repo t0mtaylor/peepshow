@@ -21,13 +21,34 @@
 
 > **video → frames → LLM.** Any LLM CLI. Any storage backend. Zero glue code.
 
-Turn a video — or an animated GIF, APNG, or WebP — into a timeline of still frames so an LLM can "watch" it as a series of images.
+Turn a video — or an animated GIF, APNG, or WebP — into a timeline of still frames plus an extracted audio track and its transcript, so an LLM can "watch" and "listen" to what's inside.
 
 Static images (JPG, PNG, static WebP) are already handled natively by most LLMs — drag, drop, done. **`peepshow` only steps in for things that have multiple frames across time**: videos and animated images, which today's LLMs can't consume directly.
 
 **Same drag-and-drop UX as images.** Drop a `.mp4` / `.mov` / `.gif` into the Claude Code prompt and a `UserPromptSubmit` hook auto-invokes `/peepshow:slides <path>` behind the scenes — Claude extracts frames, reads them, and answers. No slash command, no Bash call, no copy-paste. Works with natural-language prompts too ("what's in ~/Desktop/bug.mov?") and with every other CLI entry point (explicit `/peepshow:slides`, shell `peepshow ...`, pipes into `--sink`).
 
-**Pluggable sink backends — write your own, or use the built-ins.** Every run can fan out to downstream systems via `--sink <name>` or `--sink-cmd <shell>`. A sink is any executable that reads a JSON payload on stdin — write one in bash, Node, Python, Go, whatever. The full `video` + `tags` + `frames` + `extraction` payload (same as `--emit json`) flows to each sink, so they receive the full context, not just the frame paths. Nineteen sinks ship built-in (SQLite, Postgres, pgvector, S3-compatible, Webhook, Slack, Discord, GraphQL, Notion, Obsidian, MemPalace, IDE attachments, Linear, GitHub Issues, Sentry, Chroma, Qdrant, Pinecone, MongoDB) — see [`docs/sinks/`](./docs/sinks/). Candidates wanted: cognee, Perplexity, Antigravity. Full spec: [`docs/PLUGINS.md`](./docs/PLUGINS.md).
+**Pluggable sink backends — write your own, or use the built-ins.** Every run can fan out to downstream systems via `--sink <name>` or `--sink-cmd <shell>`. A sink is any executable that reads a JSON payload on stdin — write one in bash, Node, Python, Go, whatever. The full `video` + `tags` + `frames` + `audio` + `extraction` payload (same as `--emit json`) flows to each sink, so they receive the full context, not just the frame paths. **Fifty-one sinks ship built-in** across SQL (SQLite · Postgres · MongoDB), vector + AI memory (Chroma · Qdrant · Pinecone · pgvector · Weaviate · Milvus · MemPalace · Zep · Mem0 · Letta), object + file storage (S3-compatible · GCS · Azure Blob · Supabase · Dropbox · Google Drive · Box), chat (Slack · Discord · MS Teams · Telegram · Mattermost · Rocket.Chat · Zulip · Matrix), issue trackers (Linear · GitHub Issues · Jira · Asana · ClickUp · Shortcut · Trello), whiteboards (Miro · Figma), wiki/notes (Notion · Obsidian · Logseq · Outline · Confluence), product analytics (PostHog · Plausible · Mixpanel/Amplitude/Segment), observability (Sentry · Datadog · PagerDuty), and generic workflow glue (Webhook · GraphQL · IDE attachments). Browse [`docs/sinks/`](./docs/sinks/) or use the [use-case finder](https://www.peepshow.dev/sinks/find/). Full spec: [`docs/PLUGINS.md`](./docs/PLUGINS.md).
+
+**Audio is extracted too, not just frames.** When the input has an audio track (MP4 / MOV / WebM / MKV), `peepshow` runs a second ffmpeg pass that emits a compact mono 16 kHz AAC track next to the frames and probes loudness peak + silence ratio. Animated GIF, APNG, and animated WebP inputs skip this cleanly — they can't carry audio at the format level. The extracted `audio.m4a` + its analysis fields land in the JSON payload alongside `video` + `frames`, so any downstream sink sees the full picture. Opt out with `--no-audio`.
+
+## Audio transcription
+
+When audio is extracted, `peepshow` can also transcribe it. **If [`whisper.cpp`](https://github.com/ggml-org/whisper.cpp) is on your `PATH`, transcription auto-enables with the `base.en` model — no flag, no API key, nothing leaves the machine.** The model file downloads to `~/.peepshow/whisper-models/ggml-<model>.bin` on first use (override with `PEEPSHOW_WHISPER_MODEL_DIR`). Skip entirely with `--no-transcribe` or `PEEPSHOW_TRANSCRIBE=off`.
+
+Prefer a cloud provider? Pick one in a single flag and set the matching API key — peepshow uploads the extracted `audio.m4a` and stores the result back on the same payload:
+
+| Provider | Install / key | CLI |
+| :------- | :------------ | :-- |
+| `whisper-cpp` (default when on PATH) | `brew install whisper-cpp` (macOS) · `scoop install whisper-cpp` (Windows) · [prebuilt Linux releases](https://github.com/ggml-org/whisper.cpp/releases) | `--transcribe whisper-cpp` |
+| `openai` | `OPENAI_API_KEY=…` | `--transcribe openai` |
+| `groq` | `GROQ_API_KEY=…` | `--transcribe groq` |
+| `deepgram` | `DEEPGRAM_API_KEY=…` | `--transcribe deepgram` |
+| `assemblyai` | `ASSEMBLYAI_API_KEY=…` | `--transcribe assemblyai` |
+| `custom` | any shell command — reads audio on stdin, writes `{segments,text}` JSON on stdout | `PEEPSHOW_TRANSCRIBE_CMD='my-asr'` + `--transcribe custom` |
+
+The transcript lands on the JSON payload as `audio.transcript` (`{provider, model, language, durationSeconds, segments: [{start, end, text}], text}`). Because it rides on the same payload as frames and `video.tags`, **every sink gets the transcript for free** — search SQLite by spoken phrase, embed segments into pgvector/Chroma/Pinecone, drop it into Obsidian next to the frames, pipe it to Slack.
+
+Full reference + provider caveats: **[peepshow.dev/transcription/](https://www.peepshow.dev/transcription/)**.
 
 ## TL;DR
 
@@ -401,6 +422,27 @@ No central marketplace exists for Copilot CLI, ChatGPT Code, Cursor, Continue, C
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+## Not affiliated with <em>Peep Show</em> the TV series
+
+**peepshow LLM** (this project) is a developer CLI for extracting video
+frames so large language models can read them as a timeline. It is not
+affiliated with, endorsed by, sponsored by, or in any way connected to
+the British sitcom *Peep Show* that aired on Channel 4 from 2003 to 2015,
+nor with:
+
+- **Channel 4 Television Corporation** (the original UK broadcaster and commissioner);
+- **Objective Productions** / Objective Fiction (part of the All3Media group) who produced the series;
+- **All3Media International** (the distribution rights holder);
+- the series' creators and writers **Sam Bain** and **Jesse Armstrong**;
+- the cast of the series, including **David Mitchell** and **Robert Webb**.
+
+All trademarks, copyrights, and related rights in the *Peep Show*
+television series belong to their respective owners. Any resemblance
+between the project name and the series is coincidental and descriptive
+only; no association, sponsorship, or approval is implied or claimed. If
+you are looking for the TV show, head to
+[channel4.com/programmes/peep-show](https://www.channel4.com/programmes/peep-show).
 
 <!-- GitHub README visit counter (Matomo, no cookies, self-hosted) -->
 <img src="https://st.rs.thetomtaylor.co.uk/matomo.php?idsite=31&amp;rec=1&amp;action_name=Github+peepshow" width="1" height="1" alt="" style="border:0" />

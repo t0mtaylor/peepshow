@@ -4,7 +4,7 @@ Generic agent context file. Consumed by Codex CLI, OpenAI Agents, Zed AI, and an
 
 ## What peepshow is
 
-CLI tool that turns videos and animated images (GIF/APNG/animated WebP) into a timeline of still frames so an LLM can "watch" them as a series of images. Installed via `npm i -g peepshow`. Published at https://www.npmjs.com/package/peepshow.
+CLI tool that turns videos and animated images (GIF/APNG/animated WebP) into a timeline of still frames + an extracted audio track + optional whisper.cpp / openai / groq / deepgram / assemblyai transcript, so an LLM can "watch" and "listen" to what's inside. Installed via `npm i -g peepshow`. Published at https://www.npmjs.com/package/peepshow.
 
 ## When to invoke it
 

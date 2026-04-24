@@ -1,25 +1,32 @@
-# peepshow-sink-msteams
+# peepshow-sink-asana
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+Create an Asana task (or attach to an existing one) with:
+- plain-text notes listing strategy, frames, codec, duration, resolution, director, studio,
+- one multipart attachment per extracted frame.
+
+Uses a [Personal Access Token](https://developers.asana.com/docs/personal-access-token).
+
+## Invocation
+
+```bash
+peepshow ./bug-repro.mov --sink asana
+```
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `ASANA_ACCESS_TOKEN` | ✓ | — | Asana Personal Access Token. |
+| `ASANA_PROJECT_ID`   | ◐ | — | Project GID to create the new task under (required unless `ASANA_TASK_GID` is set). |
+| `ASANA_TASK_GID`     | ◐ | — | Attach to this existing task; skip the create step. |
+| `ASANA_API_URL`      |   | `https://app.asana.com/api/1.0` | Override for self-hosted or test doubles. |
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| 0 | Task created / attachments uploaded. |
+| 2 | Missing env. |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | Asana returned non-2xx on create or attachment. |
 
 ## Use with an LLM agent
 
@@ -35,7 +42,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export ASANA_ACCESS_TOKEN="…"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +52,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add asana
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add asana --when extension=mp4,mov
+peepshow sinks add asana --when priority=high
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +69,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `Asana` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`Asana`**: creates an Asana task with the run summary in notes and each frame attached as a file.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the
@@ -84,4 +91,4 @@ the frame paths. That includes:
   language — populated when transcription is enabled (v0.4.0+).
 - `extraction` — strategy, thresholds, ffmpeg path used.
 
-> **Transcript handling**: the transcript snippet is posted alongside the frames as a secondary message in the thread.
+> **Transcript handling**: transcript lines appear in the issue body so triage has a copy-pasteable record of what was said on-screen.

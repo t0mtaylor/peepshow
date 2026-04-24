@@ -1,25 +1,39 @@
-# peepshow-sink-msteams
+# peepshow-sink-shortcut
 
-POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
-Webhook. Card renders title + subtle summary + FactSet (Strategy /
-Frames / Codec / Duration / Resolution / Director / Studio). If
-`MSTEAMS_IMAGE_BASE` is set, the first N frames (up to `MSTEAMS_MAX_IMAGES`)
-are embedded as images; otherwise a TextBlock lists the frame paths.
+Create a [Shortcut](https://shortcut.com) (formerly Clubhouse) story (or
+attach to an existing one) with:
+- a markdown description summarising the peepshow run (strategy, frames,
+  codec, duration, resolution, director, studio, when those are known),
+- one file upload per extracted frame via `POST /files`,
+- the uploaded files linked back onto the story via `PUT /stories/{id}`
+  with `file_ids`.
+
+## Invocation
+
+```bash
+peepshow ./bug-repro.mov --sink shortcut
+```
 
 ## Configuration
 
 | Env | Required | Default | Purpose |
 |-----|----------|---------|---------|
-| `MSTEAMS_WEBHOOK_URL` | ✓ | — | Incoming-webhook URL (classic or Workflows). |
-| `MSTEAMS_IMAGE_BASE`  |   | — | URL prefix — Teams fetches images from `<base>/<frame-basename>`. Leave unset if frames aren't served publicly. |
-| `MSTEAMS_MAX_IMAGES`  |   | `8` | Max image blocks in the card. |
+| `SHORTCUT_TOKEN`            | ✓ | — | API token, sent as `Shortcut-Token` header. |
+| `SHORTCUT_PROJECT_ID`       | ◐ | — | Numeric project id to create a new story under (required unless `SHORTCUT_STORY_PUBLIC_ID` is set). |
+| `SHORTCUT_STORY_PUBLIC_ID`  | ◐ | — | Attach to this existing story; skip the create step. |
+| `SHORTCUT_STORY_TYPE`       |   | `bug` | `"feature" \| "chore" \| "bug"`. Unknown values fall back to `bug`. |
+| `SHORTCUT_API_URL`          |   | `https://api.app.shortcut.com/api/v3` | Override for self-hosted / staging. |
+
+Both `SHORTCUT_PROJECT_ID` and `SHORTCUT_STORY_PUBLIC_ID` must be positive integers.
 
 ## Exit codes
 
-| 0 | Card posted. |
-| 2 | Missing `MSTEAMS_WEBHOOK_URL`. |
+| Code | Meaning |
+|-----:|---------|
+| 0 | Story created / files uploaded + linked. |
+| 2 | Missing env / bad numeric id / bad env combo. |
 | 4 | stdin malformed. |
-| 5 | Teams returned non-2xx. |
+| 5 | Shortcut returned non-2xx on create, upload, or link. |
 
 ## Use with an LLM agent
 
@@ -35,7 +49,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export MSTEAMS_WEBHOOK_URL="https://hooks.example.com/peepshow"
+export SHORTCUT_TOKEN="…"
 ```
 
 ### 2. Register as an auto-sink
@@ -45,10 +59,10 @@ so the LLM doesn't have to remember a pipeline — the routing is
 declarative:
 
 ```sh
-peepshow sinks add msteams
+peepshow sinks add shortcut
 # Optional: only fire for matching inputs
-peepshow sinks add msteams --when extension=mp4,mov
-peepshow sinks add msteams --when studio=Pixar
+peepshow sinks add shortcut --when extension=mp4,mov
+peepshow sinks add shortcut --when priority=high
 ```
 
 See [`peepshow sinks`](../../docs/PLUGINS.md) for the full matching
@@ -62,9 +76,9 @@ vocabulary.
 > **Claude Code**: the `UserPromptSubmit` hook detects the video and
 > auto-invokes `/peepshow:slides ~/bugs/crash.mov`. peepshow extracts
 > frames + audio, transcribes locally if `whisper.cpp` is on `PATH`,
-> then forwards the run to the `Microsoft Teams` sink.
+> then forwards the run to the `Shortcut` sink.
 >
-> **`Microsoft Teams`**: delivers the run as an Adaptive Card to a Teams channel, optionally embedding frames inline.
+> **`Shortcut`**: creates a Shortcut story, uploads each frame via `/files`, and links the file ids back onto the story.
 >
 > **Claude Code**: reads the frames back as images, combines them with
 > the audio transcript, and writes a summary that references the
@@ -84,4 +98,4 @@ the frame paths. That includes:
   language — populated when transcription is enabled (v0.4.0+).
 - `extraction` — strategy, thresholds, ffmpeg path used.
 
-> **Transcript handling**: the transcript snippet is posted alongside the frames as a secondary message in the thread.
+> **Transcript handling**: transcript lines appear in the issue body so triage has a copy-pasteable record of what was said on-screen.
