@@ -1,5 +1,12 @@
 # peepshow-sink-milvus
 
+<!-- gif:sink:milvus -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/milvus.gif" alt="peepshow → milvus demo" width="720">
+</p>
+<!-- /gif:sink:milvus -->
+
+
 Upsert peepshow frames into a [Milvus](https://milvus.io) or
 [Zilliz Cloud](https://zilliz.com/cloud) collection. Each frame becomes one row
 whose `vector` is a **zero-vector** of a configurable dimension — real

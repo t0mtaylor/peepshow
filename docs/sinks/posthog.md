@@ -1,5 +1,12 @@
 # peepshow-sink-posthog
 
+<!-- gif:sink:posthog -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/posthog.gif" alt="peepshow → posthog demo" width="720">
+</p>
+<!-- /gif:sink:posthog -->
+
+
 Capture a peepshow run as a [PostHog](https://posthog.com) product-analytics
 event (plus optional per-frame events) so you can chart CLI usage,
 popular sinks, average run duration, etc.

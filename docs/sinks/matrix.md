@@ -1,5 +1,12 @@
 # peepshow-sink-matrix
 
+<!-- gif:sink:matrix -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/matrix.gif" alt="peepshow → matrix demo" width="720">
+</p>
+<!-- /gif:sink:matrix -->
+
+
 Post a peepshow run to a Matrix room. Each frame is uploaded to the
 homeserver's media repository and then attached to the room as an
 `m.image` event, preceded by a single `m.text` summary.

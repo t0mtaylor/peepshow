@@ -1,5 +1,12 @@
 # peepshow-sink-mem0
 
+<!-- gif:sink:mem0 -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/mem0.gif" alt="peepshow → mem0 demo" width="720">
+</p>
+<!-- /gif:sink:mem0 -->
+
+
 Write a peepshow run to [Mem0](https://mem0.ai) long-term memory. Each run
 is stored as one system message (video summary) plus one user message per
 extracted frame. Mem0 distils those into retrievable memories scoped to a

@@ -1,5 +1,12 @@
 # peepshow-sink-pgvector
 
+<!-- gif:sink:pgvector -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/pgvector.gif" alt="peepshow → pgvector demo" width="720">
+</p>
+<!-- /gif:sink:pgvector -->
+
+
 Extend the [`postgres`](./postgres.md) sink's archive with a [`pgvector`](https://github.com/pgvector/pgvector)-powered `peepshow_frame_embeddings` table so runs become searchable by semantic similarity. This sink does **not** compute embeddings — it creates the table and writes zero-vector rows, expecting a downstream embedder (OpenAI, Cohere, a local model) to fill them in.
 
 ## Install

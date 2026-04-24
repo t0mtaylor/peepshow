@@ -1,5 +1,12 @@
 # peepshow-sink-obsidian
 
+<!-- gif:sink:obsidian -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/obsidian.gif" alt="peepshow → obsidian demo" width="720">
+</p>
+<!-- /gif:sink:obsidian -->
+
+
 Writes a per-run markdown note into an Obsidian vault with YAML frontmatter (containing every video tag), a metadata bullet list, and frame embeds. Copies frame JPGs into the vault so they render inline without external paths.
 
 ## Config

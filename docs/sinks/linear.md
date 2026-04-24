@@ -1,5 +1,12 @@
 # peepshow-sink-linear
 
+<!-- gif:sink:linear -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/linear.gif" alt="peepshow → linear demo" width="720">
+</p>
+<!-- /gif:sink:linear -->
+
+
 Create a [Linear](https://linear.app) issue via the GraphQL API with the run summary in the description and every frame path listed as a code-formatted bullet. Title defaults to `video.tags.title` / `video.tags.show`, falling back to `peepshow run (N frames)`.
 
 ## Install

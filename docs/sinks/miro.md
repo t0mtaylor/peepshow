@@ -1,5 +1,12 @@
 # peepshow-sink-miro
 
+<!-- gif:sink:miro -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/miro.gif" alt="peepshow → miro demo" width="720">
+</p>
+<!-- /gif:sink:miro -->
+
+
 Upload each peepshow frame to a [Miro](https://miro.com) board as an
 image item. Frames are laid out on a grid (ordinal-driven columns/rows)
 so a run reads left-to-right, top-to-bottom like a comic strip.

@@ -1,5 +1,12 @@
 # peepshow-sink-msteams
 
+<!-- gif:sink:msteams -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/msteams.gif" alt="peepshow → msteams demo" width="720">
+</p>
+<!-- /gif:sink:msteams -->
+
+
 POST a peepshow run as an Adaptive Card to a Microsoft Teams Incoming
 Webhook. Card renders title + subtle summary + FactSet (Strategy /
 Frames / Codec / Duration / Resolution / Director / Studio). If

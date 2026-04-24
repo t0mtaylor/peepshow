@@ -1,5 +1,12 @@
 # peepshow-sink-telegram
 
+<!-- gif:sink:telegram -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/telegram.gif" alt="peepshow → telegram demo" width="720">
+</p>
+<!-- /gif:sink:telegram -->
+
+
 Post a peepshow run to a Telegram chat: one `sendMessage` with the
 metadata summary, then one or more `sendMediaGroup` album posts with the
 frames attached (max 10 photos per album — larger runs chunk

@@ -1,5 +1,12 @@
 # peepshow-sink-gdrive
 
+<!-- gif:sink:gdrive -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/gdrive.gif" alt="peepshow → gdrive demo" width="720">
+</p>
+<!-- /gif:sink:gdrive -->
+
+
 Upload every extracted frame plus a `manifest.json` to a Google Drive folder
 via the Drive v3 **multipart** upload endpoint. One run folder per peepshow
 run (`<YYYYMMDD>-<HHMMSS>-<strategy>`), holding all frames + the manifest.

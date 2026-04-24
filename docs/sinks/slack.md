@@ -1,5 +1,12 @@
 # peepshow-sink-slack
 
+<!-- gif:sink:slack -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/slack.gif" alt="peepshow → slack demo" width="720">
+</p>
+<!-- /gif:sink:slack -->
+
+
 Posts a peepshow run as a formatted Slack message via an incoming webhook. Uses Block Kit with a summary, tag bullets, and a context footer.
 
 ## Setup

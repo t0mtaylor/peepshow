@@ -1,5 +1,12 @@
 # peepshow-sink-mempalace
 
+<!-- gif:sink:mempalace -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/mempalace.gif" alt="peepshow → mempalace demo" width="720">
+</p>
+<!-- /gif:sink:mempalace -->
+
+
 Writes a per-run markdown note into a directory that [MemPalace](https://github.com/MemPalace/mempalace) already mines. MemPalace is a local-first AI memory system that stores content verbatim and retrieves it via semantic search — no API keys, no cloud. The sink turns every peepshow run into a mineable markdown artefact so the video's container tags + extraction metadata + frame paths all become recallable through `mempalace search`.
 
 Supports mempalace's **wing** / **room** scoping by writing into the matching subdirectory, and can optionally spawn `mempalace mine` after each note is written so ingestion happens synchronously in your pipeline instead of waiting for the next manual mine.

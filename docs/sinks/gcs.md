@@ -1,5 +1,12 @@
 # peepshow-sink-gcs
 
+<!-- gif:sink:gcs -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/gcs.gif" alt="peepshow → gcs demo" width="720">
+</p>
+<!-- /gif:sink:gcs -->
+
+
 Uploads every frame plus a `manifest.json` to a Google Cloud Storage bucket using the native `@google-cloud/storage` SDK. Authenticates via Application Default Credentials — so workload identity, `gcloud auth application-default login`, or an explicit service-account JSON all work without code changes.
 
 > If you want a provider-neutral S3-compatible upload, use [`peepshow-sink-s3`](./s3.md) with `S3_ENDPOINT=https://storage.googleapis.com`. Use this sink when you need native GCS features (uniform bucket-level access, workload identity federation, HMAC-less auth).

@@ -1,5 +1,12 @@
 # peepshow-sink-datadog
 
+<!-- gif:sink:datadog -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/datadog.gif" alt="peepshow → datadog demo" width="720">
+</p>
+<!-- /gif:sink:datadog -->
+
+
 POST a peepshow run as a Datadog event (`/api/v1/events`) so it lands
 on an incident timeline / event stream. `aggregation_key` groups repeat
 runs of the same clip under one event cluster.

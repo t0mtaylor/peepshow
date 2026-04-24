@@ -1,5 +1,12 @@
 # peepshow-sink-graphql
 
+<!-- gif:sink:graphql -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/graphql.gif" alt="peepshow → graphql demo" width="720">
+</p>
+<!-- /gif:sink:graphql -->
+
+
 POSTs a GraphQL mutation with the peepshow payload to any GraphQL endpoint. Default mutation targets a schema with `recordPeepshowRun(input: PeepshowRunInput!)` — override for your own schema.
 
 ## Config

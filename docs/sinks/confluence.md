@@ -1,5 +1,12 @@
 # peepshow-sink-confluence
 
+<!-- gif:sink:confluence -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/confluence.gif" alt="peepshow → confluence demo" width="720">
+</p>
+<!-- /gif:sink:confluence -->
+
+
 Create a Confluence Cloud page per peepshow run. Body is storage-format
 XHTML with a Metadata list + a numbered Frames list. Uses basic auth
 (email + API token) + `/wiki/api/v2/pages`.

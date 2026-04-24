@@ -1,5 +1,12 @@
 # peepshow-sink-jira
 
+<!-- gif:sink:jira -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/jira.gif" alt="peepshow → jira demo" width="720">
+</p>
+<!-- /gif:sink:jira -->
+
+
 Create a Jira issue (or attach to an existing one) with:
 - a heading + bullet list (strategy, frames, codec, duration, resolution, director, studio) in the issue description as ADF,
 - one multipart attachment per extracted frame.

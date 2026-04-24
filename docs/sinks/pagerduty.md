@@ -1,5 +1,12 @@
 # peepshow-sink-pagerduty
 
+<!-- gif:sink:pagerduty -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/pagerduty.gif" alt="peepshow → pagerduty demo" width="720">
+</p>
+<!-- /gif:sink:pagerduty -->
+
+
 Fire a [PagerDuty Events API v2](https://developer.pagerduty.com/docs/events-api-v2/overview/)
 `trigger` so a peepshow run shows up on an incident timeline. The sink
 POSTs JSON to `https://events.pagerduty.com/v2/enqueue` (configurable

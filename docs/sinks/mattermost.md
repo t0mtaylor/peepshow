@@ -1,5 +1,12 @@
 # peepshow-sink-mattermost
 
+<!-- gif:sink:mattermost -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/mattermost.gif" alt="peepshow → mattermost demo" width="720">
+</p>
+<!-- /gif:sink:mattermost -->
+
+
 POST a peepshow run to a Mattermost Incoming Webhook. The body is
 Slack-compatible — a top-level `text` plus a primary `attachment`
 (peepshow purple) with fields for Strategy / Frames / Codec / Duration /

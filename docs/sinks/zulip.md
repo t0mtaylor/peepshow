@@ -1,5 +1,12 @@
 # peepshow-sink-zulip
 
+<!-- gif:sink:zulip -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/zulip.gif" alt="peepshow → zulip demo" width="720">
+</p>
+<!-- /gif:sink:zulip -->
+
+
 POST a peepshow run as a markdown message to a Zulip stream topic (or
 private DM) via `/api/v1/messages`. The body is form-encoded
 (`application/x-www-form-urlencoded`) and authed with Basic

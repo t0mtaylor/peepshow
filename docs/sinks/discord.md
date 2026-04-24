@@ -1,5 +1,12 @@
 # peepshow-sink-discord
 
+<!-- gif:sink:discord -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/discord.gif" alt="peepshow → discord demo" width="720">
+</p>
+<!-- /gif:sink:discord -->
+
+
 Posts a peepshow run as a Discord message via a channel webhook. Uses embeds with title, description, fields for every `video.tags` entry, and a footer.
 
 ## Setup

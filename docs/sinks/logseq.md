@@ -1,5 +1,12 @@
 # peepshow-sink-logseq
 
+<!-- gif:sink:logseq -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/logseq.gif" alt="peepshow → logseq demo" width="720">
+</p>
+<!-- /gif:sink:logseq -->
+
+
 Writes a per-run markdown page into a [Logseq](https://logseq.com/) graph's `pages/` directory. The page has top-level `key:: value` properties (Logseq's frontmatter equivalent), a "Run summary" block tree, and a "Frames" block tree with image embeds. Frames are copied into the graph's `assets/` directory by default so Logseq can render them inline without extra configuration.
 
 ## Config

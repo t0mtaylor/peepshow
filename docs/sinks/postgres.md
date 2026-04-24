@@ -1,5 +1,12 @@
 # peepshow-sink-postgres
 
+<!-- gif:sink:postgres -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/postgres.gif" alt="peepshow → postgres demo" width="720">
+</p>
+<!-- /gif:sink:postgres -->
+
+
 Persists every peepshow run into PostgreSQL. Schema auto-creates on first write. Uses the `pg` optional dependency — users who don't need the sink pay nothing.
 
 ## Install

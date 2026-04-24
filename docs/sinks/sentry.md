@@ -1,5 +1,12 @@
 # peepshow-sink-sentry
 
+<!-- gif:sink:sentry -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/sentry.gif" alt="peepshow → sentry demo" width="720">
+</p>
+<!-- /gif:sink:sentry -->
+
+
 Send a peepshow run as a [Sentry](https://sentry.io) event (message-level) so video evidence can attach to an incident timeline. Tags are populated from video metadata (strategy, codec, container, ffmpeg source); the full `video`, `frames[]`, `extraction` payload lands in the `extra` block. Uses Sentry's store endpoint — no SDK required.
 
 ## Install

@@ -1,5 +1,12 @@
 # peepshow-sink-zep
 
+<!-- gif:sink:zep -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/zep.gif" alt="peepshow → zep demo" width="720">
+</p>
+<!-- /gif:sink:zep -->
+
+
 Append a peepshow run to a [Zep](https://www.getzep.com/) long-term-memory
 session. Each run becomes one `system` message summarising the video plus
 one `user` message per extracted frame (ordinal, approximate timestamp,

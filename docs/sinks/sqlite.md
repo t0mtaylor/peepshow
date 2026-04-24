@@ -1,5 +1,12 @@
 # peepshow-sink-sqlite
 
+<!-- gif:sink:sqlite -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/sqlite.gif" alt="peepshow → sqlite demo" width="720">
+</p>
+<!-- /gif:sink:sqlite -->
+
+
 Built-in. Persists every peepshow run into a SQLite file — ideal for a personal, offline-first archive that can be queried with any SQLite tool (DB Browser, Datasette, `sqlite3`).
 
 ## Install

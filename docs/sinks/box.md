@@ -1,5 +1,12 @@
 # peepshow-sink-box
 
+<!-- gif:sink:box -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/box.gif" alt="peepshow → box demo" width="720">
+</p>
+<!-- /gif:sink:box -->
+
+
 Creates a per-run subfolder under a Box parent folder, then uploads every frame plus a `manifest.json` using the Box v2 **simple upload** endpoint (`POST /2.0/files/content`).
 
 ## Simple upload vs. `upload_sessions`

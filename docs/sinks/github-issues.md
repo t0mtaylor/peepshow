@@ -1,5 +1,12 @@
 # peepshow-sink-github-issues
 
+<!-- gif:sink:github-issues -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/github-issues.gif" alt="peepshow → github-issues demo" width="720">
+</p>
+<!-- /gif:sink:github-issues -->
+
+
 Open a GitHub issue on a target repository with the run summary, metadata, and every frame path in the body. Uses the REST API; title defaults to `video.tags.title` / `video.tags.show`, falling back to `peepshow run — N frames`.
 
 ## Install

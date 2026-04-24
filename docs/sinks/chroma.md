@@ -1,5 +1,12 @@
 # peepshow-sink-chroma
 
+<!-- gif:sink:chroma -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/chroma.gif" alt="peepshow → chroma demo" width="720">
+</p>
+<!-- /gif:sink:chroma -->
+
+
 Index peepshow frames into a [Chroma](https://trychroma.com) vector DB collection. Embeddings are not computed client-side — the sink only sends `documents` + `metadatas` + `ids`, so the collection must be configured with a server-side embedding function (or an embedder pipeline must fill them in downstream). Uses Chroma's v2 REST API, tenant/database aware.
 
 ## Install

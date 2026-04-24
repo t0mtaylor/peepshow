@@ -1,5 +1,12 @@
 # peepshow-sink-rocketchat
 
+<!-- gif:sink:rocketchat -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/rocketchat.gif" alt="peepshow → rocketchat demo" width="720">
+</p>
+<!-- /gif:sink:rocketchat -->
+
+
 POST a peepshow run to a [Rocket.Chat incoming webhook][wh]. The body is
 Slack-compatible (`text` + `attachments[]`), so the run renders as a
 summary attachment (coloured bar + title + fields for Strategy / Frames

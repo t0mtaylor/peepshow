@@ -1,5 +1,12 @@
 # peepshow-sink-dropbox
 
+<!-- gif:sink:dropbox -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/dropbox.gif" alt="peepshow → dropbox demo" width="720">
+</p>
+<!-- /gif:sink:dropbox -->
+
+
 Upload every extracted frame plus a `manifest.json` to a Dropbox folder
 under a timestamped per-run prefix. Each upload is a single call to
 Dropbox's content endpoint `POST /2/files/upload`.

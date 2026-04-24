@@ -1,5 +1,12 @@
 # peepshow-sink-webhook
 
+<!-- gif:sink:webhook -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/webhook.gif" alt="peepshow → webhook demo" width="720">
+</p>
+<!-- /gif:sink:webhook -->
+
+
 Generic POST of the peepshow JSON payload to any URL. Foundation for the Slack and Discord sinks, useful on its own for automation platforms (Zapier, Make, n8n, custom APIs).
 
 ## Config

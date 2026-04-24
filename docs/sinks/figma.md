@@ -1,5 +1,12 @@
 # peepshow-sink-figma
 
+<!-- gif:sink:figma -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/figma.gif" alt="peepshow → figma demo" width="720">
+</p>
+<!-- /gif:sink:figma -->
+
+
 Post a peepshow run as a single **file-level comment** on a Figma file.
 The comment contains the run metadata (title, strategy, frame count,
 codec, duration, resolution, director, studio) plus one line per

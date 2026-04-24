@@ -1,5 +1,12 @@
 # peepshow-sink-clickup
 
+<!-- gif:sink:clickup -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/clickup.gif" alt="peepshow → clickup demo" width="720">
+</p>
+<!-- /gif:sink:clickup -->
+
+
 Create a ClickUp task (or attach to an existing one) with:
 - a markdown description summarising the peepshow run (strategy, frames, codec, duration, resolution, director, studio),
 - one multipart attachment per extracted frame.

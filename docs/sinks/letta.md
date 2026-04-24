@@ -1,5 +1,12 @@
 # peepshow-sink-letta
 
+<!-- gif:sink:letta -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/letta.gif" alt="peepshow → letta demo" width="720">
+</p>
+<!-- /gif:sink:letta -->
+
+
 Post a peepshow run summary to a [Letta](https://letta.com) (formerly MemGPT)
 agent's inbox as a single user message. The agent's built-in memory pipeline
 distils the message into recall memory so it can answer questions about the

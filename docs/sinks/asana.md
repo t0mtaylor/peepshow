@@ -1,5 +1,12 @@
 # peepshow-sink-asana
 
+<!-- gif:sink:asana -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/asana.gif" alt="peepshow → asana demo" width="720">
+</p>
+<!-- /gif:sink:asana -->
+
+
 Create an Asana task (or attach to an existing one) with:
 - plain-text notes listing strategy, frames, codec, duration, resolution, director, studio,
 - one multipart attachment per extracted frame.

@@ -1,5 +1,12 @@
 # peepshow-sink-azure-blob
 
+<!-- gif:sink:azure-blob -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/azure-blob.gif" alt="peepshow → azure-blob demo" width="720">
+</p>
+<!-- /gif:sink:azure-blob -->
+
+
 Uploads every frame plus a `manifest.json` to an Azure Blob Storage container under a timestamped prefix — same layout scheme as the `s3` sink, but talking to the native Azure REST API via `@azure/storage-blob` (no S3-compat layer required).
 
 ## Install

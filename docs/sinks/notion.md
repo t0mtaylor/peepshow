@@ -1,5 +1,12 @@
 # peepshow-sink-notion
 
+<!-- gif:sink:notion -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/notion.gif" alt="peepshow → notion demo" width="720">
+</p>
+<!-- /gif:sink:notion -->
+
+
 Creates a Notion page per peepshow run inside a database you control. Populates common columns (Name, Duration, Strategy, Codec, Director, Genre) opportunistically — Notion ignores properties the database doesn't know about, so the sink stays compatible with any schema.
 
 ## Install

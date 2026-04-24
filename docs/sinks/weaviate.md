@@ -1,5 +1,12 @@
 # peepshow-sink-weaviate
 
+<!-- gif:sink:weaviate -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/weaviate.gif" alt="peepshow → weaviate demo" width="720">
+</p>
+<!-- /gif:sink:weaviate -->
+
+
 Batch-insert peepshow frames into a [Weaviate](https://weaviate.io) class so
 the frames are indexed as vectors (via whatever vectorizer the class was
 configured with — `text2vec-openai`, `text2vec-cohere`, etc).

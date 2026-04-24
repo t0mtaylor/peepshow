@@ -1,5 +1,12 @@
 # peepshow-sink-trello
 
+<!-- gif:sink:trello -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/trello.gif" alt="peepshow → trello demo" width="720">
+</p>
+<!-- /gif:sink:trello -->
+
+
 Create a Trello card (or attach to an existing one) with:
 - a markdown description listing strategy, frames, codec, duration, resolution, director, studio,
 - one multipart attachment per extracted frame.

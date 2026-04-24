@@ -1,5 +1,12 @@
 # peepshow-sink-plausible
 
+<!-- gif:sink:plausible -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/plausible.gif" alt="peepshow → plausible demo" width="720">
+</p>
+<!-- /gif:sink:plausible -->
+
+
 Fire a custom event against a [Plausible Analytics](https://plausible.io)
 site so peepshow runs show up on the dashboard alongside regular
 pageviews. Works with Plausible Cloud and self-hosted Plausible.

@@ -1,5 +1,12 @@
 # peepshow-sink-mongodb
 
+<!-- gif:sink:mongodb -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/mongodb.gif" alt="peepshow → mongodb demo" width="720">
+</p>
+<!-- /gif:sink:mongodb -->
+
+
 Persist a peepshow run into MongoDB — one document per run in a `runs` collection, one document per frame in a `frames` collection, linked by `run_id`. Works against Atlas or self-hosted. Uses the `mongodb` optional dependency.
 
 ## Install

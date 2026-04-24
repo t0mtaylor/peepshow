@@ -1,5 +1,12 @@
 # peepshow-sink-shortcut
 
+<!-- gif:sink:shortcut -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/shortcut.gif" alt="peepshow → shortcut demo" width="720">
+</p>
+<!-- /gif:sink:shortcut -->
+
+
 Create a [Shortcut](https://shortcut.com) (formerly Clubhouse) story (or
 attach to an existing one) with:
 - a markdown description summarising the peepshow run (strategy, frames,

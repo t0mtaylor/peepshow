@@ -1,5 +1,12 @@
 # peepshow-sink-supabase
 
+<!-- gif:sink:supabase -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/supabase.gif" alt="peepshow → supabase demo" width="720">
+</p>
+<!-- /gif:sink:supabase -->
+
+
 Uploads every frame plus a `manifest.json` to a [Supabase Storage](https://supabase.com/docs/guides/storage) bucket via its REST endpoint. No SDK, no runtime dependencies — works against hosted Supabase projects and self-hosted Supabase just as happily.
 
 ## Config

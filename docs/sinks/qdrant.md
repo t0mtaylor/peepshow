@@ -1,5 +1,12 @@
 # peepshow-sink-qdrant
 
+<!-- gif:sink:qdrant -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/qdrant.gif" alt="peepshow → qdrant demo" width="720">
+</p>
+<!-- /gif:sink:qdrant -->
+
+
 Upsert peepshow frames as points in a [Qdrant](https://qdrant.tech) collection. Vectors are not computed client-side; the sink writes the metadata payload and expects callers who need real embeddings to run an embedder upstream or use a collection with a server-side inference config. Works against Qdrant Cloud or a self-hosted cluster.
 
 ## Install

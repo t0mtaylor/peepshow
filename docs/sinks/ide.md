@@ -1,5 +1,12 @@
 # peepshow-sink-ide
 
+<!-- gif:sink:ide -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/ide.gif" alt="peepshow → ide demo" width="720">
+</p>
+<!-- /gif:sink:ide -->
+
+
 Drops peepshow frames into your IDE's workspace attachments folder so you can `@mention` them in the AI chat without leaving the editor. Auto-detects Cursor, Windsurf, Zed, and VS Code / VS Code forks from the environment.
 
 ## Config

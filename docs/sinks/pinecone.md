@@ -1,5 +1,12 @@
 # peepshow-sink-pinecone
 
+<!-- gif:sink:pinecone -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/pinecone.gif" alt="peepshow → pinecone demo" width="720">
+</p>
+<!-- /gif:sink:pinecone -->
+
+
 Upsert peepshow frames as metadata-only records into a [Pinecone](https://www.pinecone.io) serverless index. The index must already exist and accept sparse/zero vectors; supply real embeddings by pre-processing the payload or running this sink downstream of an embedder. Each frame becomes one vector whose id maps back to the peepshow run + frame ordinal.
 
 ## Install

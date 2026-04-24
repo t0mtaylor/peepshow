@@ -1,5 +1,12 @@
 # peepshow-sink-event-track
 
+<!-- gif:sink:event-track -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/event-track.gif" alt="peepshow → event-track demo" width="720">
+</p>
+<!-- /gif:sink:event-track -->
+
+
 Emit each peepshow run as a product-analytics **track event** on Mixpanel,
 Amplitude, or Segment. One sink binary, one wire format per provider —
 selected by `EVENT_TRACK_PROVIDER`. Use it to chart CLI usage, popular

@@ -15,6 +15,13 @@ Add `--stats off` to strip all stats if you're token-budget-sensitive, `--stats 
 
 ## Claude Code
 
+
+<!-- gif:agent:claude-code -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/agent-gifs/claude-code.gif" alt="peepshow in Claude Code" width="720">
+</p>
+<!-- /gif:agent:claude-code -->
+
 This repo **is** a Claude Code plugin. After `npm install`, load it:
 
 ```bash
@@ -32,6 +39,13 @@ Or just describe the task — Claude auto-invokes the skill based on the descrip
 ---
 
 ## OpenAI Codex CLI
+
+
+<!-- gif:agent:codex -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/agent-gifs/codex.gif" alt="peepshow in OpenAI Codex CLI" width="720">
+</p>
+<!-- /gif:agent:codex -->
 
 Codex supports custom prompts/agents with shell access. Drop this into `~/.codex/prompts/slides.md` (adjust path to match your Codex install):
 
@@ -51,6 +65,13 @@ Invoke with `/slides ./video.mp4`.
 ---
 
 ## Google Gemini CLI
+
+
+<!-- gif:agent:gemini -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/agent-gifs/gemini.gif" alt="peepshow in Google Gemini CLI" width="720">
+</p>
+<!-- /gif:agent:gemini -->
 
 Gemini CLI allows defining custom commands via TOML config. Add to `~/.gemini/commands/slides.toml`:
 
@@ -170,6 +191,13 @@ Zed's assistant supports `/` commands including `/shell`. Run:
 then ask "read each frame under `frames[].path` and describe the scene changes".
 
 ## Cursor / Continue / Cline
+
+
+<!-- gif:agent:cursor -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/agent-gifs/cursor.gif" alt="peepshow in Cursor / Continue / Cline" width="720">
+</p>
+<!-- /gif:agent:cursor -->
 
 These tools run in VS Code with shell access via their own terminal or a built-in "run command" capability. Approach:
 

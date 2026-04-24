@@ -1,5 +1,12 @@
 # peepshow-sink-outline
 
+<!-- gif:sink:outline -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/sink-gifs/outline.gif" alt="peepshow → outline demo" width="720">
+</p>
+<!-- /gif:sink:outline -->
+
+
 Create a document in [Outline](https://www.getoutline.com) per peepshow
 run. Title is `peepshow · <video title> · <date>`. Body is markdown with
 a Metadata section + a numbered Frames list.
