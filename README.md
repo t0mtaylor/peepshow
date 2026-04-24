@@ -23,6 +23,10 @@
 
 Turn a video — or an animated GIF, APNG, or WebP — into a timeline of still frames plus an extracted audio track and its transcript, so an LLM can "watch" and "listen" to what's inside.
 
+<p align="center">
+  <img src="docs/demo.gif" alt="peepshow demo — drop a clip, extract frames and transcript, LLM answers" width="720">
+</p>
+
 Static images (JPG, PNG, static WebP) are already handled natively by most LLMs — drag, drop, done. **`peepshow` only steps in for things that have multiple frames across time**: videos and animated images, which today's LLMs can't consume directly.
 
 **Same drag-and-drop UX as images.** Drop a `.mp4` / `.mov` / `.gif` into the Claude Code prompt and a `UserPromptSubmit` hook auto-invokes `/peepshow:slides <path>` behind the scenes — Claude extracts frames, reads them, and answers. No slash command, no Bash call, no copy-paste. Works with natural-language prompts too ("what's in ~/Desktop/bug.mov?") and with every other CLI entry point (explicit `/peepshow:slides`, shell `peepshow ...`, pipes into `--sink`).
