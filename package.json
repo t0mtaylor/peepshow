@@ -1,6 +1,6 @@
 {
   "name": "peepshow",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames + audio transcript so LLMs can 'watch' and 'listen'. Second ffmpeg pass extracts an audio track; whisper.cpp or openai/groq/deepgram/assemblyai transcribe it. CLI + Claude Code plugin with 51 pluggable sinks across SQL (SQLite, Postgres, MongoDB), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Azure Blob, Supabase, Dropbox, Google Drive, Box), chat (Slack, Discord, MS Teams, Telegram, Mattermost, Rocket.Chat, Zulip, Matrix), issue trackers (Linear, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki (Notion, Obsidian, Logseq, Outline, Confluence), analytics + observability (PostHog, Plausible, Sentry, Datadog, PagerDuty, Mixpanel/Amplitude/Segment) and generic webhook/GraphQL/IDE forwarders.",
   "type": "module",
   "license": "MIT",

@@ -1,7 +1,7 @@
 {
   "name": "peepshow",
   "description": "Turn videos into a sequence of relevant still frames so Claude can view them as images. Pass a local path, an http(s) URL, or pipe video bytes on stdin.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "Tom Taylor"
   },
