@@ -24,7 +24,7 @@
 Turn a video — or an animated GIF, APNG, or WebP — into a timeline of still frames plus an extracted audio track and its transcript, so an LLM can "watch" and "listen" to what's inside.
 
 <p align="center">
-  <img src="docs/demo.766d4b36fa.gif" alt="peepshow demo — drop a clip, extract frames and transcript, LLM answers" width="720">
+  <img src="docs/demo.gif" alt="peepshow demo — drop a clip, extract frames and transcript, LLM answers" width="720">
 </p>
 
 Static images (JPG, PNG, static WebP) are already handled natively by most LLMs — drag, drop, done. **`peepshow` only steps in for things that have multiple frames across time**: videos and animated images, which today's LLMs can't consume directly.

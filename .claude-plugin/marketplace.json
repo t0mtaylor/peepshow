@@ -8,7 +8,7 @@
       "name": "peepshow",
       "source": "./",
       "description": "Extract relevant frames from videos and animated images (GIF/APNG/animated WebP) so LLMs can view them as a timeline. Wraps ffmpeg with scene-change detection and fps fallback.",
-      "version": "0.6.0"
+      "version": "0.6.1"
     }
   ]
 }

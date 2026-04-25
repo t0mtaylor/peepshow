@@ -4,7 +4,7 @@ This is a scouting list of popular AI/LLM tools and developer-facing systems whe
 
 Every entry below is "drop-in fit" — the peepshow JSON payload on stdin cleanly maps onto the system's write surface. Community PRs welcome: see `docs/sinks/skeletons.md` for the pattern.
 
-Last audit: 2026-04-24. **68 sinks shipping**; items crossed out are live.
+Last audit: 2026-04-25. **71 sinks shipping**; items crossed out are live.
 
 ## Vector stores & AI memory
 
@@ -95,7 +95,8 @@ Log "a peepshow run happened" as a product event.
 - **Tana** — API private beta.
 - **Craft** — no public API.
 - ~~**Apple Notes**~~ — shipped (`peepshow-sink-apple-notes`) via AppleScript.
-- **Bear / Things 3** — macOS-only, AppleScript/x-callback-url based. Not shipped.
+- ~~**Bear**~~ — shipped (`peepshow-sink-bear`) via `bear://x-callback-url/create`.
+- ~~**Things 3**~~ — shipped (`peepshow-sink-things`) via `things:///add` URL scheme.
 
 ## Chat / messaging (beyond Slack/Discord already covered)
 
@@ -112,7 +113,7 @@ Log "a peepshow run happened" as a product event.
 - ~~**iMessage**~~ — shipped (`peepshow-sink-imessage`); AppleScript send via Messages.app.
 - ~~**Apple Notes**~~ — shipped (`peepshow-sink-apple-notes`); new note via AppleScript with HTML body + frame attachments.
 - ~~**Shortcuts app**~~ — shipped (`peepshow-sink-shortcuts`); invokes a named Shortcut with the payload (or per-frame).
-- **Apple Reminders** — `Reminders.app` via AppleScript. Not shipped.
+- ~~**Apple Reminders**~~ — shipped (`peepshow-sink-apple-reminders`) via AppleScript with optional due date.
 
 ## Low-code / automation platforms
 
@@ -124,11 +125,10 @@ Less like sinks, more like "trigger points" — each has a webhook we can POST t
 
 ## Prioritisation for next wave
 
-0.6.0 cleared the bulk of the backlog (10 more sinks: Cody, Grafana Oncall, OpenAI Files, iMessage, Apple Notes, Shortcuts, WhatsApp, Honeycomb, New Relic, Zapier). What's left:
+0.6.1 cleared the macOS-AppleScript trio (Apple Reminders · Things 3 · Bear). Remaining backlog:
 
-1. **Apple Reminders / Things 3 / Bear** — macOS AppleScript; same pattern as apple-notes/imessage.
-2. **Make (Integromat) / n8n / Activepieces / Node-RED** — branded wrappers over webhook; adds platform-specific signing + retry tuning.
-3. **Roam Research** — API in flux; re-evaluate after their next release.
+1. **Make (Integromat) / n8n / Activepieces / Node-RED** — branded wrappers over webhook; adds platform-specific signing + retry tuning.
+2. **Roam Research** — API in flux; re-evaluate after their next release.
 
 Everything else on this page is either blocked on upstream API availability (Tana, Craft, Claude.ai Projects) or covered by the generic webhook/command sinks.
 
