@@ -1,54 +1,63 @@
-# Skeleton sinks — partial implementations awaiting community input
+# Contributing a new sink
 
-Three sinks on the roadmap need input from their upstream projects before they can ship production-ready. This doc captures exactly what's in place, what's missing, and how to finish each one. PRs very welcome — most are ~100 lines of code.
+A sink is any executable that reads the peepshow JSON payload on stdin and forwards it to some downstream system. The **71 built-ins** under `src/builtin-sinks/` all follow the same shape — copy the closest one and adapt.
 
-Each skeleton already:
+## Shape every sink follows
 
-- Reads the peepshow JSON payload on stdin via `_lib.ts`.
-- Validates env vars expected by its target system.
-- Prints a dry-run summary of what it *would* do.
-- Has unit tests covering payload parsing + env validation.
+1. **`src/builtin-sinks/<name>.ts`** — strip-only TypeScript with `.ts` import extensions. Pure helpers (`readConfig`, `buildRequest`, `parseResponse`) plus a `main()` wired up via `runSinkEntry` from `_lib.ts`.
+2. **`tests/builtin-sinks/<name>.test.ts`** — `node:test` + `node:assert/strict`. **≥ 10 unit tests**. DI everything (mock `fetch`, `spawn`, `fs`) — never call the real network or filesystem.
+3. **`bin/peepshow-sink-<name>`** — five-line shell wrapper. Copy verbatim from `bin/peepshow-sink-linear` (or any sibling) and swap the slug.
+4. **`docs/sinks/<name>.md`** — user doc with config table, exit codes, usage example, and a `<!-- gif:sink:<name> -->` marker block at the top so `embed-doc-gifs.mjs` can wire the GIF in.
+5. **Registration in `package.json`** `bin` block.
+6. **Registration in `scripts/build.mjs`** ENTRIES.
+7. **Registration in `scripts/build-landing-pages.mjs`** under the right category — bumps the catalogue count test in `tests/scripts/build-landing-pages.test.ts` (+1).
 
-What they don't yet do: make the actual API calls. That's the piece we're asking contributors to add.
+## Pick the closest existing template
 
-## peepshow-sink-cognee
+| Your target | Closest template | Why |
+| :---------- | :--------------- | :-- |
+| REST + auth header (issue tracker / observability / chat) | `linear.ts`, `pagerduty.ts`, `opsgenie.ts` | Header auth, JSON body, response parse. |
+| GraphQL endpoint | `linear.ts`, `graphql.ts` | Linear uses GraphQL. |
+| Object storage / file upload | `gcs.ts`, `firebase-storage.ts`, `s3.ts` | Bytes upload + manifest write. |
+| Vector DB (per-frame embedding) | `chroma.ts`, `qdrant.ts`, `pgvector.ts` | Per-frame ID + metadata. |
+| Local markdown append (notes / agent memory) | `obsidian.ts`, `aider.ts`, `cody.ts` | DI fs, append vs create modes. |
+| macOS-only via osascript / x-callback-url | `apple-notes.ts`, `imessage.ts`, `things.ts`, `bear.ts` | Darwin gating + `*_ALLOW_NON_DARWIN` escape. |
+| Workflow webhook with signing + retry | `pipedream.ts`, `zapier.ts` | HMAC + 429/5xx backoff. |
+| Wide-event ingest | `honeycomb.ts`, `newrelic.ts`, `datadog.ts` | Flat key→value event body. |
 
-**Target:** [cognee](https://github.com/topoteretes/cognee) — AI memory framework with knowledge-graph ingestion.
+## Quick start
 
-**Gap:** cognee's primary API is Python (`cognee.add`, `cognee.cognify`). A Node sink would need to either:
-1. Shell out to the `cognee` CLI (requires `pip install cognee` and Python env)
-2. Call cognee's REST API (project hasn't shipped a stable one yet — check their roadmap)
+```bash
+# 1. Pick a template + copy
+cp src/builtin-sinks/linear.ts src/builtin-sinks/myservice.ts
+cp tests/builtin-sinks/linear.test.ts tests/builtin-sinks/myservice.test.ts
+cp bin/peepshow-sink-linear bin/peepshow-sink-myservice
 
-**Env:** `COGNEE_DATA_ROOT`, `COGNEE_USER_ID`.
+# 2. Rename references inside
+sed -i '' 's/linear/myservice/g; s/Linear/Myservice/g' \
+  src/builtin-sinks/myservice.ts \
+  tests/builtin-sinks/myservice.test.ts \
+  bin/peepshow-sink-myservice
 
-**What a PR should add:** pick option 1 or 2 above, implement the upload call, and ingest frame paths + video tags as nodes in the cognee graph.
+# 3. Adapt the URL, auth, body shape, env vars
 
-## peepshow-sink-perplexity
+# 4. Register in package.json bin, scripts/build.mjs, scripts/build-landing-pages.mjs
 
-**Target:** Perplexity Spaces / Pro API.
+# 5. Validate
+export PATH=$HOME/.nvm/versions/node/v22.22.1/bin:$PATH
+npm run typecheck
+npm run lint
+node --test --experimental-strip-types tests/builtin-sinks/myservice.test.ts
+```
 
-**Gap:** Perplexity's Space-upload API is currently invite-only. Sink ships as a scaffold that POSTs the right shape to a configurable URL so early-access users can wire it up.
+## Conventions
 
-**Env:** `PERPLEXITY_API_KEY`, `PERPLEXITY_SPACE_ID`, `PERPLEXITY_UPLOAD_URL` (override).
+- **No new runtime deps**. Stick to native `fetch`, `node:fs/promises`, `node:child_process`, `node:crypto`. SDK-driven sinks (e.g. `@aws-sdk/client-s3`) live in `optionalDependencies`.
+- **Strip-only TS**. No decorators, no parameter properties, no enums. `.ts` extensions in every import.
+- **DI for I/O**. Every test mocks `fetch` / `spawn` / `fs` via a deps object. Never let a test reach the real network or disk.
+- **`SinkError` for failures**. Map to one of the codes in `SINK_EXIT` (`usage` 2, `missingDep` 3, `runtime` 5).
+- **Macros: `requireEnv` / `optionalEnv` / `runSinkEntry`**. Don't roll your own — they're in `_lib.ts`.
 
-**What a PR should add:** swap the mock URL for the official endpoint once it's public, plus multipart upload support for frame files (not just JSON metadata).
+## Looking for the next gap?
 
-## peepshow-sink-antigravity
-
-**Target:** Antigravity — IDE-integrated artifact system.
-
-**Gap:** no public API documented. Integration may happen via filesystem (drop to a watched dir) once Antigravity ships a protocol spec.
-
-**What a PR should add:** if/when Antigravity documents an artifact-import format, map the peepshow payload onto it.
-
----
-
-## Contributing a full sink
-
-1. Copy an existing sink in `src/builtin-sinks/` (e.g. `graphql.ts` for API-call sinks or `obsidian.ts` for filesystem sinks) as a template.
-2. Keep the transform logic pure so unit tests stay fast.
-3. Add a bin wrapper in `bin/peepshow-sink-<name>` following the pattern.
-4. Add tests under `tests/builtin-sinks/<name>.test.ts`.
-5. Add a doc page under `docs/sinks/<name>.md`.
-6. Register the bin in `package.json` `bin` map.
-7. Open a PR.
+`docs/SINKS-MISSING.md` lists what's still unbuilt and what's blocked on upstream API availability. Most remaining candidates either need a single-platform wrapper (Make / n8n / Activepieces / Node-RED — the generic webhook sink covers them today, but a branded sink could add platform-specific signing) or are pending an upstream API release (Roam, Tana, Whimsical).

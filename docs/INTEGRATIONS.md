@@ -87,7 +87,9 @@ The markdown output contains `![](path)` image refs which Gemini CLI reads as at
 
 ## Aider
 
-Aider can run shell commands inline with `/run`. Easiest wiring: a shell alias.
+> **There's a native sink: `peepshow-sink-aider`** — appends a markdown block (frames + transcript) into `.aider.chat.history.md` after each run. See [`docs/sinks/aider.md`](./sinks/aider.md) for the env vars.
+
+Aider can also run shell commands inline with `/run`. Easiest wiring: a shell alias.
 
 ```bash
 alias slides='peepshow --emit paths --stats short'
@@ -155,7 +157,9 @@ I ran: peepshow ./video.mp4 --emit json
 Here is the result: <paste stdout>
 ```
 
-## ChatGPT Code / Code Interpreter
+## ChatGPT (Custom GPTs / Projects / Code Interpreter)
+
+> **There's a native sink: `peepshow-sink-openai-files`** — pre-uploads frames + a manifest to OpenAI's `/v1/files` endpoint (`purpose=vision`) so Custom GPTs and Assistants file-search can ground against them. See [`docs/sinks/openai-files.md`](./sinks/openai-files.md).
 
 Inside a Code Interpreter sandbox, upload the video and run:
 
@@ -172,7 +176,9 @@ for frame in result["frames"]:
 
 ## Sourcegraph Cody
 
-Cody's "shell context" lets you run a command and hand its stdout to the model:
+> **There's a native sink: `peepshow-sink-cody`** — drops frames + manifest + transcript into `.cody/context/peepshow/` so Cody surfaces them automatically. See [`docs/sinks/cody.md`](./sinks/cody.md).
+
+Cody's "shell context" also lets you run a command inline and hand its stdout to the model:
 
 ```
 @sh peepshow ./video.mp4 --emit markdown
@@ -199,13 +205,17 @@ then ask "read each frame under `frames[].path` and describe the scene changes".
 </p>
 <!-- /gif:agent:cursor -->
 
-These tools run in VS Code with shell access via their own terminal or a built-in "run command" capability. Approach:
+> **Native sinks ship for both Continue (`peepshow-sink-continue`) and Cline (the agent rule at `.clinerules/peepshow.md`).** Continue's sink drops frames + manifest + transcript into `.continue/context/peepshow/` so the agent has them on the next prompt. See [`docs/sinks/continue.md`](./sinks/continue.md). Cursor uses the rule at `.cursor/rules/peepshow.mdc` and the standalone CLI.
+>
+> Windsurf has its own rule at `.windsurf/rules/peepshow.md` — Cascade auto-picks it up.
+
+These tools run in VS Code with shell access via their own terminal or a built-in "run command" capability. Without the dedicated sinks, the manual approach is:
 
 1. Invoke `peepshow ./video.mp4 --emit paths`.
 2. The assistant sees the paths in stdout.
 3. Drag the temp directory into the chat or ask the tool to "open these images".
 
-No special wiring needed — the CLI + `--emit paths` default is the whole integration.
+The CLI + `--emit paths` default is the whole integration when you skip the sinks.
 
 ## Ollama-based tools (Open WebUI, Continue offline mode)
 

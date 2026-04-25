@@ -98,7 +98,7 @@ Or describe the task in natural language — the skill auto-invokes:
 - **Scene-change detection by default** — ffmpeg's `select='gt(scene,…)'` filter catches visually distinct moments, no fixed-fps noise.
 - **Ships native agent manifests for 8+ tools.** Claude Code plugin (`.claude-plugin/`), Cursor (`.cursor/rules/`), Windsurf (`.windsurf/rules/`), Cline (`.clinerules/`), Codex CLI (`.codex/hooks.json`), Gemini CLI (`gemini-extension.json` + `GEMINI.md`), generic `AGENTS.md` convention, `.agents/plugins/` marketplace. Plus integration snippets for Copilot CLI, aider, `llm`, Continue, Cody, Zed AI, Perplexity, Ollama in [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md).
 - **Hardware-accelerated decoding** by default — VideoToolbox on macOS, VAAPI on Linux, D3D11VA on Windows. `--no-gpu` to force CPU.
-- **Pluggable sink backends.** Fan out each run to folders, SQL, HTTP/GraphQL, S3, Obsidian, cognee, MemPalace, Perplexity — whatever. Contract is one JSON stream on stdin. See [`docs/PLUGINS.md`](./docs/PLUGINS.md).
+- **Pluggable sink backends.** Fan out each run to folders, SQL, vector DBs, object storage, chat, wikis, issue trackers, observability, workflow glue — 71 ship built-in across 10 categories. Contract is one JSON stream on stdin. See [`docs/PLUGINS.md`](./docs/PLUGINS.md) and the [sinks hub](https://www.peepshow.dev/sinks/).
 - **Pairs with [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)** for token-aware LLM setups (`--emit caveman`).
 - **Live statusline badge.** `[PEEPSHOW:decoding:42%]` mid-run, `[PEEPSHOW:5frm:scene:system]` after, `[PEEPSHOW]` idle.
 - **Context-aware hints on stderr.** Missing ffmpeg → OS-specific install command. Bundled ffmpeg → one-time nudge toward native. Zero frames / short clip / heavy pruning → actionable flag suggestions. `PEEPSHOW_NO_HINTS=1` to silence.
@@ -276,7 +276,7 @@ The short-stats line surfaces the title (if present) so a quick run on a tagged 
 peepshow stats: "The Heist" 1:32:18 1920×1080 h264 24fps 2.8GB → 40 via scene, …
 ```
 
-Because the tags ride inside the JSON contract, every **sink** (folder archive, MySQL, webhook, S3, Obsidian, cognee, …) receives them too — store them next to the frames, index by director, group by show, whatever.
+Because the tags ride inside the JSON contract, every **sink** (folder archive, Postgres, webhook, S3, Obsidian, Chroma, …) receives them too — store them next to the frames, index by director, group by show, whatever.
 
 ### Runtime hints
 
@@ -335,26 +335,24 @@ The internal `--emit caveman` format (ultra-terse, no external binary required) 
 
 ## Sink plugins
 
-peepshow can fan out extracted frames + metadata to any downstream system — shared folders, SQL, NoSQL, HTTP/GraphQL, object stores, or LLM memory backends like Obsidian, cognee, MemPalace, Perplexity, Antigravity, Simplemem, Cursor, Windsurf, Zed.
+peepshow can fan out extracted frames + metadata to any downstream system. A **sink** is just an executable that reads the run's JSON payload on stdin and forwards it somewhere — written in any language.
 
-A **sink** is just an executable that reads a JSON payload on stdin. It can be written in any language.
+**71 sinks ship built-in** across 10 categories. Browse them on the [sinks hub](https://www.peepshow.dev/sinks/), pick by use case at the [finder](https://www.peepshow.dev/sinks/find/), or read the per-sink docs in [`docs/sinks/`](./docs/sinks/). A short cross-section:
 
-**Built-in sinks (ship with peepshow):**
+| Category | Examples |
+| :------- | :------- |
+| **SQL & document** | sqlite · postgres · mongodb |
+| **Vector + AI memory** | chroma · qdrant · pinecone · pgvector · weaviate · milvus · zep · mem0 · letta · mempalace |
+| **Object + cloud storage** | s3-compatible · gcs · firebase-storage · azure-blob · supabase · dropbox · gdrive · box · openai-files |
+| **Chat & messaging** | slack · discord · msteams · telegram · whatsapp · imessage · matrix · mattermost · rocketchat · zulip |
+| **Issue trackers** | linear · height · github-issues · jira · asana · clickup · shortcut · trello |
+| **Wiki + notes** | notion · obsidian · logseq · outline · confluence · apple-notes · bear |
+| **Whiteboards** | miro · figma |
+| **Analytics** | posthog · plausible · event-track (mixpanel/amplitude/segment) |
+| **Observability** | sentry · datadog · new-relic · honeycomb · pagerduty · opsgenie · grafana-oncall |
+| **Workflow glue** | webhook · graphql · ide · aider · continue · cody · raycast · pipedream · zapier · shortcuts · apple-reminders · things |
 
-| Sink | Use for |
-| :--- | :------ |
-| `sqlite` | Local archive queryable with any SQLite tool. Auto-schema (runs / frames / tags). |
-| `webhook` | Generic POST of the payload to any URL. |
-| `slack` | Webhook variant formatted as Slack Block Kit. |
-| `discord` | Webhook variant formatted as Discord embeds. |
-| `graphql` | POST a mutation to any GraphQL endpoint (custom template + auth supported). |
-| `obsidian` | Write a per-run markdown note with frame embeds into an Obsidian vault. |
-| `ide` | Drop frames into Cursor / Windsurf / Zed / VS Code attachment folders (auto-detect). |
-| `mempalace` | Write a mineable markdown note into a [MemPalace](https://github.com/MemPalace/mempalace) palace (optionally auto-mine after each run). |
-
-**Skeleton sinks** (help wanted): cognee, perplexity, antigravity. See [`docs/sinks/skeletons.md`](./docs/sinks/skeletons.md).
-
-**Other systems worth a sink** (prioritised scouting list): Zep/Mem0, cognee, Perplexity, Antigravity, plus ~40 more in [`docs/SINKS-MISSING.md`](./docs/SINKS-MISSING.md).
+**Want one we don't have?** Open the scouting list at [`docs/SINKS-MISSING.md`](./docs/SINKS-MISSING.md) — only a handful of gaps remain (Make / n8n / Activepieces / Node-RED branded wrappers, Roam once their API stabilises). Volunteer for any using the contribution pattern in [`docs/PLUGINS.md`](./docs/PLUGINS.md).
 
 Invoke one or more from any peepshow run:
 

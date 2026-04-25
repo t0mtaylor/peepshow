@@ -186,15 +186,15 @@ Both have self-contained READMEs and install instructions.
 
 These are all feasible as small sinks — the JSON contract is stable, frames are on disk, the rest is just that system's API.
 
-### Knowledge / memory systems
+### Knowledge / memory systems (all shipped)
 
-- **Obsidian** — write a Markdown note per run with embedded frame refs; drop into a vault's daily note.
-- **cognee** — push frames + transcript stub to a `cognee` graph via their Python SDK.
-- **MemPalace / memory-palace** — attach frames to a spatial memory node with timeline metadata.
-- **Perplexity Spaces** — upload via Perplexity's upload API, link the run into a Space.
-- **Antigravity** — post to Antigravity's project memory surface as an artefact.
-- **Simplemem / simple memory stores** — minimal key/value push of `run_id → frame paths`.
-- **Cursor / Windsurf / Zed** — drop frames into the project's `.cursor/` or workspace attachments dir.
+- **Obsidian** (`peepshow-sink-obsidian`) — Markdown note per run with embedded frame refs.
+- **MemPalace** (`peepshow-sink-mempalace`) — spatial memory node with timeline metadata.
+- **Zep / Mem0 / Letta** (`peepshow-sink-zep`, `peepshow-sink-mem0`, `peepshow-sink-letta`) — long-term agent memory.
+- **Aider / Continue / Cody** (`peepshow-sink-aider`, `-continue`, `-cody`) — drop into the AI coding assistant's workspace context dir.
+- **Notion / Logseq / Outline / Confluence / Apple Notes / Bear** — wiki/notes writeback.
+- **OpenAI Files** (`peepshow-sink-openai-files`) — pre-upload frames for Custom GPTs / Assistants file-search.
+- **IDE attachments** (`peepshow-sink-ide`) — auto-detects Cursor / Windsurf / Zed / VS Code project dirs.
 
 ### Storage / databases
 
