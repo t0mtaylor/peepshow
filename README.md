@@ -435,6 +435,12 @@ echo '{"summary":"<2-4 sentences>","provider":"claude-code","model":"claude-opus
   | peepshow report annotate "<outputDir>"
 ```
 
+<!-- gif:report-outro -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/report-outro.gif" alt="peepshow report — Summary, LLM analysis, sink fan-out, then the annotate command closes the loop" width="720">
+</p>
+<!-- /gif:report-outro -->
+
 Every supported agent integration has the annotate instruction wired in — see [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) and the per-agent rule files.
 
 ### Inspect runs
