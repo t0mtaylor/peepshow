@@ -20,3 +20,13 @@ Parse the stdout JSON:
 ## Flags
 
 `--max 20` · `--threshold 0.2` · `--fps 1` · `--emit json|paths|markdown|caveman` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va`.
+
+## Annotate the report
+
+Each run writes `report.html` + `manifest.json` into the run's `outputDir`. After reading the frames, pipe a JSON summary back so the report captures your understanding:
+
+```bash
+echo '{"summary":"<2-4 sentences>","provider":"cline"}' | peepshow report annotate "$OUTPUT_DIR"
+```
+
+`$OUTPUT_DIR` is the JSON payload's `outputDir`. The summary is rendered under "LLM analysis" in `report.html`.

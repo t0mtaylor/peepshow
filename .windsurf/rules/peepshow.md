@@ -19,6 +19,16 @@ Parse `frames[].path` (ordered, chronological) and read each as an image. Use `v
 
 `npm i -g peepshow` — https://www.npmjs.com/package/peepshow.
 
+## Annotate the report
+
+Each run writes `report.html` + `manifest.json` into the run's `outputDir`. After reading the frames, pipe a JSON summary back so the report captures your understanding:
+
+```bash
+echo '{"summary":"<2-4 sentences>","provider":"windsurf"}' | peepshow report annotate "$OUTPUT_DIR"
+```
+
+`$OUTPUT_DIR` is the JSON payload's `outputDir` field. The annotation is rendered under "LLM analysis" in `report.html`.
+
 ## Attach frames to the Windsurf workspace
 
 `peepshow video.mp4 --sink ide` detects Windsurf and writes frames into `.windsurf/attachments/peepshow/<timestamp>/` for easy `@mention`.

@@ -42,6 +42,15 @@ If `$ARGUMENTS` contains the video reference, use it directly. Otherwise ask the
 
 5. **Answer the user's question** using both the frames and the transcript together. Reference timestamps when helpful (derive from `video.durationSeconds`, frame ordering, and transcript `segments[].start`). A useful pattern for longer clips: summarise the visual timeline in 2-3 beats, then weave in direct quotes from the transcript to ground what was said at those moments.
 
+6. **Annotate the report** so the next person opening `report.html` sees your understanding without rerunning the model. Pipe a JSON object with your `summary` (and optional `perFrame` captions) back into peepshow:
+
+   ```bash
+   echo '{"summary":"<2-4 sentences describing the timeline>","perFrame":[{"idx":0,"text":"<frame 1 caption>"},{"idx":3,"text":"<frame 4 caption>"}],"provider":"claude-code","model":"claude-opus-4-7"}' \
+     | peepshow report annotate "$OUTPUT_DIR"
+   ```
+
+   `$OUTPUT_DIR` is the run's `outputDir` (the JSON payload's `outputDir` field — typically a `/tmp/peepshow-...` path). The annotate step rewrites `manifest.json` and `report.html` atomically; users opening the HTML now see your synthesis under the "LLM analysis" section. Skip this step only if the user explicitly asked for raw frames.
+
 ## Useful flags
 
 Pass these after the input when the defaults are not right:

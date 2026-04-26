@@ -6,6 +6,8 @@ A **sink** is just an executable that reads a JSON payload on stdin. Any languag
 
 > **Naming note.** "Plugin" in this doc means a peepshow sink plugin — an output/storage backend for peepshow runs. This is unrelated to the Claude Code plugin format that peepshow itself ships as.
 
+> **Reports cross-link.** Each sink's status (✅ ok / ❌ failed / ⏭ skipped, exit code, stderr, `--when` clause) lands in the per-run [HTML report](./REPORT.md)'s "Sinks" section, so users can see at a glance which sinks fired vs failed vs were filtered out. The same `SinkResult` shape is part of the locked `manifest.json` schema (v1) — phase 2's `peepshow serve` will surface the same data over HTTP.
+
 ---
 
 ## Contract

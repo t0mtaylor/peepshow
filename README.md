@@ -405,6 +405,51 @@ Inside Claude Code, the `/peepshow:sink` skill turns natural-language requests (
 
 Full spec and JSON contract: **[`docs/PLUGINS.md`](./docs/PLUGINS.md)**.
 
+## Reports & runs
+
+Every successful extract writes three things into the run's output directory + a global run history:
+
+| Artifact | Where | Purpose |
+| :------- | :---- | :------ |
+| `manifest.json` | `<outputDir>/manifest.json` | Locked-shape JSON record of the run (schemaVersion 1). |
+| `report.html` | `<outputDir>/report.html` | Self-contained dashboard: summary, frames grid + lightbox, transcript, sink fan-out, raw manifest. |
+| ndjson append | `~/.peepshow/runs/index.ndjson` | One line per run for the `peepshow runs` subcommand and the future `peepshow serve`. |
+
+All three are **on by default**. Opt out per-run or globally:
+
+| Flag | Env var | Effect |
+| :--- | :------ | :----- |
+| `--no-report` | `PEEPSHOW_NO_REPORT=1` | Skip `report.html` only. |
+| `--no-manifest` | `PEEPSHOW_NO_MANIFEST=1` | Skip both manifest + ndjson. |
+| `--no-index` | `PEEPSHOW_NO_INDEX=1` | Skip ndjson append only. |
+| `--report-dir <p>` | — | Override report location. |
+| `--report-open` | — | Open report.html in browser after writing. |
+| — | `PEEPSHOW_RUNS_INDEX=<p>` | Override ndjson location. |
+
+### Closing the loop — LLM analysis
+
+When peepshow runs *inside* an LLM workflow (Claude Code, Cursor, Windsurf, Cline, Codex, Gemini), the LLM is the consumer that understands the frames. Pipe its analysis back so the next viewer of `report.html` sees the synthesis without rerunning the model:
+
+```bash
+echo '{"summary":"<2-4 sentences>","provider":"claude-code","model":"claude-opus-4-7","perFrame":[{"idx":0,"text":"<caption>"}]}' \
+  | peepshow report annotate "<outputDir>"
+```
+
+Every supported agent integration has the annotate instruction wired in — see [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) and the per-agent rule files.
+
+### Inspect runs
+
+```bash
+peepshow runs list                  # show recent runs (newest first)
+peepshow runs show <runId>          # dump the run's manifest.json
+peepshow runs prune                 # drop entries whose outputDir is gone
+peepshow runs clear                 # truncate the index
+peepshow report <run-dir>           # re-render report.html from manifest.json
+peepshow report annotate <dir>      # attach LLM analysis from stdin (above)
+```
+
+Phase 2 (`peepshow serve`) will surface these over a local HTTP UI with sink-management — see [`docs/SERVER-ROADMAP.md`](./docs/SERVER-ROADMAP.md). Full spec: **[`docs/REPORT.md`](./docs/REPORT.md)**.
+
 ## Distribution
 
 `peepshow` reaches users through three independent channels. They solve different problems and aren't substitutes for each other:

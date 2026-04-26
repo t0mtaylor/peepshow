@@ -11,6 +11,19 @@ The four output formats matter here:
 
 Add `--stats off` to strip all stats if you're token-budget-sensitive, `--stats full` for detailed telemetry. Hardware-accelerated decoding is on by default — `--no-gpu` to force CPU.
 
+## Annotate the report (close the loop)
+
+Every successful run writes `report.html` + `manifest.json` into the run's `outputDir`. After your LLM has read the frames + transcript, pipe a JSON summary back so the report captures the model's understanding for whoever opens the HTML next:
+
+```bash
+echo '{"summary":"<2-4 sentences>","provider":"<your-tool>","model":"<model-id>"}' \
+  | peepshow report annotate "<outputDir>"
+```
+
+`<outputDir>` is the JSON payload's `outputDir` field. Optional fields: `perFrame: [{idx, text}]` for per-frame captions, `generatedAt` for explicit ISO timestamp, `source` for provenance. The annotation appears under the "LLM analysis" section in `report.html`.
+
+This is the loop the per-tool sections below all wire up — the snippets show the tool-specific glue.
+
 ---
 
 ## Claude Code
@@ -58,6 +71,14 @@ Run `peepshow "$ARGUMENTS" --emit json` in the shell. Parse the resulting JSON
 for `frames[].path`. Read each frame path as an image and describe what you see.
 If the user's question needs timestamps, use `video.durationSeconds` together
 with frame ordering to estimate when each frame occurs.
+
+After you've understood the timeline, annotate the auto-generated report so
+the next viewer sees your synthesis:
+
+    echo '{"summary":"<your summary>","provider":"codex"}' \
+      | peepshow report annotate "$outputDir"
+
+`$outputDir` is the JSON payload's `outputDir` field.
 ```
 
 Invoke with `/slides ./video.mp4`.
@@ -82,6 +103,16 @@ command = "peepshow \"{{args}}\" --emit markdown"
 ```
 
 The markdown output contains `![](path)` image refs which Gemini CLI reads as attachments.
+
+After you've reviewed the frames, annotate the auto-generated `report.html` so the next viewer sees your synthesis:
+
+```toml
+name = "slides-annotate"
+description = "Attach a summary to the latest peepshow report"
+command = "echo '{\"summary\":\"{{args}}\",\"provider\":\"gemini\"}' | peepshow report annotate \"$outputDir\""
+```
+
+(Replace `$outputDir` with the actual path printed in the previous run's `outputDir` field.)
 
 ---
 

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'peepshow available: turn videos + animated images into timelines of frames. Trigger: user shares .mp4/.mov/.mkv/.webm/.avi/.flv/.wmv/.ts/.mts/.m2ts/.3gp/.ogv/.gif/.apng (do NOT fire for static png/jpg). Invoke: peepshow \"<path>\" --emit json. Parse frames[].path ordered + video.tags for grounding. npm i -g peepshow (https://www.npmjs.com/package/peepshow).'",
+            "command": "echo 'peepshow available: turn videos + animated images into timelines of frames. Trigger: user shares .mp4/.mov/.mkv/.webm/.avi/.flv/.wmv/.ts/.mts/.m2ts/.3gp/.ogv/.gif/.apng (do NOT fire for static png/jpg). Invoke: peepshow \"<path>\" --emit json. Parse frames[].path ordered + video.tags for grounding. After reading frames, annotate the auto-generated report so the next viewer sees your synthesis: echo {\"summary\":...} | peepshow report annotate \"$outputDir\". npm i -g peepshow (https://www.npmjs.com/package/peepshow).'",
             "timeout": 5,
             "statusMessage": "Loading peepshow context"
           }

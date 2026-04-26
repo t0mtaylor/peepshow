@@ -27,6 +27,17 @@ Parse the stdout JSON:
 
 Read each `frames[i].path` as an image. Ground your answer in `video.tags` before describing frames.
 
+## Annotate the report after reading
+
+Each run also writes `report.html` + `manifest.json` into `outputDir`. After you've understood the frames + transcript, pipe a JSON summary back so the report captures your synthesis for whoever opens it later:
+
+```bash
+echo '{"summary":"<2-4 sentences>","provider":"<your-tool-name>"}' \
+  | peepshow report annotate "<outputDir>"
+```
+
+`<outputDir>` is the JSON payload's `outputDir` field. The annotation renders under "LLM analysis" in `report.html`. Optionally include `perFrame: [{idx, text}]` for per-frame captions, plus `model` for provenance.
+
 ## Flags worth knowing
 
 ```
