@@ -22,6 +22,12 @@ echo '{"summary":"<2-4 sentences>","provider":"<your-tool>","model":"<model-id>"
 
 `<outputDir>` is the JSON payload's `outputDir` field. Optional fields: `perFrame: [{idx, text}]` for per-frame captions, `generatedAt` for explicit ISO timestamp, `source` for provenance. The annotation appears under the "LLM analysis" section in `report.html`.
 
+<!-- gif:report-outro -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/report-outro.gif" alt="peepshow report — Summary, LLM analysis, sink fan-out, then the annotate command closes the loop" width="720">
+</p>
+<!-- /gif:report-outro -->
+
 This is the loop the per-tool sections below all wire up — the snippets show the tool-specific glue.
 
 ---

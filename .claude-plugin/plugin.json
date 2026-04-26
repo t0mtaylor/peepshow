@@ -1,7 +1,7 @@
 {
   "name": "peepshow",
   "description": "Turn videos into a sequence of relevant still frames + transcript + a self-contained HTML report so Claude can view them as images, hear the audio, and write its analysis back into the report. Pass a local path, an http(s) URL, or pipe video bytes on stdin.",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "author": {
     "name": "Tom Taylor"
   },
