@@ -164,6 +164,38 @@ Truncate the index file (no confirmation prompt — fast for scripts).
 
 ---
 
+## User preferences (`peepshow config`)
+
+Per-machine prefs at `~/.peepshow/config.json` (override via `PEEPSHOW_CONFIG_FILE`). First-run hint on stderr the first time peepshow runs in a TTY suggests `peepshow config init` — a one-shot wizard that sets the report defaults so you don't have to pass `--report-open` etc. every time.
+
+| Key | Type | Default | Meaning |
+| :-- | :--- | :------ | :------ |
+| `report.enabled` | bool | `true` | Write `report.html` on every run. (Set `false` for the same effect as `--no-report`.) |
+| `report.autoOpen` | bool | `false` | Open the report in your browser after each run (no need to pass `--report-open`). |
+| `report.browser` | enum | `default` | `default \| chrome \| firefox \| safari \| edge \| brave \| arc`. The cross-platform launcher resolves to `open -a "<App>"` on macOS, the browser binary on Linux, `start <alias>` on Windows. |
+
+### CLI
+
+```bash
+peepshow config init                  # interactive wizard (first-run UX)
+peepshow config list                  # JSON dump of the full config
+peepshow config get report.browser    # print one value
+peepshow config set <key> <value>     # set + persist
+peepshow config export [path]         # write to <path> or stdout (when omitted)
+peepshow config import <path>         # atomically replace from <path>
+peepshow config reset                 # delete the config file
+```
+
+`export` / `import` are how you copy prefs between machines or back them up before a `reset`. Import is strict on `schemaVersion` — unknown versions are rejected with a clear error so a future format change can't quietly corrupt prefs.
+
+### Env-var overrides (precedence: env > config > defaults)
+
+- `PEEPSHOW_BROWSER=chrome` — force a specific browser for one invocation
+- `PEEPSHOW_REPORT_OPEN=1` — force `--report-open` for one invocation
+- `PEEPSHOW_CONFIG_FILE=/path/to/config.json` — alt config location
+
+---
+
 ## File layout
 
 After a run with all defaults:

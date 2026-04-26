@@ -454,6 +454,30 @@ peepshow report <run-dir>           # re-render report.html from manifest.json
 peepshow report annotate <dir>      # attach LLM analysis from stdin (above)
 ```
 
+### Preferences (`peepshow config`)
+
+User prefs live at `~/.peepshow/config.json` (override via `PEEPSHOW_CONFIG_FILE`). First time `peepshow` runs interactively a one-line stderr hint suggests `peepshow config init` — a quick wizard that sets:
+
+- `report.enabled` (bool, default `true`) — write `report.html` on every run
+- `report.autoOpen` (bool, default `false`) — auto-open the report in your browser after each run
+- `report.browser` (`default | chrome | firefox | safari | edge | brave | arc`) — cross-platform: macOS uses `open -a "<App>"`, Linux uses the browser binary, Windows uses `start <alias>`
+
+```bash
+peepshow config init                # interactive first-run wizard
+peepshow config list                # print the full config as JSON
+peepshow config get report.browser  # print one value
+peepshow config set report.browser chrome
+peepshow config set report.autoOpen true
+peepshow config export ~/peepshow-prefs.json   # back up before reset
+peepshow config import ~/peepshow-prefs.json   # restore on a new machine
+peepshow config reset               # delete the config file
+```
+
+Env vars override the saved prefs at run time:
+
+- `PEEPSHOW_BROWSER=chrome` — force a specific browser for one invocation
+- `PEEPSHOW_REPORT_OPEN=1` — force `--report-open` for one invocation
+
 Phase 2 (`peepshow serve`) will surface these over a local HTTP UI with sink-management — see [`docs/SERVER-ROADMAP.md`](./docs/SERVER-ROADMAP.md). Full spec: **[`docs/REPORT.md`](./docs/REPORT.md)**.
 
 ## Distribution
