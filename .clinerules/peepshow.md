@@ -11,7 +11,7 @@ peepshow "<path-or-url>" --emit json
 Parse the stdout JSON:
 - `frames[]` — ordered, chronological frame paths. Read each as an image.
 - `video` — container, codec, resolution, fps, duration, size, **plus `tags`** (title, director, producer, show, …). Ground your answer in the tags first.
-- `extraction` — which strategy (`scene` or `fps`) was used, elapsed ms, ffmpeg source.
+- `extraction` — which strategy (`scene` or `fps`) was used, elapsed ms, ffmpeg source, plus `framesDeduped` + `dedupDistance` (perceptual-hash post-pass, default-on, 8×8 dHash) and `motionSignalAvg` + `motionSignalLevel` (`low`/`medium`/`high`) — useful for colouring your narration.
 
 ## Install
 
@@ -19,7 +19,9 @@ Parse the stdout JSON:
 
 ## Flags
 
-`--max 20` · `--threshold 0.2` · `--fps 1` · `--emit json|paths|markdown|caveman` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va`.
+`--max 20` · `--threshold 0.2` · `--fps 1` · `--emit json|paths|markdown|caveman` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va` · `--dedup on|auto|off` · `--dedup-distance 0..64` · `--adaptive on|off`.
+
+8×8 perceptual-hash dedup is default-on; `--gpu auto` is duration+resolution aware (skips hwaccel on short or sub-1080p clips where init dominates); `--adaptive on` re-extracts denser when motion is high and there's headroom under `--max`.
 
 ## Annotate the report
 

@@ -21,7 +21,9 @@ Parse `frames[].path` from the stdout JSON, read each as an image (in order), us
 
 ## Flags
 
-`--emit paths|json|markdown|caveman` · `--stats off|short|full` · `--max N` · `--threshold 0..1` · `--fps N` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va`
+`--emit paths|json|markdown|caveman` · `--stats off|short|full` · `--max N` · `--threshold 0..1` · `--fps N` · `--sink <name[:arg]>` · `--gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va` · `--dedup on|auto|off` · `--dedup-distance 0..64` · `--adaptive on|off`
+
+Manifest fields the LLM should read: `extraction.framesDeduped`, `extraction.dedupDistance`, `extraction.motionSignalAvg` (number) + `extraction.motionSignalLevel` (`low`/`medium`/`high`). Default-on dedup is 8×8 perceptual-hash; `--gpu auto` is duration+resolution aware (skips hwaccel on short/low-res clips); `--adaptive on` re-extracts denser when motion is high and there's headroom under `--max`.
 
 ## Annotate the report
 

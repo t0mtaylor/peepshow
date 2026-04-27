@@ -13,7 +13,7 @@ When the user shares a video or animated image file (`.mp4` `.mov` `.mkv` `.webm
 peepshow "<path-or-url>" --emit json
 ```
 
-Parse `frames[].path` (ordered, chronological) and read each as an image. Use `video.tags` (title/director/producer/show/etc) to ground your answer. Static images are already handled natively — skip peepshow for those.
+Parse `frames[].path` (ordered, chronological) and read each as an image. Use `video.tags` (title/director/producer/show/etc) to ground your answer. The `extraction` block carries `framesDeduped` (perceptual-hash post-pass, default-on), `dedupDistance`, and a coarse motion signal — `motionSignalAvg` (numeric) + `motionSignalLevel` (`low`/`medium`/`high`) — useful for colouring narration. `--gpu auto` automatically picks CPU on short clips where hwaccel init dominates; `--adaptive on` (default) re-extracts denser when motion is high and there's headroom. Static images are already handled natively — skip peepshow for those.
 
 ## Install
 

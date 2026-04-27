@@ -23,7 +23,7 @@ peepshow "<path-or-url>" --emit json
 Parse the stdout JSON:
 - `frames[]` — ordered frame paths (chronological).
 - `video` — container, codec, resolution, fps, duration, size, plus `tags` (title, director, producer, etc).
-- `extraction` — strategy used, ffmpeg source, elapsed ms.
+- `extraction` — strategy used (`scene` vs `fps`), ffmpeg source, elapsed ms. Plus `framesDeduped` + `dedupDistance` (perceptual-hash post-pass, 8×8 dHash, default-on), and `motionSignalAvg` + `motionSignalLevel` (`low`/`medium`/`high`) — average pairwise hamming across kept frames. Use the motion signal to colour narration; high motion + `framesDeduped == 0` means every frame is genuinely distinct.
 
 Read each `frames[i].path` as an image. Ground your answer in `video.tags` before describing frames.
 
@@ -47,6 +47,8 @@ peepshow <input> --emit json|paths|markdown|caveman
                  --sink <name[:arg]>  --sink-cmd <shell>  --no-auto-sinks
                  --gpu auto|off|videotoolbox|cuda|qsv|vaapi|amf|d3d11va
                  --no-gpu
+                 --dedup on|auto|off  --dedup-distance 0..64  --no-dedup
+                 --adaptive on|off  --no-adaptive
 ```
 
 ## Per-agent entrypoints

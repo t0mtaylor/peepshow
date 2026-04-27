@@ -9,7 +9,7 @@ The four output formats matter here:
 - `--emit markdown` — a markdown doc with `![](path)` image refs. Best for LLM tools that auto-render markdown images.
 - `--emit caveman` — ultra-terse one-line summary + paths. Pairs with [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) for token-budget setups.
 
-Add `--stats off` to strip all stats if you're token-budget-sensitive, `--stats full` for detailed telemetry. Hardware-accelerated decoding is on by default — `--no-gpu` to force CPU.
+Add `--stats off` to strip all stats if you're token-budget-sensitive, `--stats full` for detailed telemetry. Hardware-accelerated decoding is on by default — `--no-gpu` to force CPU. **Perceptual frame dedup is on by default** (`--dedup on`) — every run runs an 8×8 dHash post-pass, so a static talking-head clip emits a handful of frames covering actual visual changes rather than 600 near-identical thumbnails. Tweak with `--dedup-distance N` (default 5; lower = stricter), or disable with `--no-dedup`.
 
 ## Annotate the report (close the loop)
 
