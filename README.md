@@ -485,6 +485,10 @@ Env vars override the saved prefs at run time:
 
 Phase 2 (`peepshow serve`) will surface these over a local HTTP UI with sink-management — see [`docs/SERVER-ROADMAP.md`](./docs/SERVER-ROADMAP.md). Full spec: **[`docs/REPORT.md`](./docs/REPORT.md)**.
 
+## Releases
+
+Per-version changes live on the GitHub Releases page: **[github.com/t0mtaylor/peepshow/releases](https://github.com/t0mtaylor/peepshow/releases)**. Every published version of the npm package has a matching release with the user-visible changes (new flags, env vars, manifest fields, default-behaviour shifts) and links into the relevant docs.
+
 ## Distribution
 
 `peepshow` reaches users through three independent channels. They solve different problems and aren't substitutes for each other:
