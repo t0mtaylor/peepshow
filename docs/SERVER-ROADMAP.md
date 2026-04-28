@@ -34,23 +34,34 @@ peepshow serve --no-watch           # disable filesystem watch (just serve curre
 
 ---
 
-## Routes
+## Routes (locked spec)
 
-| Method | Path | Purpose |
-| :----- | :--- | :------ |
-| `GET`  | `/` | Homepage: table of all runs (newest first, search + filter). |
-| `GET`  | `/runs/:runId` | Detail page reusing the `report.html` shell. |
-| `GET`  | `/runs/:runId/manifest.json` | Raw manifest. |
-| `GET`  | `/runs/:runId/frames/:idx` | Stream a frame (proxies the local file). |
-| `GET`  | `/runs/:runId/audio.m4a` | Stream the audio (when present). |
-| `POST` | `/runs/:runId/annotate` | Same shape as `peepshow report annotate` (JSON body → `manifest.analysis`). |
-| `POST` | `/runs/:runId/sink/:name/test` | Re-fire a single sink against the existing payload. |
-| `GET`  | `/sinks` | Auto-sink management page. |
-| `POST` | `/sinks` | Add an auto-sink. |
-| `DELETE` | `/sinks/:idx` | Remove. |
-| `PATCH` | `/sinks/:idx` | Edit `--when` clause. |
-| `GET`  | `/api/runs.json` | Cursor-paginated run list (for the future Mac status-bar app, etc). |
-| `GET`  | `/healthz` | `{"ok":true,"version":"0.x.x"}` |
+| Method | Path | Response | Notes |
+| :----- | :--- | :------- | :---- |
+| `GET`  | `/` | `text/html` | Homepage: server-rendered run list (newest first). Query: `?q=<text>&codec=&since=&limit=N&cursor=<runId>`. |
+| `GET`  | `/runs/:runId` | `text/html` | Detail page — reuses report.html shell rendered with `baseUrl=/runs/:runId/`. |
+| `GET`  | `/runs/:runId/manifest.json` | `application/json` | Raw manifest. 404 when unknown id. |
+| `GET`  | `/runs/:runId/frames/:idx` | `image/jpeg` or `image/png` | Streams the frame file. ETag = file mtime. 404 when idx out of range or file missing. |
+| `GET`  | `/runs/:runId/audio.m4a` | `audio/mp4` | Streams audio when present. 404 when audio.path is null. |
+| `POST` | `/runs/:runId/annotate` | `application/json` `{ ok: true, manifestPath, reportPath }` | Body: same shape as `peepshow report annotate` stdin. Atomic write to manifest.json + re-render of report.html. |
+| `POST` | `/runs/:runId/sink/:name/test` | `application/json` `{ ok, status, exitCode, stderr, durationMs }` | Re-fires the sink against the run's existing payload. `?dry-run=1` pipes payload to stderr instead of executing. |
+| `GET`  | `/sinks` | `text/html` | Sink management UI. |
+| `GET`  | `/api/sinks` | `application/json` `{ sinks: SinkSpec[] }` | List current auto-sinks. |
+| `POST` | `/api/sinks` | `application/json` `{ ok, idx }` | Body: `SinkSpec`. Persists to `~/.peepshow/sinks.json`. |
+| `PATCH` | `/api/sinks/:idx` | `application/json` `{ ok }` | Body: `{ when?: SinkMatch }`. Edits the when clause in place. |
+| `DELETE` | `/api/sinks/:idx` | `application/json` `{ ok }` | Removes by 1-based index. |
+| `GET`  | `/api/runs.json` | `application/json` `{ runs: IndexEntry[], nextCursor?: string }` | Cursor-paginated. Default limit 50. |
+| `GET`  | `/healthz` | `application/json` `{ ok: true, version, runsCount }` | Liveness + version + index size. |
+| `GET`  | `/_static/*` | served bytes | Inlined CSS / JS / favicon for the server's own pages (separate from per-run report assets). |
+
+### Errors
+
+All non-2xx responses return JSON `{ error: string, code: string }` with these codes: `not_found`, `bad_request`, `unauthorised`, `internal`. HTML routes render an error page in the same shell.
+
+### CORS + auth
+
+- Loopback bind by default (`127.0.0.1`). No CORS, no auth — single-user model.
+- `--host 0.0.0.0` requires `--token <hex>` (random per-process). Token passed via `?token=<hex>` query param OR `X-Peepshow-Token` header. No accounts, no sessions.
 
 ---
 

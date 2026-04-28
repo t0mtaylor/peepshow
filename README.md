@@ -105,6 +105,71 @@ Or describe the task in natural language — the skill auto-invokes:
 - **Live statusline badge.** `[PEEPSHOW:decoding:42%]` mid-run, `[PEEPSHOW:5frm:scene:system]` after, `[PEEPSHOW]` idle.
 - **Context-aware hints on stderr.** Missing ffmpeg → OS-specific install command. Bundled ffmpeg → one-time nudge toward native. Zero frames / short clip / heavy pruning → actionable flag suggestions. `PEEPSHOW_NO_HINTS=1` to silence.
 
+## Where peepshow fits
+
+`peepshow` is a CLI first — anything that can spawn a child process can use it. The intended use cases break down like this:
+
+- **Claude Code plugin** — drag-and-drop UX via the `UserPromptSubmit` hook. Native skills `/peepshow:slides` and `/peepshow:sink`. Already covered above.
+- **Cursor / Windsurf / Cline rules** — the per-agent rule files in `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/` teach each agent to call `peepshow` when the user mentions a video path.
+- **Codex CLI / Gemini CLI** — `.codex/hooks.json` and `gemini-extension.json` + `GEMINI.md` ship native manifests.
+- **Aider / Continue / Cody / Zed AI / Copilot CLI / `llm`** — copy-paste snippets in [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md). Generic `AGENTS.md` covers anything that follows that convention.
+- **Standalone shell** — pipe video bytes in on stdin, pipe JSON out, fan out to sinks. Works inside any shell pipeline, CI job, cron task, Makefile target, or sandbox.
+- **Electron desktop AI client** — pre-process video in the main process before forwarding context to a cloud LLM. See below.
+- **Server-side AI portal** — extract once, fan a single JSON manifest out to multiple LLMs. See below.
+- **`peepshow serve` dashboard** — local HTTP server that browses run history, streams frames, manages auto-sinks. Loopback by default. Full reference: [`docs/SERVE.md`](./docs/SERVE.md).
+
+### Electron desktop AI client
+
+Drop-target a video onto a `BrowserWindow`, pre-process locally in the main process, only forward the distilled JSON to your cloud model. Frames + transcript stay on disk; the LLM sees a compact manifest.
+
+```js
+// main.js — Electron main process
+import { spawn } from 'node:child_process';
+
+ipcMain.handle('peepshow:run', async (_evt, videoPath) => {
+  return new Promise((resolve, reject) => {
+    const child = spawn('peepshow', [videoPath, '--emit', 'json', '--quiet']);
+    let out = '';
+    child.stdout.on('data', (b) => { out += b; });
+    child.on('close', (code) => code === 0 ? resolve(JSON.parse(out)) : reject(new Error(`peepshow exit ${code}`)));
+  });
+});
+```
+
+Sandbox the renderer (`contextIsolation: true`, `nodeIntegration: false`); only the main process gets `child_process`. If you expose `peepshow serve` to the renderer over HTTP, bind it loopback or pass `--token`. Pattern: pre-process locally → keep frames + transcript on disk → only forward distilled context to the cloud LLM.
+
+### Server-side AI portal / multi-LLM pre-processor
+
+A Node service that ingests user uploads, runs `peepshow` once, then fans the JSON manifest out to multiple LLMs. Cuts upload bandwidth and per-token cost vs sending the full video to each provider.
+
+```js
+// portal.js — fan one extraction out to N models
+import { spawn } from 'node:child_process';
+import express from 'express';
+
+const app = express();
+app.post('/analyse', express.raw({ type: '*/*', limit: '500mb' }), async (req, res) => {
+  const ps = spawn('peepshow', ['-', '--emit', 'json', '--no-index', '--no-report', '--quiet']);
+  ps.stdin.end(req.body);                                    // upload bytes → stdin
+  let manifest = '';
+  ps.stdout.on('data', (b) => { manifest += b; });
+  ps.on('close', async (code) => {
+    if (code !== 0) return res.status(500).json({ error: 'extract failed' });
+    const payload = JSON.parse(manifest);
+    const replies = await Promise.all([
+      callClaude(payload), callGPT(payload), callGemini(payload), callLocal(payload),
+    ]);
+    res.json({ replies });
+  });
+});
+```
+
+`--no-index --no-report` keeps the service stateless. Pattern: one extract, many models. Cuts upload bandwidth + cost vs sending the full video to each LLM.
+
+### Telemetry + privacy
+
+`peepshow` sends an anonymous run beacon by default (version + OS family + outcome — no paths, no payload). Opt out with `peepshow config set telemetry off`, `PEEPSHOW_TELEMETRY=0`, or `DO_NOT_TRACK=1`. Full details + every switch in [`docs/PRIVACY.md`](./docs/PRIVACY.md).
+
 ## Requirements
 
 - **Node.js ≥ 22** — enforced by `npm i peepshow` via the `engines` field.
@@ -249,7 +314,7 @@ LLM-friendly markdown output (`--emit markdown`) emits one `![](...)` link per f
 | `--emit paths\|json\|markdown\|caveman` | `paths` | Output format — see [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) for when each one shines. |
 | `--stats off\|short\|full` | `short` | Verbosity of the stats block. `--no-stats` / `--full-stats` are shortcuts. |
 | `--quiet`, `-q` | off | Alias for `--stats off`. |
-| `--gpu auto\|off\|videotoolbox\|cuda\|qsv\|vaapi\|amf\|d3d11va` | `auto` | ffmpeg hardware-decode backend. **`auto` is duration + resolution aware**: clips <30s (or 30–60s at <1080p) decode on CPU because GPU init + memory-copy overhead exceeds per-frame savings — measured 3× faster than forced GPU on the project's hero reels (Apple Silicon). 1080p+ longer than 30s uses the platform default (VideoToolbox/macOS, VAAPI/Linux, D3D11VA/Windows). Override via `PEEPSHOW_GPU_MIN_SECONDS=<n>` (default 30) or `PEEPSHOW_GPU_MIN_HEIGHT=<px>` (default 1080). Pass an explicit backend (`--gpu videotoolbox` / `cuda` / `vaapi` / `amf`) to force GPU regardless. `--no-gpu` shortcuts `--gpu off`. |
+| `--gpu auto\|off\|videotoolbox\|cuda\|qsv\|vaapi\|amf\|d3d11va` | `auto` | ffmpeg hardware-decode backend. **`auto` is duration + resolution aware**: clips <30s (or 30–60s at <1080p) decode on CPU because GPU init + memory-copy overhead exceeds per-frame savings — measured up to ~3× faster than forced GPU on short H.264 clips. 1080p+ longer than 30s uses the platform default (VideoToolbox/macOS, VAAPI/Linux, D3D11VA/Windows). Override via `PEEPSHOW_GPU_MIN_SECONDS=<n>` (default 30) or `PEEPSHOW_GPU_MIN_HEIGHT=<px>` (default 1080). Pass an explicit backend (`--gpu videotoolbox` / `cuda` / `vaapi` / `amf`) to force GPU regardless. `--no-gpu` shortcuts `--gpu off`. |
 | `--dedup on\|auto\|off` | `on` | Perceptual frame dedup post-pass via 8×8 dHash. `on` runs in both scene + fps modes; `auto` only fps fallback (scene already filters); `off` disables. `--no-dedup` is a shortcut. Adds ~50–100ms for 40 frames; drops near-identical thumbnails so static talking-heads don't waste tokens. |
 | `--dedup-distance <0-64>` | `5` | Hamming-distance threshold. Lower = stricter (drops fewer near-duplicates); higher = looser (drops more). 0 means only bit-identical hashes drop. |
 | `--adaptive on\|off` | `on` | Adaptive density second pass. When dedup drops 0 frames AND motion is high AND there's room under `--max`, peepshow re-extracts at higher fps to amortise the headroom. Targets ~80% of `--max`. Recursion-guarded (single retry only). `--no-adaptive` shortcuts disable. |
@@ -448,16 +513,60 @@ echo '{"summary":"<2-4 sentences>","provider":"claude-code","model":"claude-opus
 
 Every supported agent integration has the annotate instruction wired in — see [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) and the per-agent rule files.
 
+**Per-frame caption rule.** `analysis.perFrame[]` should cover **every** frame index. Sparse uploads emit a stderr warning listing missing idxs, and `--strict` (on either `peepshow report annotate <dir>` or `peepshow runs repair --apply`) refuses to write them at all. Runs with sparse coverage surface as the **`partial-captions`** auto-tag chip on the `/runs` filter bar so reviewers can spot lazy annotations and re-run the agent over them.
+
+**Caller attribution.** Set `PEEPSHOW_CLIENT` (e.g. `claude-code`, `cursor`, `codex`), `PEEPSHOW_SESSION` (any session id; falls back to `CLAUDE_SESSION_ID` for Claude Code), and `PEEPSHOW_AGENT` (model id, e.g. `claude-opus-4-7`) so the manifest's `invoker` block + the `peepshow serve` `/access` page can attribute each run to the agent + session that triggered it. All three are optional and never beaconed off the machine.
+
 ### Inspect runs
 
 ```bash
-peepshow runs list                  # show recent runs (newest first)
-peepshow runs show <runId>          # dump the run's manifest.json
-peepshow runs prune                 # drop entries whose outputDir is gone
-peepshow runs clear                 # truncate the index
-peepshow report <run-dir>           # re-render report.html from manifest.json
-peepshow report annotate <dir>      # attach LLM analysis from stdin (above)
+peepshow runs list                       # show recent runs (newest first)
+peepshow runs show <runId>               # dump the run's manifest.json
+peepshow runs prune [--keep N]           # drop dead-outputDir entries; --keep caps to N newest
+peepshow runs clear                      # truncate the index
+peepshow runs repair                     # emit ndjson worklist of runs missing LLM analysis
+peepshow runs repair --apply             # read back analyses on stdin, atomic merge
+peepshow runs repair --apply --strict    # reject sparse perFrame uploads (every frame must have a caption)
+peepshow runs dedup --runId <id>         # retroactive perceptual-hash pass on one run
+peepshow runs dedup --all [--dry-run]    # iterate every run, with optional dry-run
+peepshow report <run-dir>                # re-render report.html from manifest.json
+peepshow report annotate <dir>           # attach LLM analysis from stdin (above)
+peepshow report annotate <dir> --strict  # reject sparse perFrame
 ```
+
+### Local server (`peepshow serve`)
+
+`peepshow serve` boots a local HTTP server that browses the run history, streams frames + audio + the original video, and exposes a sink-management UI. Loopback by default; remote bind needs `--token`.
+
+```bash
+peepshow serve                       # http://127.0.0.1:7331/
+peepshow serve --port 8080 --open    # custom port + auto-open in browser
+peepshow serve --host 0.0.0.0        # expose on the LAN — auto-generates a token
+```
+
+Routes:
+
+| Path | What |
+| :--- | :--- |
+| `/` | `/runs` dashboard — newest-first list with thumbnails, search, row/card view toggle, and chip filters (status / sinks / callers / user-tags / auto-tags). Missing-manifest rows hide by default behind a "show N missing" toggle. |
+| `/runs/:runId` | Per-run report — 2-col hero with `<video>` preview (when source still on disk) + Summary + user-editable tag pills, frames grid + per-frame captions, lightbox with caption pane, sinks fan-out, raw manifest. |
+| `/runs/:runId/manifest.json` | Raw manifest JSON. |
+| `/runs/:runId/frames/:idx` | Frame stream. |
+| `/runs/:runId/audio.m4a` | Audio track. |
+| `/runs/:runId/video` | Original source video — streamed when `manifest.input.kind === "path"` and the file's still on disk. |
+| `POST /runs/:runId/annotate` | Pipe LLM analysis in over HTTP (no CLI needed). |
+| `POST /runs/:runId/tags` | Replace user tags (10-cap, 32-char ceiling, dedup). |
+| `/sinks` | Auto-sink management UI — 71 brand-iconed catalogue cards, env-var editor, `when:` matcher, named instances. |
+| `/api/sinks` | List + add (POST) + delete (DELETE) + patch (PATCH) auto-sinks. |
+| `/api/sinks/log` | Sink interaction log — every invocation's start, status, exit code, duration, env-keys (values redacted). Drives the future replay UI. |
+| `/api/catalogue` | Full sink catalogue (slug + brand SVG + neon colour + category). |
+| `/access` | Caller tracking — UA + headers (`X-Peepshow-Client`, `X-Peepshow-Session`, `X-Peepshow-Agent`) + access log. |
+| `/api/runs.json` | Paginated JSON. |
+| `/healthz` | Version + run count. |
+
+Auto-tags drive the filter chips for free: `mp4`, `h264`, `aspect-16:9`, `1080p`, `60fps`, `portrait`, `short`/`medium`/`long`, `sink:slack`, `failed`, `silent`/`has-audio`, `has-transcript`, `has-analysis`/`no-analysis`, `partial-captions` — derived from manifest signals at write time + recomputed on read.
+
+When the server starts and finds runs missing LLM analysis, it prints a one-line nudge with the `peepshow runs repair` command. Page analytics (Matomo + GA4) are on by default; opt out with `PEEPSHOW_ANALYTICS=0`, `peepshow config set serve.analytics false`, the consent banner Reject button, or `DNT:1` request header. Full reference: **[`docs/SERVE.md`](./docs/SERVE.md)**.
 
 ### Preferences (`peepshow config`)
 
@@ -504,6 +613,15 @@ Typical sequence: **npm publish first** (widest reach, no review), **your own ma
 ### Other LLM tools
 
 No central marketplace exists for Copilot CLI, ChatGPT Code, Cursor, Continue, Cody, Zed AI, aider, or `llm` — so we ship integration snippets in [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) that work as soon as `peepshow` is on `PATH` via npm.
+
+## Support the project
+
+If `peepshow` saves you time, consider chipping in:
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-on%20GitHub-ea4aaa?logo=github)](https://github.com/sponsors/t0mtaylor) [![Buy a Coffee](https://img.shields.io/badge/Buy-a%20Coffee-yellow?logo=buy-me-a-coffee&logoColor=white)](https://buymeacoffee.com/tomtaylor)
+
+- **Sponsor on GitHub** — recurring or one-off, goes through GitHub Sponsors: <https://github.com/sponsors/t0mtaylor>
+- **Buy a Coffee** — one-off tip via Buy Me a Coffee: <https://buymeacoffee.com/tomtaylor>
 
 ## License
 

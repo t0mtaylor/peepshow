@@ -30,6 +30,23 @@ echo '{"summary":"<2-4 sentences>","provider":"<your-tool>","model":"<model-id>"
 
 This is the loop the per-tool sections below all wire up — the snippets show the tool-specific glue.
 
+## Caller attribution (multi-agent setups)
+
+A single `peepshow serve` instance is shared across every Claude Code, Copilot, Cursor, Codex, etc. session on the machine. To attribute each run + each HTTP call back to the right agent, set three optional env vars before invoking peepshow:
+
+```bash
+export PEEPSHOW_CLIENT=claude-code     # short slug; appears as a badge in /access + run history
+export PEEPSHOW_SESSION="$SESSION_ID"  # any per-conversation id; Claude Code: $CLAUDE_SESSION_ID
+export PEEPSHOW_AGENT=claude-opus-4-7  # model id (informational)
+```
+
+These end up in two places:
+
+1. **`manifest.json` → `invoker`** — captured at extract time, surfaced as the `caller` column on the run history homepage.
+2. **`~/.peepshow/serve-access.ndjson`** — every served HTTP request is tagged with `client` / `session` / `agent` (set via `X-Peepshow-Client` / `X-Peepshow-Session` / `X-Peepshow-Agent` headers, or sniffed from the User-Agent). Visible at `http://127.0.0.1:7331/access`.
+
+Per-tool snippets below set them where applicable. They're never required — peepshow runs fine without — but with multiple agents on one machine they're how you tell who's doing what.
+
 ---
 
 ## Claude Code
@@ -53,7 +70,7 @@ Then use the skill:
 /peepshow:slides ./video.mp4
 ```
 
-Or just describe the task — Claude auto-invokes the skill based on the description in `skills/slides/SKILL.md`.
+Or just describe the task — Claude auto-invokes the skill based on the description in `skills/slides/SKILL.md`. The skill exports `PEEPSHOW_CLIENT=claude-code` + `PEEPSHOW_SESSION=$CLAUDE_SESSION_ID` automatically, so a shared `peepshow serve` knows which Claude Code session each run came from.
 
 ---
 
@@ -73,7 +90,7 @@ Codex supports custom prompts/agents with shell access. Drop this into `~/.codex
 description: Extract and view a video's timeline as still frames
 ---
 
-Run `peepshow "$ARGUMENTS" --emit json` in the shell. Parse the resulting JSON
+Run `PEEPSHOW_CLIENT=codex peepshow "$ARGUMENTS" --emit json` in the shell. Parse the resulting JSON
 for `frames[].path`. Read each frame path as an image and describe what you see.
 If the user's question needs timestamps, use `video.durationSeconds` together
 with frame ordering to estimate when each frame occurs.
@@ -190,9 +207,11 @@ gh copilot suggest "extract frames from ./video.mp4 and list them"
 Copilot will suggest running `peepshow ./video.mp4`. For its in-VS-Code chat, install Copilot Chat and point the assistant at the output with:
 
 ```
-I ran: peepshow ./video.mp4 --emit json
+I ran: PEEPSHOW_CLIENT=copilot peepshow ./video.mp4 --emit json
 Here is the result: <paste stdout>
 ```
+
+(`PEEPSHOW_CLIENT=copilot` is optional — only matters if a `peepshow serve` instance is also tracking other agents on the same machine.)
 
 ## ChatGPT (Custom GPTs / Projects / Code Interpreter)
 
@@ -248,7 +267,7 @@ then ask "read each frame under `frames[].path` and describe the scene changes".
 
 These tools run in VS Code with shell access via their own terminal or a built-in "run command" capability. Without the dedicated sinks, the manual approach is:
 
-1. Invoke `peepshow ./video.mp4 --emit paths`.
+1. Invoke `PEEPSHOW_CLIENT=cursor peepshow ./video.mp4 --emit paths` (use `continue`, `cline`, or `windsurf` as the slug for the matching tool).
 2. The assistant sees the paths in stdout.
 3. Drag the temp directory into the chat or ask the tool to "open these images".
 

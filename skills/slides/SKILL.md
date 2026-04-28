@@ -22,8 +22,10 @@ If `$ARGUMENTS` contains the video reference, use it directly. Otherwise ask the
 1. **Run the CLI** with the `Bash` tool. JSON is the most reliable output for parsing:
 
    ```
-   peepshow "$ARGUMENTS" --emit json
+   PEEPSHOW_CLIENT=claude-code PEEPSHOW_SESSION="${CLAUDE_SESSION_ID:-}" peepshow "$ARGUMENTS" --emit json
    ```
+
+   The `PEEPSHOW_CLIENT` + `PEEPSHOW_SESSION` env vars tag the run in the manifest and the access log so a shared `peepshow serve` instance can attribute every run + HTTP call back to the right Claude Code session. Both are optional — peepshow runs fine without them — but setting them costs nothing.
 
    (If the path contains spaces, quote it. Use `--emit paths` if you prefer reading the human-readable list.)
 
@@ -42,14 +44,18 @@ If `$ARGUMENTS` contains the video reference, use it directly. Otherwise ask the
 
 5. **Answer the user's question** using both the frames and the transcript together. Reference timestamps when helpful (derive from `video.durationSeconds`, frame ordering, and transcript `segments[].start`). A useful pattern for longer clips: summarise the visual timeline in 2-3 beats, then weave in direct quotes from the transcript to ground what was said at those moments.
 
-6. **Annotate the report** so the next person opening `report.html` sees your understanding without rerunning the model. Pipe a JSON object with your `summary` (and optional `perFrame` captions) back into peepshow:
+6. **Annotate the report — MANDATORY.** The JSON payload from step 1 includes an `annotate` block with the exact command. Without this step the manifest stays empty and the run shows up as `no-analysis` on the /runs page. Pipe a JSON object with your `summary` and **`perFrame` covering every frame** back into peepshow:
 
    ```bash
-   echo '{"summary":"<2-4 sentences describing the timeline>","perFrame":[{"idx":0,"text":"<frame 1 caption>"},{"idx":3,"text":"<frame 4 caption>"}],"provider":"claude-code","model":"claude-opus-4-7"}' \
+   echo '{"summary":"<2-4 sentences describing the timeline>","perFrame":[{"idx":0,"text":"<frame 0 caption>"},{"idx":1,"text":"<frame 1 caption>"},{"idx":2,"text":"<frame 2 caption>"},…,{"idx":N-1,"text":"<frame N-1 caption>"}],"provider":"claude-code","model":"claude-opus-4-7"}' \
      | peepshow report annotate "$OUTPUT_DIR"
    ```
 
-   `$OUTPUT_DIR` is the run's `outputDir` (the JSON payload's `outputDir` field — typically a `/tmp/peepshow-...` path). The annotate step rewrites `manifest.json` and `report.html` atomically; users opening the HTML now see your synthesis under the "LLM analysis" section. Skip this step only if the user explicitly asked for raw frames.
+   `$OUTPUT_DIR` is the run's `outputDir` (the JSON payload's `outputDir` field — typically a `/tmp/peepshow-...` path). The annotate step rewrites `manifest.json` and `report.html` atomically; users opening the HTML now see your synthesis under the "LLM analysis" section.
+
+   **`perFrame.length` MUST equal `frames.length`.** Every extracted frame gets its own caption — no skipping, no key-beats-only summaries. The /runs page surfaces sparse coverage as `partial-captions`; agents that ship sparse perFrame are doing it wrong. peepshow logs a warning to stderr when sparse uploads are detected (and rejects them with `--strict`).
+
+   Run this for **every** invocation, including ones that didn't end with a question — the manifest is the durable record of what you understood. Only skip when the user explicitly asks for raw frames with no synthesis.
 
 ## Useful flags
 

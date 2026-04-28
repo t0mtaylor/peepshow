@@ -217,13 +217,26 @@ After a run with all defaults:
 
 ---
 
-## What's next — phase 2
+## Local server — `peepshow serve` (shipped in 0.8.0)
 
-`peepshow serve` will spawn a local HTTP server that:
+`peepshow serve` spawns a local HTTP server that:
 
 - Indexes `~/.peepshow/runs/index.ndjson` for a homepage of every run.
-- Serves per-run detail pages reusing the `report.html` shell.
-- Exposes a sink-management GUI: list auto-sinks, add/remove, edit `--when` rules, fire test runs against existing payloads.
-- Optionally migrates the index to SQLite when run count crosses ~10K.
+- Serves per-run detail pages reusing the `report.html` shell with served frame URLs (no `file://` quirks).
+- Streams frames + audio so the report works in browsers that block local file paths.
+- Exposes a tiny sink-management GUI at `/sinks`: list, add, remove auto-sinks.
+- Lets external agents pipe LLM analysis over HTTP via `POST /runs/:runId/annotate` — same shape as the CLI's `peepshow report annotate`.
+- Loopback by default; non-loopback bind requires a token.
 
-The ndjson + manifest format stays the source of truth — phase 2 is a UI on top, not a rewrite. See `docs/SERVER-ROADMAP.md` for the in-flight design.
+```bash
+peepshow serve                       # http://127.0.0.1:7331/
+peepshow serve --port 8080 --open    # custom port + auto-open
+```
+
+Defaults seed from `peepshow config init` (`serve.port`, `serve.host`, `serve.autoOpen`). The ndjson + manifest format stays the source of truth — the server is a UI on top, not a rewrite.
+
+Full reference: [`docs/SERVE.md`](./SERVE.md). Original design notes: [`docs/SERVER-ROADMAP.md`](./SERVER-ROADMAP.md).
+
+### Phase 2.1 (deferred)
+
+SQLite mirror for >10K runs (opt-in) — ndjson stays source of truth, SQLite is a derived index. Not blocking for the current ship.
