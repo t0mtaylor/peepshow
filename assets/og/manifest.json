@@ -90,6 +90,7 @@
   "clickhouse": "11bac1ab7ed94507",
   "duckdb": "63ec6901645b185f",
   "elasticsearch": "8c988263be6b0f30",
+  "granola": "678d3b441468b68d",
   "claude-code": "2e81a7f9aebc88bf",
   "cursor": "f9f58a1d0312f462",
   "windsurf": "317218085b99190f",
