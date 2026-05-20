@@ -547,6 +547,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.peepshow.dev/sinks/clickhouse/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/sinks/duckdb/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/sinks/elasticsearch/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.peepshow.dev/agents/claude-code/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -662,6 +680,18 @@
   </url>
   <url>
     <loc>https://www.peepshow.dev/models/reka/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/models/granite/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/models/siglip/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
