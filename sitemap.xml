@@ -661,6 +661,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.peepshow.dev/sinks/databricks/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/sinks/cassandra/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.peepshow.dev/agents/claude-code/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -758,6 +770,12 @@
   </url>
   <url>
     <loc>https://www.peepshow.dev/models/cohere/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/models/aya/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
