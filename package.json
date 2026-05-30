@@ -1,7 +1,7 @@
 {
   "name": "peepshow",
-  "version": "0.8.1",
-  "description": "Turn videos + animated images (GIF/APNG/WebP) into a timeline of still frames + audio transcript + a self-contained HTML report so LLMs can 'watch', 'listen', and write their analysis back. Second ffmpeg pass extracts an audio track; whisper.cpp or openai/groq/deepgram/assemblyai transcribe it. CLI + Claude Code plugin with 71 pluggable sinks across SQL (SQLite, Postgres, MongoDB), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Firebase Storage, Azure Blob, Supabase, Dropbox, Google Drive, Box, OpenAI Files), chat (Slack, Discord, MS Teams, Telegram, Mattermost, Rocket.Chat, Zulip, Matrix, WhatsApp, iMessage), issue trackers (Linear, Height, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki + notes (Notion, Obsidian, Logseq, Outline, Confluence, Apple Notes, Bear), analytics + observability (PostHog, Plausible, Sentry, Datadog, New Relic, Honeycomb, PagerDuty, Opsgenie, Grafana Oncall, Mixpanel/Amplitude/Segment) and workflow glue (Webhook, GraphQL, IDE, Aider, Continue, Cody, Raycast, Pipedream, Zapier, Shortcuts, Apple Reminders, Things 3).",
+  "version": "0.9.0",
+  "description": "Turn videos + animated images (GIF/APNG/WebP) + HLS/DASH/RTSP live streams into a timeline of still frames + audio transcript + a self-contained HTML report so LLMs can 'watch', 'listen', and write their analysis back. Auto-detects embedded subtitles, chapter markers, HDR, 360°/VR, and portrait orientation; optional Tesseract OCR, YOLO11 object gating, CLIP/SigLIP embeddings, EgoBlur PII redaction, vidstab stabilisation, WhisperX speaker diarisation, YAMNet audio events, TransNetV2 ML scene detect. CLI + Claude Code plugin with 95 pluggable sinks across SQL (SQLite, Postgres, MongoDB, ClickHouse, DuckDB, Snowflake, BigQuery, Databricks, Cassandra), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, Redis vector, Meilisearch, Typesense, Elasticsearch, Algolia, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Firebase, Azure Blob, Supabase, Dropbox, Google Drive, Box, OpenAI Files), chat (Slack, Discord, MS Teams, Telegram, WhatsApp, iMessage, Mattermost, Rocket.Chat, Zulip, Matrix, Pushover, ntfy, Apprise, Bluesky, Mastodon), issue trackers (Linear, Plane, Height, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki + notes (Notion, Obsidian, Coda, Anytype, Granola, Logseq, Outline, Confluence, Apple Notes, Bear, Airtable), meeting notes (Fireflies, Otter, Zoom), analytics + observability (PostHog, Plausible, Sentry, Datadog, New Relic, Honeycomb, PagerDuty, Opsgenie, Grafana Oncall, Mixpanel/Amplitude/Segment), workflow glue (Webhook, GraphQL, IDE, Aider, Continue, Cody, Raycast, Pipedream, Zapier, Shortcuts, Apple Reminders, Things 3).",
   "type": "module",
   "license": "MIT",
   "author": {
@@ -115,7 +115,28 @@
     "peepshow-sink-shortcuts": "./bin/peepshow-sink-shortcuts",
     "peepshow-sink-things": "./bin/peepshow-sink-things",
     "peepshow-sink-openai-files": "./bin/peepshow-sink-openai-files",
-    "peepshow-sink-zapier": "./bin/peepshow-sink-zapier"
+    "peepshow-sink-zapier": "./bin/peepshow-sink-zapier",
+    "peepshow-sink-ntfy": "./bin/peepshow-sink-ntfy",
+    "peepshow-sink-apprise": "./bin/peepshow-sink-apprise",
+    "peepshow-sink-airtable": "./bin/peepshow-sink-airtable",
+    "peepshow-sink-anytype": "./bin/peepshow-sink-anytype",
+    "peepshow-sink-bigquery": "./bin/peepshow-sink-bigquery",
+    "peepshow-sink-bluesky": "./bin/peepshow-sink-bluesky",
+    "peepshow-sink-clickhouse": "./bin/peepshow-sink-clickhouse",
+    "peepshow-sink-coda": "./bin/peepshow-sink-coda",
+    "peepshow-sink-duckdb": "./bin/peepshow-sink-duckdb",
+    "peepshow-sink-elasticsearch": "./bin/peepshow-sink-elasticsearch",
+    "peepshow-sink-granola": "./bin/peepshow-sink-granola",
+    "peepshow-sink-mastodon": "./bin/peepshow-sink-mastodon",
+    "peepshow-sink-meilisearch": "./bin/peepshow-sink-meilisearch",
+    "peepshow-sink-plane": "./bin/peepshow-sink-plane",
+    "peepshow-sink-pushover": "./bin/peepshow-sink-pushover",
+    "peepshow-sink-redis-vector": "./bin/peepshow-sink-redis-vector",
+    "peepshow-sink-snowflake": "./bin/peepshow-sink-snowflake",
+    "peepshow-sink-fireflies": "./bin/peepshow-sink-fireflies",
+    "peepshow-sink-zoom": "./bin/peepshow-sink-zoom",
+    "peepshow-sink-databricks": "./bin/peepshow-sink-databricks",
+    "peepshow-sink-cassandra": "./bin/peepshow-sink-cassandra"
   },
   "dependencies": {
     "ffmpeg-static": "^5.2.0"

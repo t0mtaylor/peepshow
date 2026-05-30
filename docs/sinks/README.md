@@ -25,6 +25,8 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `jira` | Create a Jira issue (or attach to one) with an ADF body + one attachment per frame | [jira.md](./jira.md) |
 | `posthog` | Capture a PostHog `peepshow_run` product event (+ optional per-frame events) | [posthog.md](./posthog.md) |
 | `telegram` | Post a run to a Telegram chat via Bot API (summary + `sendMediaGroup` albums) | [telegram.md](./telegram.md) |
+| `ntfy` | Push the run summary to an [ntfy.sh](https://ntfy.sh) topic (cloud or self-hosted) for instant phone / desktop alerts | [ntfy.md](./ntfy.md) |
+| `apprise` | Fan out to 80+ services (Slack, Discord, Telegram, email, SMS, …) via an [Apprise API](https://github.com/caronc/apprise-api) instance | [apprise.md](./apprise.md) |
 | `msteams` | Microsoft Teams Incoming Webhook — Adaptive Card with metadata + optional image embeds | [msteams.md](./msteams.md) |
 | `datadog` | Datadog `/api/v1/events` — attach a peepshow run to an incident timeline or event stream | [datadog.md](./datadog.md) |
 | `outline` | Create a markdown doc per run in [Outline](https://www.getoutline.com) (draft or published) | [outline.md](./outline.md) |
@@ -58,6 +60,28 @@ Install once with `npm install -g peepshow`, then run from any shell or register
 | `bear` | File a markdown note in Bear (macOS / iOS) via `bear://x-callback-url/create` — supports `create` and `append` modes | [bear.md](./bear.md) |
 | `things` | Create a todo in Things 3 (Cultured Code) on macOS / iOS via the `things:///add` x-callback-url scheme | [things.md](./things.md) |
 | `shortcuts` | Invoke a user-created macOS Shortcut via the `shortcuts` CLI — pass the peepshow JSON payload or each frame image | [shortcuts.md](./shortcuts.md) |
+| `airtable` | Create one record per run in an [Airtable](https://airtable.com) base — `Run ID` · `Title` · `Frames` · `Duration` · `Transcript` · `Thumbnail URL` · `Created At` | [airtable.md](./airtable.md) |
+| `clickhouse` | Insert one row per run into a [ClickHouse](https://clickhouse.com) table via the HTTP interface (`FORMAT JSONEachRow`); auto-creates a `MergeTree` schema on first write | [clickhouse.md](./clickhouse.md) |
+| `duckdb` | Append one row per run to a local [DuckDB](https://duckdb.org) file via the `duckdb` CLI — embedded columnar analytics, no server | [duckdb.md](./duckdb.md) |
+| `elasticsearch` | Index one document per run into [Elasticsearch / OpenSearch](https://www.elastic.co/elasticsearch/) — full-text search over transcripts, titles, and container tags | [elasticsearch.md](./elasticsearch.md) |
+| `granola` | Write a markdown bundle (`note.md` + `frames/`) per run into a [Granola](https://granola.ai) import directory — Granola's public API is read-only, so this is a drag-drop / paste bundle | [granola.md](./granola.md) |
+| `meilisearch` | Index one document per run into a [Meilisearch](https://www.meilisearch.com) index — hybrid keyword + auto-embedding search; auto-creates the index on first write | [meilisearch.md](./meilisearch.md) |
+| `typesense` | Upsert one document per run into a [Typesense](https://typesense.org) collection — soft-creates schema on first write, keyed on `id == run_id` | [typesense.md](./typesense.md) |
+| `redis-vector` | Write one hash per run into Redis 8+ via `redis-cli` and issue `FT.CREATE` for [RediSearch](https://redis.io/docs/latest/develop/interact/search-and-query/) full-text + vector search | [redis-vector.md](./redis-vector.md) |
+| `pushover` | Push the run summary to every device on a [Pushover](https://pushover.net) account — title · summary · priority · clickable frame URL | [pushover.md](./pushover.md) |
+| `bluesky` | Post the run summary (title + frame count + duration, capped at 300 chars) to a [Bluesky](https://bsky.app) / AT Protocol account via app-password session | [bluesky.md](./bluesky.md) |
+| `coda` | Append one row per run to a [Coda](https://coda.io) doc table — `Run ID` · `Title` · `Frames` · `Duration` · `Transcript` · `Thumbnail URL` · `Created At` | [coda.md](./coda.md) |
+| `snowflake` | Insert one row per run into a [Snowflake](https://www.snowflake.com) table via the SQL API v2 (`POST /api/v2/statements`); auto-creates the table on first write; tags stored as `VARIANT` | [snowflake.md](./snowflake.md) |
+| `bigquery` | Stream one row per run into a [Google BigQuery](https://cloud.google.com/bigquery) table via the `tabledata.insertAll` REST endpoint — OAuth2 access token, `run_id` doubles as the `insertId` for streaming dedup | [bigquery.md](./bigquery.md) |
+| `fireflies` | Hand the extracted audio URL to [Fireflies.ai](https://fireflies.ai) via the `uploadAudio` GraphQL mutation — meeting-style transcription + indexing in the Fireflies dashboard | [fireflies.md](./fireflies.md) |
+| `zoom` | Post the run summary as a [Zoom Team Chat](https://developers.zoom.us/docs/api/chat/) message to a user (by email) or channel (by JID) — title · metadata · transcript preview | [zoom.md](./zoom.md) |
+| `plane` | File a work item per peepshow run on [Plane](https://plane.so) (open-source Linear/Jira alt) — cloud or self-hosted via REST API | [plane.md](./plane.md) |
+| `mastodon` | Post a status to any Mastodon / Fediverse instance — auto-truncated to 500 chars, configurable visibility | [mastodon.md](./mastodon.md) |
+| `anytype` | Create an object in a local-first [Anytype](https://anytype.io) vault via the desktop app's HTTP API | [anytype.md](./anytype.md) |
+| `algolia` | Index each run into an [Algolia](https://www.algolia.com) index — `objectID = run_id` so re-runs upsert cleanly | [algolia.md](./algolia.md) |
+| `otter` | Webhook fan-out intended for Zapier / Make / n8n → [Otter.ai](https://otter.ai) Create Note (Otter has no public write API) | [otter.md](./otter.md) |
+| `databricks` | Insert one row per run into a [Databricks](https://www.databricks.com) Delta table via the [Statement Execution API](https://docs.databricks.com/api/workspace/statementexecution) (`POST /api/2.0/sql/statements/`); auto-creates the table on first write | [databricks.md](./databricks.md) |
+| `cassandra` | Insert one row per run into a [Cassandra](https://cassandra.apache.org) / [DataStax Astra](https://www.datastax.com/products/datastax-astra) table via the [Stargate REST API](https://stargate.io) (`POST /v2/keyspaces/<ks>/<table>`); table must pre-exist | [cassandra.md](./cassandra.md) |
 
 ## Skeletons (need community input)
 
