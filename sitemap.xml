@@ -913,6 +913,36 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.peepshow.dev/how-to/ocr-video-frames/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/how-to/object-gated-frames/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/how-to/frame-embeddings-vector-search/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/how-to/blur-pii-in-frames/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.peepshow.dev/how-to/speaker-diarisation/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.peepshow.dev/vs/</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
