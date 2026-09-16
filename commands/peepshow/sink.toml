@@ -1,0 +1,71 @@
+# Gemini CLI custom command — invoked as /peepshow:sink <intent>
+#
+# Namespace comes from the directory: commands/peepshow/sink.toml → /peepshow:sink.
+# Keep this in step with skills/sink/SKILL.md (the Claude Code equivalent).
+
+description = "Manage peepshow's persistent auto-sinks — list, add, remove, clear."
+
+prompt = """
+# peepshow — manage auto-sinks
+
+The user asked: `{{args}}`
+
+Auto-sinks are persistent sink definitions in `~/.peepshow/sinks.json` that run on
+**every** peepshow extraction, pushing the run's JSON payload (frames, metadata,
+container tags, transcript) into whatever the sink writes to. Here is the current
+state:
+
+```
+!{peepshow sinks list}
+```
+
+## Map the request to one command
+
+| They want | Run |
+| :-------- | :-- |
+| see what's active | `peepshow sinks list` (already above) |
+| add a named sink | `peepshow sinks add <name>` |
+| add with an argument | `peepshow sinks add folder:/Volumes/Shared` |
+| add a raw shell command | `peepshow sinks add-cmd '<command>'` |
+| add, but only for some files | `peepshow sinks add <spec> --when extension=mp4,mov` |
+| remove one | `peepshow sinks remove <n>` — index from the list above |
+| remove everything | `peepshow sinks clear` |
+| skip sinks for one run only | Don't touch the config. Tell them to pass `--no-auto-sinks` on that invocation. |
+
+`<name>` resolves to an executable `peepshow-sink-<name>` on `$PATH`; extra
+colon-separated tokens become positional arguments, so `folder:/tmp/shared` runs
+`peepshow-sink-folder /tmp/shared`. Roughly 95 sinks ship as bins — SQL, vector
+stores, AI memory, object storage, chat, issue trackers, wikis, whiteboards,
+analytics, observability.
+
+## Conditional sinks
+
+`--when` narrows a sink to matching videos. Recognised keys: `extension`,
+`filename` (glob), `path` (substring or glob), `container`, `codec`, plus **any**
+container metadata tag — `director`, `genre`, `show`, `producer`, `publisher` and
+so on. Multiple `--when` flags AND together; comma-separated values inside one
+clause OR. So "archive Kubrick mp4s only" is:
+
+```
+peepshow sinks add folder:/cinema --when director=Kubrick --when extension=mp4
+```
+
+## Rules
+
+- Run `peepshow sinks list` again after any change and show the user the result.
+  Never claim a sink is active without having seen it in the list.
+- Several sinks need credentials in the environment (`DATABASE_URL` for `mysql` /
+  `postgres`, `PEEPSHOW_WEBHOOK_URL` for `webhook`, and so on). Adding the sink
+  succeeds regardless — it only fails at extraction time. Say which env var is
+  needed when you add one of these.
+- `remove` takes the index from the current listing, so always list first; the
+  indices shift after every mutation.
+- `clear` wipes every auto-sink with no confirmation prompt of its own. Confirm
+  with the user before running it.
+- "no auto-sinks configured" just means the file doesn't exist yet — any `add`
+  creates it.
+
+If a sink fails during a later run with `sink '<name>' failed (exit N)`, the
+binary isn't on `$PATH` (for a named sink) or the shell command is wrong (for
+`add-cmd`). Remove it and re-add it correctly, or install the missing bin.
+"""

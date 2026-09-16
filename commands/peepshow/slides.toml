@@ -1,0 +1,95 @@
+# Gemini CLI custom command — invoked as /peepshow:slides <video>
+#
+# The namespace comes from the directory: commands/peepshow/slides.toml → /peepshow:slides.
+# Keep this in step with skills/slides/SKILL.md (the Claude Code equivalent) —
+# both drive the same CLI and should describe the same workflow.
+
+description = "Extract frames + audio from a video or animated image so Gemini can read it as a timeline."
+
+prompt = """
+# peepshow — watch a video
+
+The user wants you to look at: `{{args}}`
+
+peepshow turns a video (or an animated GIF / APNG / WebP) into an ordered set of
+still frames plus an extracted audio track, so a model with image vision can read
+a timeline instead of guessing. Static images need none of this — you can already
+read a JPG or PNG directly, so if the input is a still image, say so and stop.
+
+Accepted inputs: a local path (including network mounts), an `http(s)://` URL, a
+YouTube URL (needs `yt-dlp` on PATH), an HLS/DASH/RTSP live stream, a
+`data:video/...` or `data:image/(gif|apng|webp|png)` URI, or `-` for stdin.
+
+## 1. Extraction output
+
+```
+!{PEEPSHOW_CLIENT=gemini-cli peepshow {{args}} --emit json}
+```
+
+If that failed, read the error before retrying — peepshow reports the real cause.
+`ffmpeg not found` means no ffmpeg on PATH and no bundled binary; a yt-dlp failure
+quotes yt-dlp's own stderr and, on a 403, tells you the binary is stale. Do not
+silently retry with different flags; tell the user what broke.
+
+## 2. Read the payload
+
+- `frames[].path` — absolute paths, already in chronological order.
+- `video` — container, codec, resolution, fps, duration, size.
+- `video.tags` — metadata embedded in the file itself (title, director, show,
+  episode_id, creation_time, …). Ground your answer in what the file *claims to
+  be* before describing what you see.
+- `extraction` — which strategy ran (`scene` / `fps` / `transnet`), how many
+  frames were pruned, how many the perceptual-hash pass deduped
+  (`framesDeduped`), and a motion signal (`motionSignalLevel`: low / medium /
+  high). Let it colour the narration: `high` with `framesDeduped == 0` is a dense
+  clip where every frame carries information; `low` is closer to a timelapse.
+- `outputDir` — the run directory. You need it in step 5.
+
+## 3. Read the frames as images
+
+Use `read_many_files` on `frames[].path`, **in order**. They are named
+`frame_0001.jpg`, `frame_0002.jpg`, … and represent earliest → latest. Read them
+all; skipping frames is how you miss the moment the user is asking about.
+
+## 4. Read the audio
+
+When the input had a sound track, `audio.transcript.text` is the full transcript
+and `audio.transcript.segments[]` carries `start` / `end` / `text` in seconds. For
+anything narration- or dialogue-heavy the transcript usually says more than the
+frames do — cross-reference segment timestamps against frame order so you can
+attribute what was said to what was on screen.
+
+`audio.path === null` means there was no audio track (a GIF, or a silent video).
+`audio.transcript === null`, or a set `audio.transcript.skippedReason`, means
+transcription did not run. Either way, carry on with the frames and say nothing
+about audio you did not hear.
+
+## 5. Answer, then annotate — both
+
+Answer the user's question from the frames and the transcript together. For a
+longer clip, summarise the visual timeline in a few beats and quote the transcript
+at those moments.
+
+Then write your analysis back into the run. This is not optional: without it the
+run's `manifest.json` stays empty and `report.html` shows `no-analysis`.
+
+```
+echo '{"summary":"<2-4 sentences on the timeline>","perFrame":[{"idx":0,"text":"<caption>"}],"provider":"gemini-cli","model":"<your model id>"}' | peepshow report annotate <outputDir>
+```
+
+`perFrame` must have one entry per frame — `perFrame.length == frames.length`.
+Sparse captions are flagged as `partial-captions` and peepshow warns on stderr
+about them. Caption every frame, in order, from index 0.
+
+## Flags worth knowing
+
+Pass these after the input when the defaults don't fit: `--max 20` (cap frames,
+default 40) · `--min 6` (floor, falls back to fps sampling) · `--threshold 0.2`
+(more sensitive scene detection, default 0.3) · `--fps 0.5` (fixed-rate sampling,
+skips scene detection) · `--width 960` (max width, default 1280) · `--format png`
+· `--start 90 --duration 30` (clip window) · `--stats off` (quieter output when
+context is tight).
+
+Zero frames back usually means the threshold was too high — lower it or force
+`--fps 1`. Too many frames is the same dial the other way.
+"""

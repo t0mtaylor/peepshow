@@ -1,6 +1,6 @@
 {
   "name": "peepshow",
-  "version": "0.9.0",
+  "version": "0.9.2",
   "description": "Turn videos + animated images (GIF/APNG/WebP) + HLS/DASH/RTSP live streams into a timeline of still frames + audio transcript + a self-contained HTML report so LLMs can 'watch', 'listen', and write their analysis back. Auto-detects embedded subtitles, chapter markers, HDR, 360°/VR, and portrait orientation; optional Tesseract OCR, YOLO11 object gating, CLIP/SigLIP embeddings, EgoBlur PII redaction, vidstab stabilisation, WhisperX speaker diarisation, YAMNet audio events, TransNetV2 ML scene detect. CLI + Claude Code plugin with 95 pluggable sinks across SQL (SQLite, Postgres, MongoDB, ClickHouse, DuckDB, Snowflake, BigQuery, Databricks, Cassandra), vector + memory (Chroma, Qdrant, Pinecone, pgvector, Weaviate, Milvus, Redis vector, Meilisearch, Typesense, Elasticsearch, Algolia, MemPalace, Zep, Mem0, Letta), storage (S3-compatible, GCS, Firebase, Azure Blob, Supabase, Dropbox, Google Drive, Box, OpenAI Files), chat (Slack, Discord, MS Teams, Telegram, WhatsApp, iMessage, Mattermost, Rocket.Chat, Zulip, Matrix, Pushover, ntfy, Apprise, Bluesky, Mastodon), issue trackers (Linear, Plane, Height, GitHub Issues, Jira, Asana, ClickUp, Shortcut, Trello), whiteboards (Miro, Figma), wiki + notes (Notion, Obsidian, Coda, Anytype, Granola, Logseq, Outline, Confluence, Apple Notes, Bear, Airtable), meeting notes (Fireflies, Otter, Zoom), analytics + observability (PostHog, Plausible, Sentry, Datadog, New Relic, Honeycomb, PagerDuty, Opsgenie, Grafana Oncall, Mixpanel/Amplitude/Segment), workflow glue (Webhook, GraphQL, IDE, Aider, Continue, Cody, Raycast, Pipedream, Zapier, Shortcuts, Apple Reminders, Things 3).",
   "type": "module",
   "license": "MIT",
@@ -161,6 +161,7 @@
     ".codex",
     ".agents",
     "skills",
+    "commands",
     "docs/sinks",
     "docs/INTEGRATIONS.md",
     "docs/PLUGINS.md",

@@ -111,7 +111,8 @@ Or describe the task in natural language — the skill auto-invokes:
 
 - **Claude Code plugin** — drag-and-drop UX via the `UserPromptSubmit` hook. Native skills `/peepshow:slides` and `/peepshow:sink`. Already covered above.
 - **Cursor / Windsurf / Cline rules** — the per-agent rule files in `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/` teach each agent to call `peepshow` when the user mentions a video path.
-- **Codex CLI / Gemini CLI** — `.codex/hooks.json` and `gemini-extension.json` + `GEMINI.md` ship native manifests.
+- **Gemini CLI extension** — a real extension, not just a manifest. `gemini extensions install t0mtaylor/peepshow` registers `/peepshow:slides` and `/peepshow:sink` as native slash commands, with `GEMINI.md` supplying the context. Details below.
+- **Codex CLI** — `.codex/hooks.json` ships a native `SessionStart` hook manifest.
 - **Aider / Continue / Cody / Zed AI / Copilot CLI / `llm`** — copy-paste snippets in [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md). Generic `AGENTS.md` covers anything that follows that convention.
 - **Standalone shell** — pipe video bytes in on stdin, pipe JSON out, fan out to sinks. Works inside any shell pipeline, CI job, cron task, Makefile target, or sandbox.
 - **Electron desktop AI client** — pre-process video in the main process before forwarding context to a cloud LLM. See below.
@@ -235,6 +236,25 @@ claude plugin install peepshow@peepshow-marketplace
 After that, `claude` launches normally with peepshow enabled. The skill is available as `/peepshow:slides` — and the drag-and-drop hook fires automatically on every prompt.
 
 > **Why two steps?** This GitHub repo ships only manifests, hooks, and docs — no compiled code. The runtime lives on npm so everyone gets minified, versioned binaries. Step 1 supplies the `peepshow` command; step 2 lets Claude Code know about it.
+
+### 3. Register the Gemini CLI extension
+
+peepshow ships as a first-class [Gemini CLI extension](https://geminicli.com/extensions) — slash commands included, no MCP server to run:
+
+```bash
+gemini extensions install t0mtaylor/peepshow
+```
+
+That clones the public repo into `~/.gemini/extensions/peepshow` and registers two namespaced commands. Restart the CLI (or `/commands reload`) and they appear in `/help`:
+
+| Command | Does |
+| :------ | :--- |
+| `/peepshow:slides <video>` | Extract the timeline, read every frame in order, read the transcript, answer, then write the analysis back into the run's report. |
+| `/peepshow:sink <intent>` | Manage the persistent auto-sink list — list, add (including `--when` conditions), remove, clear. |
+
+The commands shell out to the `peepshow` binary from step 1, so npm supplies the runtime and the extension supplies the workflow — same split as the Claude Code plugin. `GEMINI.md` imports `AGENTS.md`, so Gemini also gets the full tool description in context even when you invoke the CLI by hand instead of through a command.
+
+Verify with `gemini extensions list`; update later with `gemini extensions update peepshow`.
 
 ## Drag-and-drop auto-invoke
 
