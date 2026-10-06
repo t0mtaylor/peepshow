@@ -1,6 +1,6 @@
 {
   "name": "peepshow",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Turn videos, YouTube links, live streams and animated images (GIF/APNG/WebP) into an ordered timeline of frames plus a transcribed audio track, so Gemini can watch and listen instead of guessing.",
   "contextFileName": "GEMINI.md"
 }

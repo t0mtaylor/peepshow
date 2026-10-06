@@ -173,7 +173,7 @@ app.post('/analyse', express.raw({ type: '*/*', limit: '500mb' }), async (req, r
 
 ## Requirements
 
-- **Node.js ≥ 22** — enforced by `npm i peepshow` via the `engines` field.
+- **Node.js ≥ 22** — enforced by `npm i peepshow` via the `engines` field. Node is the only interpreter the launchers need: every command in `bin/` is a `#!/usr/bin/env node` script, so `npm` and `pnpm` generate a Windows `.CMD` shim that calls `node` directly. **No POSIX shell, MSYS, or Git Bash is required on Windows.**
 - **ffmpeg** — `npm i peepshow` pulls in `ffmpeg-static` automatically, so it works out of the box on linux-x64/arm64, darwin-x64/arm64, win32-x64. Install a native build for faster hardware decoding (see matrix below).
 
 ## ffmpeg install matrix
@@ -290,10 +290,10 @@ The skill runs the CLI, reads each frame back as an image, and answers your ques
 You can also use `peepshow` directly from a shell:
 
 ```bash
-./bin/peepshow ./video.mp4
-./bin/peepshow https://example.com/clip.webm --threshold 0.2
-cat video.mp4 | ./bin/peepshow -          # bytes on stdin
-./bin/peepshow ./v.mp4 --fps 1 --max 30   # fixed-fps sampling, cap at 30 frames
+./bin/peepshow.mjs ./video.mp4
+./bin/peepshow.mjs https://example.com/clip.webm --threshold 0.2
+cat video.mp4 | ./bin/peepshow.mjs -          # bytes on stdin
+./bin/peepshow.mjs ./v.mp4 --fps 1 --max 30   # fixed-fps sampling, cap at 30 frames
 ```
 
 Default output (paths + one-line stats):
