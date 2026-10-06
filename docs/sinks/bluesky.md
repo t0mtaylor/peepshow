@@ -56,7 +56,7 @@ with an ellipsis so the summary tail (`— N frames · Ts`) is preserved.
 
 ```bash
 export BLUESKY_IDENTIFIER="peepshow.bsky.social"
-export BLUESKY_APP_PASSWORD="abcd-efgh-ijkl-mnop"
+export BLUESKY_APP_PASSWORD="<your-app-password>"
 peepshow sinks add bluesky
 peepshow ./clip.mp4
 ```
@@ -66,7 +66,7 @@ Against a self-hosted PDS:
 ```bash
 export BLUESKY_PDS_URL="https://pds.internal"
 export BLUESKY_IDENTIFIER="peepshow.pds.internal"
-export BLUESKY_APP_PASSWORD="abcd-efgh-ijkl-mnop"
+export BLUESKY_APP_PASSWORD="<your-app-password>"
 peepshow sinks add bluesky
 ```
 
@@ -87,7 +87,7 @@ the sink's env vars in the shell it runs under.
 
 ```sh
 export BLUESKY_IDENTIFIER="peepshow.bsky.social"
-export BLUESKY_APP_PASSWORD="abcd-efgh-ijkl-mnop"
+export BLUESKY_APP_PASSWORD="<your-app-password>"
 ```
 
 ### 2. Register as an auto-sink

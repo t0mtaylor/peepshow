@@ -1,4 +1,5 @@
 ---
+name: sink
 description: Manage peepshow's persistent auto-sink list (list, add, remove, clear). Use when the user asks to turn a peepshow sink on or off, enable folder/mysql/webhook sinks, or wants to see which sinks are currently active. Sinks run on every peepshow extraction.
 ---
 

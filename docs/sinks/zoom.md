@@ -78,7 +78,7 @@ and `Zoom 401` on stderr when the token expires.
 ### DM a teammate
 
 ```bash
-export ZOOM_ACCESS_TOKEN="$(./refresh-zoom-token.sh)"
+export ZOOM_ACCESS_TOKEN=$(./refresh-zoom-token.sh)
 export ZOOM_TO_USER="alice@example.com"
 peepshow sinks add zoom
 peepshow ./standup.mp4
@@ -87,7 +87,7 @@ peepshow ./standup.mp4
 ### Post to a channel
 
 ```bash
-export ZOOM_ACCESS_TOKEN="$(./refresh-zoom-token.sh)"
+export ZOOM_ACCESS_TOKEN=$(./refresh-zoom-token.sh)
 export ZOOM_TO_CHANNEL="channel_jid_abc123"
 peepshow ./demo.mp4 --sink zoom
 ```
@@ -137,7 +137,7 @@ shell out. The LLM doesn't need a plugin; it just needs `peepshow` on
 ### 1. Set the environment
 
 ```sh
-export ZOOM_ACCESS_TOKEN="$(./refresh-zoom-token.sh)"
+export ZOOM_ACCESS_TOKEN=$(./refresh-zoom-token.sh)
 export ZOOM_TO_USER="alice@example.com"
 # or: export ZOOM_TO_CHANNEL="channel_jid_abc123"
 ```

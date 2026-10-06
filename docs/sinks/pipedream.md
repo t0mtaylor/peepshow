@@ -47,7 +47,7 @@ With signature verification:
 
 ```bash
 export PIPEDREAM_URL="https://eoabcdef.m.pipedream.net"
-export PIPEDREAM_SIGNING_SECRET="whatever-long-random-string"
+export PIPEDREAM_SIGNING_SECRET="<your-signing-secret>"
 peepshow sinks add pipedream
 ```
 
@@ -120,7 +120,7 @@ shell out. The LLM doesn't need a plugin; it just needs `peepshow` on
 ```sh
 export PIPEDREAM_URL="https://eoabcdef.m.pipedream.net"
 # Optional:
-export PIPEDREAM_SIGNING_SECRET="long-random-string"
+export PIPEDREAM_SIGNING_SECRET="<your-signing-secret>"
 ```
 
 ### 2. Register as an auto-sink

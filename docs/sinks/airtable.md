@@ -66,7 +66,7 @@ for your base — it appears in the URL when you select the table.
 ## Use
 
 ```bash
-export AIRTABLE_API_KEY="patXXXXXXXXXXXXXX"
+export AIRTABLE_API_KEY="<your-airtable-pat>"
 export AIRTABLE_BASE_ID="appXXXXXXXXXXXXXX"
 export AIRTABLE_TABLE_ID="tblXXXXXXXXXXXXXX"
 peepshow sinks add airtable
@@ -99,7 +99,7 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export AIRTABLE_API_KEY="patXXXXXXXXXXXXXX"
+export AIRTABLE_API_KEY="<your-airtable-pat>"
 export AIRTABLE_BASE_ID="appXXXXXXXXXXXXXX"
 export AIRTABLE_TABLE_ID="tblXXXXXXXXXXXXXX"
 ```

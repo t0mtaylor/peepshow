@@ -52,8 +52,8 @@ Priority: 1
 ## Use
 
 ```bash
-export PUSHOVER_USER_KEY="uXXXXXXXXXXXXXXXXXXXXXX"
-export PUSHOVER_API_TOKEN="aXXXXXXXXXXXXXXXXXXXXXX"
+export PUSHOVER_USER_KEY="<your-pushover-user-key>"
+export PUSHOVER_API_TOKEN="<your-pushover-api-token>"
 peepshow sinks add pushover
 peepshow ./video.mp4
 ```
@@ -86,8 +86,8 @@ Add the sink's required env vars to your shell rc (`~/.zshrc`,
 agent tooling loads. Example:
 
 ```sh
-export PUSHOVER_USER_KEY="uXXXXXXXXXXXXXXXXXXXXXX"
-export PUSHOVER_API_TOKEN="aXXXXXXXXXXXXXXXXXXXXXX"
+export PUSHOVER_USER_KEY="<your-pushover-user-key>"
+export PUSHOVER_API_TOKEN="<your-pushover-api-token>"
 ```
 
 ### 2. Register as an auto-sink

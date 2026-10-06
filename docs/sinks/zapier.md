@@ -65,7 +65,7 @@ With signature verification (Code step inside the Zap):
 
 ```bash
 export ZAPIER_HOOK_URL="https://hooks.zapier.com/hooks/catch/1234567/abcdef/"
-export ZAPIER_SIGNING_SECRET="long-random-string"
+export ZAPIER_SIGNING_SECRET="<your-signing-secret>"
 peepshow sinks add zapier
 ```
 
@@ -171,7 +171,7 @@ shell out. The LLM doesn't need a plugin; it just needs `peepshow` on
 ```sh
 export ZAPIER_HOOK_URL="https://hooks.zapier.com/hooks/catch/1234567/abcdef/"
 # Optional:
-export ZAPIER_SIGNING_SECRET="long-random-string"
+export ZAPIER_SIGNING_SECRET="<your-signing-secret>"
 ```
 
 ### 2. Register as an auto-sink

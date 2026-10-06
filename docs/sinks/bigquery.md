@@ -47,10 +47,10 @@ user credentials or a service account work:
 
 ```sh
 # User credentials (interactive)
-export BIGQUERY_ACCESS_TOKEN="$(gcloud auth print-access-token)"
+export BIGQUERY_ACCESS_TOKEN=$(gcloud auth print-access-token)
 
 # Service account (recommended for CI)
-export BIGQUERY_ACCESS_TOKEN="$(gcloud auth print-access-token \
+export BIGQUERY_ACCESS_TOKEN=$(gcloud auth print-access-token \
   --impersonate-service-account=peepshow@my-project.iam.gserviceaccount.com)"
 ```
 
@@ -86,7 +86,7 @@ The service account needs `bigquery.dataEditor` on the dataset (or
 ```bash
 export BIGQUERY_PROJECT="my-project"
 export BIGQUERY_DATASET="peepshow"
-export BIGQUERY_ACCESS_TOKEN="$(gcloud auth print-access-token)"
+export BIGQUERY_ACCESS_TOKEN=$(gcloud auth print-access-token)
 peepshow sinks add bigquery
 peepshow ./demo.mp4
 ```
@@ -97,7 +97,7 @@ Custom table:
 export BIGQUERY_PROJECT="my-project"
 export BIGQUERY_DATASET="analytics"
 export BIGQUERY_TABLE="ml_video_runs"
-export BIGQUERY_ACCESS_TOKEN="$(gcloud auth print-access-token)"
+export BIGQUERY_ACCESS_TOKEN=$(gcloud auth print-access-token)
 peepshow ./demo.mp4 --sink bigquery
 ```
 
@@ -128,7 +128,7 @@ shell out. The LLM doesn't need a plugin; it just needs `peepshow` on
 ```sh
 export BIGQUERY_PROJECT="my-project"
 export BIGQUERY_DATASET="peepshow"
-export BIGQUERY_ACCESS_TOKEN="$(gcloud auth print-access-token)"
+export BIGQUERY_ACCESS_TOKEN=$(gcloud auth print-access-token)
 ```
 
 ### 2. Register as an auto-sink

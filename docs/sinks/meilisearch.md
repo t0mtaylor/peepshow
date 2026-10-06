@@ -46,7 +46,7 @@ in place rather than duplicating. Each document looks like:
 docker run -p 7700:7700 -e MEILI_MASTER_KEY=masterKey getmeili/meilisearch:latest
 
 export MEILISEARCH_URL="http://localhost:7700"
-export MEILISEARCH_API_KEY="masterKey"
+export MEILISEARCH_API_KEY=masterKey
 peepshow sinks add meilisearch
 peepshow ./demo.mp4
 ```
@@ -88,7 +88,7 @@ shell out.
 
 ```sh
 export MEILISEARCH_URL="http://localhost:7700"
-export MEILISEARCH_API_KEY="masterKey"
+export MEILISEARCH_API_KEY=masterKey
 ```
 
 ### 2. Register as an auto-sink

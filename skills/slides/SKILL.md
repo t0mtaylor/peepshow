@@ -1,4 +1,5 @@
 ---
+name: slides
 description: Extract relevant frames from a video or animated image (GIF, APNG, animated WebP) so the model can view them as a timeline. Use when the user shares a video or an animated image. DO NOT use for static images — the model can already read those natively.
 ---
 

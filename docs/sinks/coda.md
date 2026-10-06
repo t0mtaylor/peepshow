@@ -64,7 +64,7 @@ your API key — the response includes each table's `id`.
 ## Use
 
 ```bash
-export CODA_API_KEY="codaKEYxxxxxxxxxxxxxxxxxxxxxxxx"
+export CODA_API_KEY="<your-coda-api-key>"
 export CODA_DOC_ID="abc123XYZ"
 export CODA_TABLE_ID="grid-xxxxxxxx"
 peepshow sinks add coda
@@ -100,7 +100,7 @@ the sink's env vars in the shell it runs under.
 ### 1. Set the environment
 
 ```sh
-export CODA_API_KEY="codaKEYxxxxxxxxxxxxxxxxxxxxxxxx"
+export CODA_API_KEY="<your-coda-api-key>"
 export CODA_DOC_ID="abc123XYZ"
 export CODA_TABLE_ID="grid-xxxxxxxx"
 ```

@@ -63,7 +63,7 @@ Self-hosted with auth:
 ```bash
 export NTFY_BASE_URL="https://ntfy.internal"
 export NTFY_TOPIC="peepshow"
-export NTFY_TOKEN="tk_abc123"
+export NTFY_TOKEN="<your-ntfy-token>"
 peepshow sinks add ntfy
 ```
 

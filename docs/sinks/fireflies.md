@@ -55,7 +55,7 @@ peepshow sinks add s3
 peepshow sinks add s3 --when extension=mp3,m4a,aac
 
 # Tell Fireflies where to find the mirrored audio:
-export FIREFLIES_API_KEY="ff_pat_xxx"
+export FIREFLIES_API_KEY="<your-fireflies-api-key>"
 export FIREFLIES_AUDIO_BASE_URL="https://peepshow-public.s3.amazonaws.com/runs/<run-id>"
 peepshow sinks add fireflies
 ```
@@ -67,7 +67,7 @@ elsewhere), skip the base-URL machinery and point Fireflies at the
 exact file:
 
 ```bash
-export FIREFLIES_API_KEY="ff_pat_xxx"
+export FIREFLIES_API_KEY="<your-fireflies-api-key>"
 export FIREFLIES_AUDIO_URL="https://example.com/recordings/sprint-demo.mp3"
 peepshow ./demo.mp4 --sink fireflies
 ```
@@ -75,7 +75,7 @@ peepshow ./demo.mp4 --sink fireflies
 ### 3. With attendees + language hint
 
 ```bash
-export FIREFLIES_API_KEY="ff_pat_xxx"
+export FIREFLIES_API_KEY="<your-fireflies-api-key>"
 export FIREFLIES_AUDIO_BASE_URL="https://peepshow-public.s3.amazonaws.com/runs/abc"
 export FIREFLIES_ATTENDEES="alice@example.com,bob@example.com"
 export FIREFLIES_LANGUAGE="en"
@@ -114,7 +114,7 @@ shell out. The LLM doesn't need a plugin; it just needs `peepshow` on
 ### 1. Set the environment
 
 ```sh
-export FIREFLIES_API_KEY="ff_pat_xxx"
+export FIREFLIES_API_KEY="<your-fireflies-api-key>"
 export FIREFLIES_AUDIO_BASE_URL="https://peepshow-public.s3.amazonaws.com/runs/<run-id>"
 # Optional: language hint + attendees
 export FIREFLIES_LANGUAGE="en"
