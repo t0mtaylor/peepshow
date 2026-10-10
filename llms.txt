@@ -1,0 +1,106 @@
+# peepshow
+
+> Turn a video — or a YouTube link, a live stream, or an animated GIF/APNG/WebP —
+> into an ordered timeline of still frames plus an extracted audio track and its
+> transcript, so an LLM can "watch" and "listen" to footage it cannot read
+> natively. Ships as a CLI, a Claude Code plugin, a Gemini CLI extension, and
+> native manifests for Cursor, Windsurf, Cline and Codex. Every run can fan out
+> to 95 pluggable sinks. MIT licensed, current version 0.9.4.
+
+Static images are already readable by most multimodal models. peepshow exists for
+inputs that have multiple frames across time, which they cannot consume directly.
+Install the runtime with `npm i -g peepshow`; it falls back to a bundled ffmpeg
+when none is on PATH.
+
+## Start here
+
+- [Homepage](https://www.peepshow.dev/): what it does, install, the frame-extraction pipeline
+- [README](https://github.com/t0mtaylor/peepshow/blob/main/README.md): full CLI reference: flags, exit codes, input sources, env vars
+- [AGENTS.md](https://github.com/t0mtaylor/peepshow/blob/main/AGENTS.md): the invocation contract for any agent — read this first if you are an LLM
+- [Releases](https://www.peepshow.dev/releases/): user-facing changes per version
+- [Report format](https://www.peepshow.dev/report/): the HTML report + manifest.json each run writes
+- [Transcription](https://www.peepshow.dev/transcription/): whisper.cpp and cloud providers, token costs
+
+## Using it from an agent
+
+- [Claude Code](https://www.peepshow.dev/agents/claude-code/): The reference integration — drag-and-drop auto-invoke included.
+- [Cursor](https://www.peepshow.dev/agents/cursor/): Project-level rules auto-load when peepshow is installed.
+- [Windsurf](https://www.peepshow.dev/agents/windsurf/): Cascade rules pick up peepshow without config.
+- [Cline](https://www.peepshow.dev/agents/cline/): `.clinerules/` convention — zero setup.
+- [Codex CLI](https://www.peepshow.dev/agents/codex/): SessionStart hook announces peepshow to the model.
+- [Gemini CLI](https://www.peepshow.dev/agents/gemini/): A real extension — two slash commands, one install line, no MCP server.
+- [AGENTS.md](https://www.peepshow.dev/agents/agents-md/): Zed AI · Codex Agents · GitHub Copilot — convention-based pickup.
+- [Agents Marketplace](https://www.peepshow.dev/agents/agents-marketplace/): Cross-agent plugin registry (emerging).
+
+## Per-model guides
+
+- [Gemini](https://www.peepshow.dev/models/gemini/): Native video + peepshow = control plane for long footage, animated formats, and cost ceilings.
+- [Claude](https://www.peepshow.dev/models/claude/): Claude reads images. peepshow turns a video into a timeline Claude already knows how to reason about.
+- [GPT-4o / GPT-5](https://www.peepshow.dev/models/gpt/): GPT vision is image input only. peepshow turns video + animated formats into the frame timeline GPT can ingest.
+- [Local LLMs](https://www.peepshow.dev/models/local/): Same peepshow pipeline, offline. Frames into Llama 3.2 Vision / Qwen2.5-VL / Pixtral / LLaVA via Ollama or LM Studio.
+- [Grok](https://www.peepshow.dev/models/grok/): Grok vision is image input only. peepshow turns video + animated formats into the frame timeline Grok ingests.
+- [Mistral](https://www.peepshow.dev/models/mistral/): Pixtral and Mistral Large 3 read images. peepshow extracts the frame timeline that lets them reason about video.
+- [Qwen](https://www.peepshow.dev/models/qwen/): Qwen3-VL 235B reads short video natively. peepshow normalises long clips and bridges the smaller sizes — same artifact, every variant.
+- [DeepSeek](https://www.peepshow.dev/models/deepseek/): DeepSeek-OCR reads images with OCR precision. peepshow extracts the frame timeline so it reads video as a sequence of stills.
+- [Cohere Command A Vision](https://www.peepshow.dev/models/cohere/): Command A Vision is enterprise-focused, OCR-grade, image-only. peepshow turns video into the 20-image batch it natively accepts.
+- [Cohere Aya Vision](https://www.peepshow.dev/models/aya/): Aya Vision is Cohere's multilingual research VLM — 23+ languages, OCR-strong, image-only. peepshow turns video into the frame batch it natively reads.
+- [NVIDIA Nemotron 3 Nano Omni](https://www.peepshow.dev/models/nemotron/): Nemotron 3 Nano Omni reads vision, audio, and text in a single 30B MoE. peepshow keeps it predictable across long clips.
+- [Phi-4 Multimodal](https://www.peepshow.dev/models/phi/): Phi-4-multimodal runs on a laptop. peepshow caps frame count so even a 5.6B vision model handles arbitrary video.
+- [Reka](https://www.peepshow.dev/models/reka/): Reka ingests video, audio, and image in one call. peepshow caps cost on long footage and slots in animated formats.
+- [IBM Granite 4.1 Vision](https://www.peepshow.dev/models/granite/): Granite 4.1 Vision is small, governed, document-grade, image-only. peepshow turns video into the chart / table / page sequence it was trained on.
+- [SigLIP 2](https://www.peepshow.dev/models/siglip/): SigLIP 2 is an image embedder, not a chat model. peepshow turns a video into the frame batch it forward-passes — vectors then go straight to Chroma / Qdrant / Pinecone.
+
+## How-to
+
+- [GIF to LLM](https://www.peepshow.dev/how-to/gif-to-llm/): Drop a `.gif`, get every motion frame any vision LLM can read.
+- [YouTube to LLM](https://www.peepshow.dev/how-to/youtube-to-llm/): Pair peepshow with yt-dlp to turn any YouTube URL into a frame timeline + transcript any LLM reads.
+- [Transcribe video locally](https://www.peepshow.dev/how-to/transcribe-video-locally/): peepshow + whisper.cpp = local-only transcript. Zero network. Zero PII leakage.
+- [CCTV → LLM analysis](https://www.peepshow.dev/how-to/cctv-llm-analysis/): Scene detect + perceptual dedup turn a 12-hour CCTV reel into 30 frames an LLM can review.
+- [Live stream → LLM](https://www.peepshow.dev/how-to/live-stream-to-llm/): Drop an `.m3u8`, `.mpd`, or `rtsp://` URL straight into peepshow. ffmpeg reads the stream natively; --duration caps the window.
+- [Video → Notion](https://www.peepshow.dev/how-to/video-to-notion/): peepshow's Notion sink creates a page per run — metadata properties, embedded thumbnails, full frame gallery.
+- [Video → Slack](https://www.peepshow.dev/how-to/video-to-slack/): Slack sink fires on every peepshow run — title, thumbnail, deep link to the first scene frame.
+- [Loom → LLM](https://www.peepshow.dev/how-to/loom-to-llm/): Download the Loom .mp4, run peepshow, get scene frames + whisper transcript.
+- [APNG → LLM](https://www.peepshow.dev/how-to/apng-to-llm/): peepshow unrolls APNGs into JPEG sequences any vision model reads.
+- [Animated WebP → LLM](https://www.peepshow.dev/how-to/webp-animated-to-text/): peepshow handles animated WebP that vision APIs reject or flatten.
+- [Screen recording → LLM](https://www.peepshow.dev/how-to/screen-recording-to-llm/): Drop the .mov / .mp4, get scene frames + a transcript — bug repros, design reviews, QA evidence.
+- [Video → Obsidian](https://www.peepshow.dev/how-to/video-to-obsidian/): peepshow's Obsidian sink writes a markdown note per run with embedded frames + an index entry.
+- [Video → SQLite](https://www.peepshow.dev/how-to/video-to-sqlite/): peepshow's SQLite sink builds a frame + transcript archive any SQL tool searches.
+- [Dashcam → LLM](https://www.peepshow.dev/how-to/dashcam-llm/): Scene-detect + perceptual dedup pinpoint the incident frames so the LLM reviews only what matters.
+- [Video → GraphQL](https://www.peepshow.dev/how-to/video-to-graphql/): peepshow's GraphQL sink turns every run into a typed mutation against your schema.
+- [Video → Graphify](https://www.peepshow.dev/how-to/video-to-graphify/): Run peepshow, then `graphify` the output folder — Claude / Cursor / Gemini agents query the video timeline as a knowledge graph.
+- [OCR video frames](https://www.peepshow.dev/how-to/ocr-video-frames/): peepshow's `--ocr` pass runs Tesseract on every extracted frame so text-only LLMs get the words on-screen.
+- [Object-gated frames](https://www.peepshow.dev/how-to/object-gated-frames/): `--require-objects person,car` drops every frame that doesn't contain at least one of the requested classes.
+- [Frame embeddings → vector search](https://www.peepshow.dev/how-to/frame-embeddings-vector-search/): `--embed-frames` runs CLIP/SigLIP per frame so vector sinks (Chroma, Qdrant, Pinecone, pgvector, Redis, Weaviate, Milvus) get pre-computed vectors.
+- [Blur PII in frames](https://www.peepshow.dev/how-to/blur-pii-in-frames/): `--blur faces|plates|both` runs EgoBlur per frame so frames leaving the box stay GDPR-clean.
+- [Speaker diarisation](https://www.peepshow.dev/how-to/speaker-diarisation/): `--diarise` labels every transcript segment with `speaker_0`, `speaker_1`, etc. Local via WhisperX; cloud via Deepgram / AssemblyAI.
+
+## Comparisons
+
+- [peepshow vs Gemini native video](https://www.peepshow.dev/vs/gemini-native-video/): Native video on Gemini works. peepshow wins on cost, long clips, animated formats, and audit.
+- [peepshow vs hand-rolled ffmpeg](https://www.peepshow.dev/vs/ffmpeg-manual/): Yes you can roll your own. peepshow is what you'd end up writing — plus sinks, transcripts, dedup, and a dashboard.
+- [peepshow vs OpenAI video](https://www.peepshow.dev/vs/openai-video/): GPT-4o / GPT-5 have no native video input. peepshow is the bridge.
+- [peepshow vs whisper.cpp standalone](https://www.peepshow.dev/vs/whisper-cli/): If you only need transcription, whisper.cpp is enough. peepshow's win is frames + transcript + sinks in one go.
+
+## Sinks
+
+A sink is any executable that reads peepshow's JSON payload on stdin, so a run can
+land in whatever store you already use. 95 ship built in.
+
+- [All sinks](https://www.peepshow.dev/sinks/): the full index
+- [Use-case finder](https://www.peepshow.dev/sinks/find/): pick a sink by what you want to do
+- [SQL & document sinks](https://www.peepshow.dev/sinks/sql/): Persist every run into a queryable store — SQLite, Postgres, MongoDB.
+- [Vector + AI memory sinks](https://www.peepshow.dev/sinks/vector-memory/): Index frames for semantic recall — Chroma, Qdrant, Pinecone, Milvus, MemPalace.
+- [Object + file storage sinks](https://www.peepshow.dev/sinks/storage/): Durable uploads to S3-compatible, GCS, Azure, Dropbox, GDrive, Box.
+- [Chat & messaging sinks](https://www.peepshow.dev/sinks/chat/): Post the run summary into Slack, Discord, Teams, Telegram, Matrix and more.
+- [Issue trackers sinks](https://www.peepshow.dev/sinks/issues/): Attach frames as evidence on Linear, GitHub, Jira, Asana, ClickUp, Trello.
+- [Wiki & notes sinks](https://www.peepshow.dev/sinks/wiki/): Drop a per-run page into Notion, Obsidian, Logseq, Outline, Confluence.
+- [Whiteboards & canvas sinks](https://www.peepshow.dev/sinks/whiteboard/): Lay frames out on Miro or drop a comment on a Figma file.
+- [Product analytics sinks](https://www.peepshow.dev/sinks/analytics/): Log a peepshow run as a product event — PostHog, Plausible, Mixpanel/Amplitude/Segment.
+- [Observability sinks](https://www.peepshow.dev/sinks/observability/): Attach run evidence to Sentry issues, Datadog events, PagerDuty incidents.
+- [Workflow & glue sinks](https://www.peepshow.dev/sinks/workflow/): Generic surfaces — webhook, GraphQL, IDE attachment folders.
+
+## Optional
+
+- [Privacy](https://www.peepshow.dev/privacy/)
+- [Terms](https://www.peepshow.dev/terms/)
+- [Every sink page](https://www.peepshow.dev/sitemap.xml): sitemap, including all 95 individual sink pages
