@@ -1,0 +1,3 @@
+# Nothing here is needed at plugin runtime — the CLI comes from npm.
+node_modules/
+dist/

@@ -338,6 +338,7 @@ LLM-friendly markdown output (`--emit markdown`) emits one `![](...)` link per f
 | `--dedup on\|auto\|off` | `on` | Perceptual frame dedup post-pass via 8×8 dHash. `on` runs in both scene + fps modes; `auto` only fps fallback (scene already filters); `off` disables. `--no-dedup` is a shortcut. Adds ~50–100ms for 40 frames; drops near-identical thumbnails so static talking-heads don't waste tokens. |
 | `--dedup-distance <0-64>` | `5` | Hamming-distance threshold. Lower = stricter (drops fewer near-duplicates); higher = looser (drops more). 0 means only bit-identical hashes drop. |
 | `--adaptive on\|off` | `on` | Adaptive density second pass. When dedup drops 0 frames AND motion is high AND there's room under `--max`, peepshow re-extracts at higher fps to amortise the headroom. Targets ~80% of `--max`. Recursion-guarded (single retry only). `--no-adaptive` shortcuts disable. |
+| `--version`, `-V` | — | Print the peepshow version and exit 0. |
 | `--help`, `-h` | — | Show usage. |
 
 ### Input sources
@@ -633,6 +634,24 @@ Typical sequence: **npm publish first** (widest reach, no review), **your own ma
 ### Other LLM tools
 
 No central marketplace exists for Copilot CLI, ChatGPT Code, Cursor, Continue, Cody, Zed AI, aider, or `llm` — so we ship integration snippets in [`docs/INTEGRATIONS.md`](./docs/INTEGRATIONS.md) that work as soon as `peepshow` is on `PATH` via npm.
+
+## Built something with peepshow?
+
+Shipped a tool, an agent workflow, or a sink that runs on peepshow? Put the badge on it:
+
+<p>
+  <a href="https://github.com/t0mtaylor/peepshow"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/media/powered-with-peepshow-dark.svg"><img src="docs/media/powered-with-peepshow-light.svg" height="32" alt="powered with peepshow"></picture></a>
+</p>
+
+```markdown
+[![powered with peepshow](https://raw.githubusercontent.com/t0mtaylor/peepshow/main/docs/media/powered-with-peepshow-dark.svg)](https://github.com/t0mtaylor/peepshow)
+```
+
+Swap in `powered-with-peepshow-light.svg` on a light background. Both are plain SVG — no tracking, no external request beyond GitHub's own image proxy.
+
+## Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=t0mtaylor/peepshow&type=Date)](https://star-history.com/#t0mtaylor/peepshow&Date)
 
 ## Support the project
 

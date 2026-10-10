@@ -1,0 +1,9 @@
+# Nothing in here is needed by an agent at runtime — the peepshow CLI comes
+# from npm (`npm i -g peepshow`). Keeps agent context on the manifests, skills
+# and docs rather than build output.
+node_modules/
+dist/
+site/
+site-dist/
+public/
+coverage/

@@ -1,0 +1,31 @@
+{
+  "name": "peepshow",
+  "version": "0.9.4",
+  "description": "Turn videos, YouTube links, live streams and animated images (GIF/APNG/WebP) into an ordered timeline of frames plus a transcribed audio track, so an LLM can watch and listen instead of guessing \u2014 then fan each run out to 95 pluggable sinks.",
+  "author": {
+    "name": "Tom Taylor",
+    "url": "https://github.com/t0mtaylor"
+  },
+  "homepage": "https://www.peepshow.dev/",
+  "repository": "https://github.com/t0mtaylor/peepshow",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "frames",
+    "ffmpeg",
+    "llm",
+    "vision",
+    "transcription",
+    "scene-detection",
+    "sinks",
+    "agent-skills",
+    "cli"
+  ],
+  "rules": [
+    ".cursor/rules/peepshow.mdc"
+  ],
+  "requirements": {
+    "node": ">=22",
+    "install": "npm i -g peepshow"
+  }
+}
