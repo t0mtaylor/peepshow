@@ -105,6 +105,30 @@ Or describe the task in natural language — the skill auto-invokes:
 - **Live statusline badge.** `[PEEPSHOW:decoding:42%]` mid-run, `[PEEPSHOW:5frm:scene:system]` after, `[PEEPSHOW]` idle.
 - **Context-aware hints on stderr.** Missing ffmpeg → OS-specific install command. Bundled ffmpeg → one-time nudge toward native. Zero frames / short clip / heavy pruning → actionable flag suggestions. `PEEPSHOW_NO_HINTS=1` to silence.
 
+## How peepshow differs
+
+Most tools in this space stop at "sample the video, write frames to a folder". That leaves the two decisions that actually determine whether an LLM can answer about your footage — *which* frames are worth keeping, and what they cost once they reach the model — as your problem to solve. peepshow treats both as the product.
+
+| | Typical frame extractors | peepshow |
+| :--- | :--- | :--- |
+| **Finding the shot cuts** | One scene-score threshold, or a fixed interval | Finds shot cuts that single-threshold scene detection misses — particularly jump cuts in talking-head footage, where the picture barely changes between shots |
+| **What the model pays** | One image per frame; cost grows with the frame count | Frames tiled into labelled contact sheets, with a ceiling you set rather than discover: `--token-budget 800` |
+| **Where the output goes** | A folder, and a wiring job | 95 pluggable sinks — SQL, object stores, vector indexes, trackers, wikis, chat, observability |
+| **Record of the run** | stdout, if you kept it | A self-contained HTML report per run, openable with nothing installed, plus the annotate loop that pins the model's answer back onto the frames it came from |
+| **Accepted inputs** | Local files | Paths, stdin, data URIs, plain URLs, YouTube input, and live streams over HLS / DASH / RTSP |
+| **Before the frames ship** | — | OCR for on-screen text, object gating, PII blur for faces and plates, local transcription — all in the same pass |
+| **Agent integration** | Copy-paste setup instructions | Native manifests for 8+ agents: Claude Code, Gemini CLI, Cursor, Windsurf, Cline, Codex, OpenCode |
+
+**The token arithmetic.** Vision cost scales with image *area*, not with how many files you send, so tiling is a genuine reduction rather than an accounting trick. Measured on peepshow's own output:
+
+| Output | Vision tokens |
+| :--- | :--- |
+| 40 frames, emitted individually | ≈ 49,160 |
+| the same 40 frames, one default contact sheet | ≈ 1,592 — about 31× less |
+| the same sheet under `--token-budget 800` | 783 |
+
+Those are measurements of peepshow's own output, not a benchmark run against anyone else's software. For named, like-for-like comparisons — hand-rolled ffmpeg, native video models, whisper on its own — see [peepshow.dev/vs/](https://www.peepshow.dev/vs/), which also sets out the cases where the alternative is the better choice.
+
 ## Where peepshow fits
 
 `peepshow` is a CLI first — anything that can spawn a child process can use it. The intended use cases break down like this:
