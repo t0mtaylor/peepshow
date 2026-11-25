@@ -80,6 +80,7 @@ when none is on PATH.
 - [peepshow vs hand-rolled ffmpeg](https://www.peepshow.dev/vs/ffmpeg-manual/): Yes you can roll your own. peepshow is what you'd end up writing — plus sinks, transcripts, dedup, and a dashboard.
 - [peepshow vs OpenAI video](https://www.peepshow.dev/vs/openai-video/): GPT-4o / GPT-5 have no native video input. peepshow is the bridge.
 - [peepshow vs whisper.cpp standalone](https://www.peepshow.dev/vs/whisper-cli/): If you only need transcription, whisper.cpp is enough. peepshow's win is frames + transcript + sinks in one go.
+- [peepshow vs open-source frame extractors](https://www.peepshow.dev/vs/frame-extraction-tools/): Most extractors hand you a folder of JPEGs. peepshow is built for what happens next — the context window, and the rest of your stack.
 
 ## Sinks
 
